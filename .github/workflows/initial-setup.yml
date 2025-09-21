@@ -1,0 +1,70 @@
+# .github/workflows/initial-setup.yml
+
+name: Initial EC2 Setup
+
+on:
+  workflow_dispatch:
+    inputs:
+      postgres_tag:
+        description: '배포할 Postgres 이미지 태그 (commit sha)'
+        required: true
+
+jobs:
+  setup:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Setup EC2 instance
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: ${{ secrets.EC2_HOST }}
+          username: ${{ secrets.EC2_USERNAME }}
+          key: ${{ secrets.EC2_SSH_PRIVATE_KEY }}
+          script: |
+            # Docker 및 Docker Compose 설치
+            if ! command -v docker &> /dev/null; then
+                echo "Installing Docker..."
+                sudo apt-get update && sudo apt-get install -y docker.io
+                sudo systemctl start docker && sudo systemctl enable docker
+                sudo usermod -aG docker ${{ secrets.EC2_USERNAME }}
+                sudo curl -L "https://github.com/docker/compose/releases/latest/download/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
+                sudo chmod +x /usr/local/bin/docker-compose
+            fi
+
+            # docker-compose.yml 파일 생성
+            cat << 'EOF' > docker-compose.yml
+            version: '3.8'
+            services:
+              leafy-postgres:
+                image: ${{ secrets.DOCKERHUB_USERNAME }}/leafy-postgres:${{ github.event.inputs.postgres_tag || 'latest'  }}
+                 environment:
+                  - POSTGRES_USER=${{ secrets.DATASOURCE_USERNAME }}
+                  - POSTGRES_PASSWORD=${{ secrets.DATASOURCE_PASSWORD }}
+                  - POSTGRES_DB=postgres # DB 이름은 보통 고정값이므로 직접 입력
+                ports:
+                  - "5432:5432"
+                volumes:
+                  - leafy_data:/var/lib/postgresql/data
+                restart: always
+                healthcheck:
+                  test: ["CMD-SHELL", "pg_isready -U postgres"]
+                  interval: 5s
+                  timeout: 5s
+                  retries: 5
+              leafy-backend:
+                image: ${{ secrets.DOCKERHUB_USERNAME }}/leafy-backend:initial
+                restart: on-failure
+                depends_on:
+                  leafy-postgres: { condition: service_healthy }
+              leafy-front:
+                image: ${{ secrets.DOCKERHUB_USERNAME }}/leafy-frontend:initial
+                restart: on-failure
+                ports: ["80:80"]
+                depends_on: ["leafy-backend"]
+            volumes:
+              leafy_data:
+            EOF
+
+            # Postgres 서비스 시작
+            docker login -u "${{ secrets.DOCKERHUB_USERNAME }}" -p "${{ secrets.DOCKERHUB_TOKEN }}"
+            docker-compose pull leafy-postgres
+            docker-compose up -d

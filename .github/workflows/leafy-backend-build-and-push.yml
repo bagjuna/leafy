@@ -72,9 +72,9 @@ jobs:
                 image: ${{ secrets.DOCKERHUB_USERNAME }}/leafy-backend:initial
                 restart: on-failure
                 environment:
-                  - SPRING_DATASOURCE_URL=jdbc:postgresql://leafy-postgres:5432/postgres
-                  - SPRING_DATASOURCE_USERNAME=postgres
-                  - SPRING_DATASOURCE_PASSWORD=postgres
+                  - SPRING_DATASOURCE_URL=jdbc:postgresql://leafy-postgres:5432/${{ secrets.DATASOURCE_URL }}
+                  - SPRING_DATASOURCE_USERNAME=${{ secrets.DATASOURCE_USERNAME }}
+                  - SPRING_DATASOURCE_PASSWORD=${{ secrets.DATASOURCE_PASSWORD }}
                 depends_on:
                   leafy-postgres: { condition: service_healthy }
               leafy-front:
