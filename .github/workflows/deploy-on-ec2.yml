@@ -10,65 +10,98 @@ on:
       - '08-cicd'
 
 jobs:
-  deploy:
-    # 워크플로우가 성공했을 때만 실행
-    if: ${{ github.event.workflow_run.conclusion == 'success' }}
+  # --- 백엔드 배포 전용 Job ---
+  deploy-backend:
+    # "Backend Build and Push" 워크플로우가 성공했을 때만 이 Job을 실행
+    if: ${{ github.event.workflow_run.workflow.name == 'Backend Build and Push' && github.event.workflow_run.conclusion == 'success' }}
     runs-on: ubuntu-latest
-
     steps:
-      - name: Checkout Repository
-        uses: actions/checkout@v3
-
-      - name: Deploy to EC2 instance
+      - name: Deploy Backend to EC2 instance
         uses: appleboy/ssh-action@master
         with:
           host: ${{ secrets.EC2_HOST }}
           username: ${{ secrets.EC2_USERNAME }}
           key: ${{ secrets.EC2_SSH_PRIVATE_KEY }}
           script: |
-            # 1. EC2 서버에 docker-compose.yml 파일 전송 (기존 파일 덮어쓰기)
-            # Secrets를 통해 변수 값을 받아와서 docker-compose.yml을 서버에 생성
-            cat << EOF > docker-compose.yml
-            version: '3'
-            services:
-              leafy-postgres:
-                image: ${{ secrets.DOCKERHUB_USERNAME }}/leafy-postgres:latest # Postgres는 최신 버전을 고정적으로 사용
-                volumes:
-                  - leafy_data:/var/lib/postgresql/data
-                restart: always
-
-              leafy-backend:
-                # 방금 빌드한 새로운 이미지로 교체!
-                image: ${{ secrets.DOCKERHUB_USERNAME }}/leafy-backend:${{ github.event.workflow_run.head_sha }}
-                environment:
-                  - DB_URL=leafy-postgres
-                depends_on:
-                  - leafy-postgres
-                restart: on-failure
+            # EC2에 docker-compose.yml이 없다면 초기 버전을 생성
+            if [ ! -f docker-compose.yml ]; then
+              echo "Creating initial docker-compose.yml"
+              cat << EOF > docker-compose.yml
+              version: '3'
+              services:
+                leafy-postgres:
+                  image: ${{ secrets.DOCKERHUB_USERNAME }}/leafy-postgres:latest
+                  volumes:
+                    - leafy_data:/var/lib/postgresql/data
+                  restart: always
+                leafy-backend:
+                  image: ${{ secrets.DOCKERHUB_USERNAME }}/leafy-backend:initial
+                  environment:
+                    - DB_URL=leafy-postgres
+                  depends_on:
+                    - leafy-postgres
+                  restart: on-failure
+                leafy-front:
+                  image: ${{ secrets.DOCKROO_USERNAME }}/leafy-frontend:initial
+                  environment:
+                    - BACKEND_HOST=leafy-backend
+                  ports:
+                    - 80:80
+                  depends_on:
+                    - leafy-backend
+                  restart: on-failure
+              volumes:
+                leafy_data:
+              EOF
+            fi
             
-              leafy-front:
-                # 방금 빌드한 새로운 이미지로 교체!
-                image: ${{ secrets.DOCKERHUB_USERNAME }}/leafy-frontend:${{ github.event.workflow_run.head_sha }}
-                environment:
-                  - BACKEND_HOST=leafy-backend
-                ports:
-                  - 80:80
-                depends_on:
-                  - leafy-backend
-                restart: on-failure
+            # 1. 백엔드 이미지 태그만 최신 버전으로 변경
+            export BACKEND_IMAGE=${{ secrets.DOCKERHUB_USERNAME }}/leafy-backend:${{ github.event.workflow_run.head_sha }}
+            sed -i "s|image: ${{ secrets.DOCKERHUB_USERNAME }}/leafy-backend:.*|image: $BACKEND_IMAGE|g" docker-compose.yml
 
-            volumes:
-              leafy_data:
-            EOF
-            
-            # 2. Docker Hub 로그인 (private 이미지 다운로드를 위해)
+            echo "Docker Hub Login..."
             echo "${{ secrets.DOCKERHUB_TOKEN }}" | docker login -u "${{ secrets.DOCKERHUB_USERNAME }}" --password-stdin
             
-            # 3. Docker Compose로 애플리케이션 실행
-            # --pull 옵션으로 항상 최신 이미지를 받도록 강제
-            # -d 옵션으로 백그라운드에서 실행
-            docker-compose --file docker-compose.yml pull
-            docker-compose --file docker-compose.yml up -d
+            echo "Pulling updated backend image..."
+            docker-compose pull leafy-backend
+
+            echo "Restarting services..."
+            docker-compose up -d --remove-orphans
+
+            echo "Pruning old images..."
+            docker image prune -af
+
+  # --- 프론트엔드 배포 전용 Job ---
+  deploy-frontend:
+    # "Frontend Build and Push" 워크플로우가 성공했을 때만 이 Job을 실행
+    if: ${{ github.event.workflow_run.workflow.name == 'Frontend Build and Push' && github.event.workflow_run.conclusion == 'success' }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Deploy Frontend to EC2 instance
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.EC2_HOST }}
+          username: ${{ secrets.EC2_USERNAME }}
+          key: ${{ secrets.EC2_SSH_PRIVATE_KEY }}
+          script: |
+            # EC2에 docker-compose.yml이 없다면 초기 버전을 생성 (위와 동일)
+            if [ ! -f docker-compose.yml ]; then
+              echo "Creating initial docker-compose.yml"
+              # ... (위의 backend job에 있는 cat 명령어 블록과 동일한 내용) ...
+            fi
+
+            # 1. 프론트엔드 이미지 태그만 최신 버전으로 변경
+            export FRONTEND_IMAGE=${{ secrets.DOCKERHUB_USERNAME }}/leafy-frontend:${{ github.event.workflow_run.head_sha }}
+            sed -i "s|image: ${{ secrets.DOCKERHUB_USERNAME }}/leafy-frontend:.*|image: $FRONTEND_IMAGE|g" docker-compose.yml
             
-            # 4. 불필요한 Docker 이미지 정리 (서버 용량 확보)
+            echo "Docker Hub Login..."
+            echo "${{ secrets.DOCKERHUB_TOKEN }}" | docker login -u "${{ secrets.DOCKERHUB_USERNAME }}" --password-stdin
+
+            echo "Pulling updated frontend image..."
+            docker-compose pull leafy-frontend
+
+            echo "Restarting services..."
+            docker-compose up -d --remove-orphans
+
+            echo "Pruning old images..."
             docker image prune -af
