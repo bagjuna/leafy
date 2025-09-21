@@ -2,10 +2,7 @@ name: Initial EC2 Setup
 
 on:
   workflow_dispatch:
-    inputs:
-      postgres_tag:
-        description: '배포할 Postgres 이미지 태그 (commit sha)'
-        required: true
+
 
 jobs:
   setup:
@@ -36,7 +33,7 @@ jobs:
             version: '3.8'
             services:
               leafy-postgres:
-                image: ${{ secrets.DOCKERHUB_USERNAME }}/leafy-postgres:${{ github.event.inputs.postgres_tag }}
+                image: ${{ secrets.DOCKERHUB_USERNAME }}/leafy-postgres:latest
                 environment:
                   - POSTGRES_USER=${{ secrets.DATASOURCE_USERNAME }}
                   - POSTGRES_PASSWORD=${{ secrets.DATASOURCE_PASSWORD }}
