@@ -37,7 +37,6 @@ jobs:
                 environment:
                   - POSTGRES_USER=${{ secrets.DATASOURCE_USERNAME }}
                   - POSTGRES_PASSWORD=${{ secrets.DATASOURCE_PASSWORD }}
-                  - POSTGRES_DB=${{ secrets.DATASOURCE_DBNAME }}
                 ports:
                   - "5432:5432"
                 volumes:
@@ -48,19 +47,6 @@ jobs:
                   interval: 5s
                   timeout: 5s
                   retries: 5
-              leafy-backend:
-                image: ${{ secrets.DOCKERHUB_USERNAME }}/leafy-backend:initial
-                restart: on-failure
-                depends_on:
-                  leafy-postgres:
-                    condition: service_healthy
-              leafy-front:
-                image: ${{ secrets.DOCKERHUB_USERNAME }}/leafy-frontend:initial
-                restart: on-failure
-                ports:
-                  - "80:80"
-                depends_on:
-                  - leafy-backend
             volumes:
               leafy_data:
             EOF
@@ -70,7 +56,7 @@ jobs:
             docker login -u "${{ secrets.DOCKERHUB_USERNAME }}" -p "${{ secrets.DOCKERHUB_TOKEN }}"
             
             # sudo를 추가하여 권한 문제 해결
-            sudo docker-compose pull
-            sudo docker-compose up -d
+            sudo docker-compose pull leafy-postgres
+            sudo docker-compose up -d leafy-postgres
             
             echo "Initial setup complete. Services are starting."
