@@ -1,5 +1,5 @@
 # 빌드 이미지로 OpenJDK 11 & Gradle을 지정
-FROM eclipse-temurin:11-jre AS build
+FROM gradle:7.6.1-jdk11 AS build
 
 # 소스코드를 복사할 작업 디렉토리를 생성
 WORKDIR /app
