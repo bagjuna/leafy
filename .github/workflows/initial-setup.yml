@@ -1,5 +1,4 @@
 # .github/workflows/initial-setup.yml
-
 name: Initial EC2 Setup
 
 on:
@@ -25,30 +24,30 @@ jobs:
                 sudo curl -L "https://github.com/docker/compose/releases/latest/download/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
                 sudo chmod +x /usr/local/bin/docker-compose
             fi
-            
+
+            # --- 2. docker-compose.yml 파일 생성 (검증된 버전) ---
             echo "Creating docker-compose.yml..."
             cat << EOF > docker-compose.yml
             version: '3.8'
             services:
               leafy-postgres:
                 image: ${{ secrets.DOCKERHUB_USERNAME }}/leafy-postgres:latest
+                ports:
+                  - "5432:5432"
                 environment:
                   - POSTGRES_USER=${{ secrets.DATASOURCE_USERNAME }}
                   - POSTGRES_PASSWORD=${{ secrets.DATASOURCE_PASSWORD }}
-                  - POSTGRES_DB=${{ secrets.DATASOURCE_URL }}
-                ports:
-                  - "5432:5432"
+                  - POSTGRES_DB=postgres
                 volumes:
                   - leafy_data:/var/lib/postgresql/data
-                restart: always₩
+                restart: always
                 healthcheck:
-                  # healthcheck 사용자를 secret 값으로 동적으로 변경
                   test: ["CMD-SHELL", "pg_isready -U ${{ secrets.DATASOURCE_USERNAME }}"]
                   interval: 5s
                   timeout: 5s
                   retries: 5
               leafy-backend:
-                image: ${{ secrets.DOCKERHUB_USERNAME }}/leafy-backend:f1b0bbc
+                image: ${{ secrets.DOCKERHUB_USERNAME }}/leafy-backend:latest
                 restart: on-failure
                 environment:
                   - SPRING_DATASOURCE_URL=jdbc:postgresql://leafy-postgres:5432/${{ secrets.DATASOURCE_URL }}
@@ -59,7 +58,7 @@ jobs:
                   leafy-postgres:
                     condition: service_healthy
               leafy-front:
-                image: ${{ secrets.DOCKERHUB_USERNAME }}/leafy-frontend:
+                image: ${{ secrets.DOCKERHUB_USERNAME }}/leafy-frontend:latest
                 restart: on-failure
                 ports:
                   - "80:80"
