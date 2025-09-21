@@ -5,6 +5,9 @@ name: Backend Build and Push  # <-- 실제 CI 워크플로우의 name과 똑같�
 on:
   workflow_dispatch: # 수동 실행 버튼 추가
 
+permissions:      # <-- 이 블록을 추가합니다.
+  contents: read
+
 jobs:
   fake-build:
     runs-on: ubuntu-latest
