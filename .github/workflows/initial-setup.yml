@@ -42,7 +42,7 @@ jobs:
                   - "5432:5432"
                 volumes:
                   - leafy_data:/var/lib/postgresql/data
-                restart: always
+                restart: always₩
                 healthcheck:
                   # healthcheck 사용자를 secret 값으로 동적으로 변경
                   test: ["CMD-SHELL", "pg_isready -U ${{ secrets.DATASOURCE_USERNAME }}"]
@@ -50,7 +50,7 @@ jobs:
                   timeout: 5s
                   retries: 5
               leafy-backend:
-                image: ${{ secrets.DOCKERHUB_USERNAME }}/leafy-backend:latest
+                image: ${{ secrets.DOCKERHUB_USERNAME }}/leafy-backend:f1b0bbc
                 restart: on-failure
                 environment:
                   - SPRING_DATASOURCE_URL=jdbc:postgresql://leafy-postgres:5432/${{ secrets.DATASOURCE_URL }}
@@ -61,7 +61,7 @@ jobs:
                   leafy-postgres:
                     condition: service_healthy
               leafy-front:
-                image: ${{ secrets.DOCKERHUB_USERNAME }}/leafy-frontend:latest
+                image: ${{ secrets.DOCKERHUB_USERNAME }}/leafy-frontend:
                 restart: on-failure
                 ports:
                   - "80:80"
