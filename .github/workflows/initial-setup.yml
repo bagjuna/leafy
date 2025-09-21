@@ -38,9 +38,9 @@ jobs:
               leafy-postgres:
                 image: ${{ secrets.DOCKERHUB_USERNAME }}/leafy-postgres:${{ github.event.inputs.postgres_tag }}
                 environment:
-                  - POSTGRES_USER=${{ DATASOURCE_USERNAME }}
-                  - POSTGRES_PASSWORD=${{ DATASOURCE_PASSWORD }}
-                  - POSTGRES_DB=${{ DATASOURCE_DBNAME }}
+                  - POSTGRES_USER=${{ secrets.DATASOURCE_USERNAME }}
+                  - POSTGRES_PASSWORD=${{ secrets.DATASOURCE_PASSWORD }}
+                  - POSTGRES_DB=${{ secrets.DATASOURCE_DBNAME }}
                 ports:
                   - "5432:5432"
                 volumes:
