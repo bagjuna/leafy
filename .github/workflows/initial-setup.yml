@@ -1,4 +1,3 @@
-# .github/workflows/initial-setup.yml
 name: Initial EC2 Setup
 
 on:
@@ -19,7 +18,7 @@ jobs:
           username: ${{ secrets.EC2_USERNAME }}
           key: ${{ secrets.EC2_SSH_PRIVATE_KEY }}
           script: |
-            # --- 1. Docker 및 Docker Compose 설치 (Ubuntu 기준) ---
+            # --- 1. Docker 및 Docker Compose 설치 ---
             if ! command -v docker &> /dev/null; then
                 echo "Installing Docker..."
                 sudo apt-get update
@@ -31,7 +30,7 @@ jobs:
                 sudo chmod +x /usr/local/bin/docker-compose
             fi
 
-            # --- 2. docker-compose.yml 파일 생성 (검증된 버전) ---
+            # --- 2. docker-compose.yml 파일 생성 ---
             echo "Creating docker-compose.yml..."
             cat << 'EOF' > docker-compose.yml
             version: '3.8'
@@ -39,9 +38,9 @@ jobs:
               leafy-postgres:
                 image: ${{ secrets.DOCKERHUB_USERNAME }}/leafy-postgres:${{ github.event.inputs.postgres_tag }}
                 environment:
-                  - POSTGRES_USER={{ secrets.DATABASE_USER }}
-                  - POSTGRES_PASSWORD={{ secrets.DATABASE_PASSWORD }}
-                  - POSTGRES_DB={{ secrets.DATABASE_NAME }}
+                  - POSTGRES_USER=${{ DATASOURCE_USERNAME }}
+                  - POSTGRES_PASSWORD=${{ DATASOURCE_PASSWORD }}
+                  - POSTGRES_DB=${{ DATASOURCE_DBNAME }}
                 ports:
                   - "5432:5432"
                 volumes:
@@ -72,7 +71,9 @@ jobs:
             # --- 3. Postgres 서비스 시작 ---
             echo "Starting Postgres service..."
             docker login -u "${{ secrets.DOCKERHUB_USERNAME }}" -p "${{ secrets.DOCKERHUB_TOKEN }}"
-            docker-compose pull leafy-postgres
-            docker-compose up -d
             
-            echo "Initial setup complete. Postgres is running."
+            # sudo를 추가하여 권한 문제 해결
+            sudo docker-compose pull leafy-postgres
+            sudo docker-compose up -d
+            
+            echo "Initial setup complete. Services are starting."
