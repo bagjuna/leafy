@@ -84,7 +84,7 @@ jobs:
                   depends_on: ["leafy-backend"]
               volumes:
                 leafy_data:
-              EOF
+            EOF
             fi
             
             sed -i "s|image: ${{ secrets.DOCKERHUB_USERNAME }}/leafy-backend:.*|image: \$IMAGE_NAME|g" docker-compose.yml
