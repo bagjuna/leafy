@@ -56,40 +56,40 @@ jobs:
             if [ ! -f docker-compose.yml ]; then
               echo "Creating initial docker-compose.yml"
               cat << 'EOF' > docker-compose.yml
-              version: '3.8'
-              services:
-                leafy-postgres:
-                  image: ${{ secrets.DOCKERHUB_USERNAME }}/leafy-postgres:latest
-                  ports:
-                    - "5432:5432"
-                  environment:
-                    - POSTGRES_USER=${{ secrets.DATASOURCE_USERNAME }}
-                    - POSTGRES_PASSWORD=${{ secrets.DATASOURCE_PASSWORD }}
-                    - POSTGRES_DB=postgres
-                  volumes:
-                    - leafy_data:/var/lib/postgresql/data
-                  restart: always
-                  healthcheck:
-                    test: ["CMD-SHELL", "pg_isready -U postgres"]
-                    interval: 5s
-                    timeout: 5s
-                    retries: 5
-                leafy-backend:
-                  image: ${{ secrets.DOCKERHUB_USERNAME }}/leafy-backend:initial
-                  restart: on-failure
-                  depends_on:
-                    leafy-postgres:
-                      condition: service_healthy
-                leafy-front:
-                  image: ${{ secrets.DOCKERHUB_USERNAME }}/leafy-frontend:initial
-                  restart: on-failure
-                  ports:
-                    - "80:80"
-                  depends_on:
-                    - leafy-backend
-              volumes:
-                leafy_data:
-              EOF
+            version: '3.8'
+            services:
+              leafy-postgres:
+                image: ${{ secrets.DOCKERHUB_USERNAME }}/leafy-postgres:latest
+                ports:
+                  - "5432:5432"
+                environment:
+                  - POSTGRES_USER=${{ secrets.DATASOURCE_USERNAME }}
+                  - POSTGRES_PASSWORD=${{ secrets.DATASOURCE_PASSWORD }}
+                  - POSTGRES_DB=postgres
+                volumes:
+                  - leafy_data:/var/lib/postgresql/data
+                restart: always
+                healthcheck:
+                  test: ["CMD-SHELL", "pg_isready -U postgres"]
+                  interval: 5s
+                  timeout: 5s
+                  retries: 5
+              leafy-backend:
+                image: ${{ secrets.DOCKERHUB_USERNAME }}/leafy-backend:initial
+                restart: on-failure
+                depends_on:
+                  leafy-postgres:
+                    condition: service_healthy
+              leafy-front:
+                image: ${{ secrets.DOCKERHUB_USERNAME }}/leafy-frontend:initial
+                restart: on-failure
+                ports:
+                  - "80:80"
+                depends_on:
+                  - leafy-backend
+            volumes:
+              leafy_data:
+            EOF
             fi
             
             sed -i "s|image: ${{ secrets.DOCKERHUB_USERNAME }}/leafy-frontend:.*|image: \$IMAGE_NAME|g" docker-compose.yml
