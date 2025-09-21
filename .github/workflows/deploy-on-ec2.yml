@@ -2,7 +2,7 @@ name: Deploy to EC2
 
 on:
   workflow_run:
-    workflows: ["Backend Build and Push", "Frontend Build and Push"]
+    workflows: ["Backend-CI-Workflow", "Frontend Build and Push"]
     types:
       - completed
     branches:
@@ -11,7 +11,7 @@ on:
 jobs:
   # --- 백엔드 배포 전용 Job ---
   deploy-backend:
-    if: ${{ github.event.workflow_run.workflow.name == 'Backend Build and Push' && github.event.workflow_run.conclusion == 'success' }}
+    if: ${{ github.event.workflow_run.workflow.name == 'Backend-CI-Workflow' && github.event.workflow_run.conclusion == 'success' }}
     runs-on: ubuntu-latest
     steps:
       - name: Deploy Backend to EC2 instance
