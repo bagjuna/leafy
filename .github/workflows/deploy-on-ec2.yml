@@ -2,16 +2,26 @@ name: Deploy to EC2
 
 on:
   workflow_run:
-    workflows: ["Backend-CI-Workflow", "Frontend Build and Push"]
+    workflows: ["Backend Build and Push", "Frontend Build and Push"]
     types:
       - completed
     branches:
       - '08-cicd'
 
 jobs:
+  # --- 디버깅을 위한 Job ---
+  debug-event:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Print workflow run event details
+        run: |
+          echo "이벤트를 발생시킨 워크플로우의 이름: --->${{ github.event.workflow_run.workflow.name }}<---"
+          echo "워크플로우의 결론: ${{ github.event.workflow_run.conclusion }}"
+          echo "전체 이벤트 내용:"
+          echo "${{ toJSON(github.event) }}"
   # --- 백엔드 배포 전용 Job ---
   deploy-backend:
-    if: ${{ github.event.workflow_run.workflow.name == 'Backend-CI-Workflow' && github.event.workflow_run.conclusion == 'success' }}
+    if: ${{ github.event.workflow_run.workflow.name == 'Backend Build and Push' && github.event.workflow_run.conclusion == 'success' }}
     runs-on: ubuntu-latest
     steps:
       - name: Deploy Backend to EC2 instance
