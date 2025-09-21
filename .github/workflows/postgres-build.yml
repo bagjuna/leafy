@@ -32,5 +32,8 @@ jobs:
           context: ./leafy-postgresql
           file: ./leafy-postgresql/Dockerfile
           push: true
-          tags: ${{ secrets.DOCKERHUB_USERNAME }}/leafy-postgres:${{ github.sha }}
+          tags: |
+            ${{ secrets.DOCKERHUB_USERNAME }}/leafy-postgres:${{ github.sha }}
+            ${{ secrets.DOCKERHUB_USERNAME }}/leafy-postgres:latest
+
           platforms: linux/amd64,linux/arm64
