@@ -57,33 +57,33 @@ jobs:
             if [ ! -f docker-compose.yml ]; then
               echo "Creating initial docker-compose.yml"
               cat << EOF > docker-compose.yml
-              version: '3.8'
-              services:
-                leafy-postgres:
-                  image: ${{ secrets.DOCKERHUB_USERNAME }}/leafy-postgres:latest
-                  volumes: ["leafy_data:/var/lib/postgresql/data"]
-                  restart: always
-                  healthcheck:
-                    test: ["CMD-SHELL", "pg_isready -U postgres"]
-                    interval: 5s
-                    timeout: 5s
-                    retries: 5
-                leafy-backend:
-                  image: ${{ secrets.DOCKERHUB_USERNAME }}/leafy-backend:initial
-                  restart: on-failure
-                  environment:
-                    - SPRING_DATASOURCE_URL=jdbc:postgresql://leafy-postgres:5432/postgres
-                    - SPRING_DATASOURCE_USERNAME=postgres
-                    - SPRING_DATASOURCE_PASSWORD=postgres
-                  depends_on:
-                    leafy-postgres: { condition: service_healthy }
-                leafy-front:
-                  image: ${{ secrets.DOCKERHUB_USERNAME }}/leafy-frontend:initial
-                  restart: on-failure
-                  ports: ["80:80"]
-                  depends_on: ["leafy-backend"]
-              volumes:
-                leafy_data:
+            version: '3.8'
+            services:
+              leafy-postgres:
+                image: ${{ secrets.DOCKERHUB_USERNAME }}/leafy-postgres:latest
+                volumes: ["leafy_data:/var/lib/postgresql/data"]
+                restart: always
+                healthcheck:
+                  test: ["CMD-SHELL", "pg_isready -U postgres"]
+                  interval: 5s
+                  timeout: 5s
+                  retries: 5
+              leafy-backend:
+                image: ${{ secrets.DOCKERHUB_USERNAME }}/leafy-backend:initial
+                restart: on-failure
+                environment:
+                  - SPRING_DATASOURCE_URL=jdbc:postgresql://leafy-postgres:5432/postgres
+                  - SPRING_DATASOURCE_USERNAME=postgres
+                  - SPRING_DATASOURCE_PASSWORD=postgres
+                depends_on:
+                  leafy-postgres: { condition: service_healthy }
+              leafy-front:
+                image: ${{ secrets.DOCKERHUB_USERNAME }}/leafy-frontend:initial
+                restart: on-failure
+                ports: ["80:80"]
+                depends_on: ["leafy-backend"]
+            volumes:
+              leafy_data:
             EOF
             fi
             
