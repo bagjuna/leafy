@@ -1,0 +1,142 @@
+name: Deploy to EC2
+
+on:
+  workflow_run:
+    workflows: ["Backend Build and Push", "Frontend Build and Push"]
+    types:
+      - completed
+    branches:
+      - '08-cicd'
+
+jobs:
+  # --- 백엔드 배포 전용 Job ---
+  deploy-backend:
+    if: ${{ github.event.workflow_run.workflow.name == 'Backend Build and Push' && github.event.workflow_run.conclusion == 'success' }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Deploy Backend to EC2 instance
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: ${{ secrets.EC2_HOST }}
+          username: ${{ secrets.EC2_USERNAME }}
+          key: ${{ secrets.EC2_SSH_PRIVATE_KEY }}
+          script: |
+            # EC2에 docker-compose.yml이 없다면 초기 버전을 생성
+            if [ ! -f docker-compose.yml ]; then
+              echo "Creating initial docker-compose.yml"
+              cat << EOF > docker-compose.yml
+              version: '3.8'
+              services:
+                leafy-postgres:
+                  image: ${{ secrets.DOCKERHUB_USERNAME }}/leafy-postgres:latest
+                  volumes:
+                    - leafy_data:/var/lib/postgresql/data
+                  restart: always
+                  healthcheck:
+                    test: ["CMD-SHELL", "pg_isready -U postgres"]
+                    interval: 5s
+                    timeout: 5s
+                    retries: 5
+                leafy-backend:
+                  image: ${{ secrets.DOCKERHUB_USERNAME }}/leafy-backend:initial
+                  restart: on-failure
+                  environment:
+                    - SPRING_DATASOURCE_URL=jdbc:postgresql://leafy-postgres:5432/postgres
+                    - SPRING_DATASOURCE_USERNAME=postgres
+                    - SPRING_DATASOURCE_PASSWORD=postgres
+                  depends_on:
+                    leafy-postgres:
+                      condition: service_healthy
+                leafy-front:
+                  image: ${{ secrets.DOCKERHUB_USERNAME }}/leafy-frontend:initial
+                  restart: on-failure
+                  ports:
+                    - "80:80"
+                  depends_on:
+                    - leafy-backend
+              volumes:
+                leafy_data:
+              EOF
+            fi
+            
+            # 1. 백엔드 이미지 태그만 최신 버전으로 변경
+            export BACKEND_IMAGE=${{ secrets.DOCKERHUB_USERNAME }}/leafy-backend:${{ github.event.workflow_run.head_sha }}
+            sed -i "s|image: ${{ secrets.DOCKERHUB_USERNAME }}/leafy-backend:.*|image: \$BACKEND_IMAGE|g" docker-compose.yml
+
+            echo "Docker Hub Login..."
+            docker login -u "${{ secrets.DOCKERHUB_USERNAME }}" -p "${{ secrets.DOCKERHUB_TOKEN }}"
+            
+            echo "Pulling updated backend image..."
+            docker-compose pull leafy-backend
+
+            echo "Restarting services..."
+            docker-compose up -d --remove-orphans
+
+            echo "Pruning old images..."
+            docker image prune -af
+
+  # --- 프론트엔드 배포 전용 Job ---
+  deploy-frontend:
+    if: ${{ github.event.workflow_run.workflow.name == 'Frontend Build and Push' && github.event.workflow_run.conclusion == 'success' }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Deploy Frontend to EC2 instance
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: ${{ secrets.EC2_HOST }}
+          username: ${{ secrets.EC2_USERNAME }}
+          key: ${{ secrets.EC2_SSH_PRIVATE_KEY }}
+          script: |
+            # EC2에 docker-compose.yml이 없다면 초기 버전을 생성 (위와 동일)
+            if [ ! -f docker-compose.yml ]; then
+              echo "Creating initial docker-compose.yml"
+              cat << EOF > docker-compose.yml
+              version: '3.8'
+              services:
+                leafy-postgres:
+                  image: ${{ secrets.DOCKERHUB_USERNAME }}/leafy-postgres:latest
+                  volumes:
+                    - leafy_data:/var/lib/postgresql/data
+                  restart: always
+                  healthcheck:
+                    test: ["CMD-SHELL", "pg_isready -U postgres"]
+                    interval: 5s
+                    timeout: 5s
+                    retries: 5
+                leafy-backend:
+                  image: ${{ secrets.DOCKERHUB_USERNAME }}/leafy-backend:initial
+                  restart: on-failure
+                  environment:
+                    - SPRING_DATASOURCE_URL=jdbc:postgresql://leafy-postgres:5432/postgres
+                    - SPRING_DATASOURCE_USERNAME=postgres
+                    - SPRING_DATASOURCE_PASSWORD=postgres
+                  depends_on:
+                    leafy-postgres:
+                      condition: service_healthy
+                leafy-front:
+                  image: ${{ secrets.DOCKERHUB_USERNAME }}/leafy-frontend:initial
+                  restart: on-failure
+                  ports:
+                    - "80:80"
+                  depends_on:
+                    - leafy-backend
+              volumes:
+                leafy_data:
+              EOF
+            fi
+
+            # 1. 프론트엔드 이미지 태그만 최신 버전으로 변경
+            export FRONTEND_IMAGE=${{ secrets.DOCKERHUB_USERNAME }}/leafy-frontend:${{ github.event.workflow_run.head_sha }}
+            sed -i "s|image: ${{ secrets.DOCKERHUB_USERNAME }}/leafy-frontend:.*|image: \$FRONTEND_IMAGE|g" docker-compose.yml
+            
+            echo "Docker Hub Login..."
+            docker login -u "${{ secrets.DOCKERHUB_USERNAME }}" -p "${{ secrets.DOCKERHUB_TOKEN }}"
+
+            echo "Pulling updated frontend image..."
+            docker-compose pull leafy-frontend
+
+            echo "Restarting services..."
+            docker-compose up -d --remove-orphans
+
+            echo "Pruning old images..."
+            docker image prune -af

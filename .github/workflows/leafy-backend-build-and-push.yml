@@ -41,3 +41,4 @@ jobs:
         tags: ${{ secrets.DOCKERHUB_USERNAME }}/leafy-backend:${{ github.sha }}  
         platforms: linux/amd64,linux/arm64,windows/amd64
 
+        platforms: linux/amd64,linux/arm64

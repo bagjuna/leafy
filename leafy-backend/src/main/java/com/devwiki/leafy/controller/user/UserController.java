@@ -50,7 +50,7 @@ public class UserController {
      * @return 추가된 사용자 정보
      */
     @PostMapping("")
-    public ResponseEntity<UserResponseDto> addUser(@Valid @RequestBody UserRequestDto userRequestDto) {
+    public ResponseEntity<UserResponseDto> addUser(@RequestBody UserRequestDto userRequestDto) {
         UserResponseDto addedUserResponseDto = userService.createUser(userRequestDto);
         return new ResponseEntity<>(addedUserResponseDto, HttpStatus.CREATED);
     }
