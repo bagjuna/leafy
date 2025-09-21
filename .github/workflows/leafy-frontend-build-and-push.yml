@@ -46,8 +46,11 @@ jobs:
           username: ${{ secrets.EC2_USERNAME }}
           key: ${{ secrets.EC2_SSH_PRIVATE_KEY }}
           script: |
-            echo "Creating/Updating docker-compose.yml with latest frontend image..."
-            cat << EOF > docker-compose.yml
+            
+            # --- 1. docker-compose.yml 파일이 없으면 새로 생성 ---
+            if [ ! -f docker-compose.yml ]; then
+              echo "Creating initial docker-compose.yml"
+              cat << 'EOF' > docker-compose.yml
             version: '3.8'
             services:
               leafy-postgres:
@@ -57,7 +60,7 @@ jobs:
                 environment:
                   - POSTGRES_USER=${{ secrets.DATASOURCE_USERNAME }}
                   - POSTGRES_PASSWORD=${{ secrets.DATASOURCE_PASSWORD }}
-                  - POSTGRES_DB=postgres
+                  - POSTGRES_DB=${{ secrets.DATASOURCE_URL }}
                 volumes:
                   - leafy_data:/var/lib/postgresql/data
                 restart: always
@@ -88,6 +91,11 @@ jobs:
             EOF
 
             echo "Starting services..."
+            
+            export IMAGE_NAME=${{ secrets.DOCKERHUB_USERNAME }}/leafy-frontend:${{ needs.build.outputs.sha_tag }}
+            # 프론트엔드 이미지 태그만 수정
+            sed -i "s|image: ${{ secrets.DOCKERHUB_USERNAME }}/leafy-frontend:.*|image: \$IMAGE_NAME|g" docker-compose.yml
+            
             sudo docker login -u "${{ secrets.DOCKERHUB_USERNAME }}" -p "${{ secrets.DOCKERHUB_TOKEN }}"
             sudo docker-compose pull leafy-frontend
             sudo docker-compose up -d --remove-orphans
