@@ -1,16 +1,15 @@
 name: Frontend Build and Push
+# .github/workflows/frontend-cicd.yml
 
 on:
   push:
     branches:
-      - 08-cicd  
-      # 08-cicd 브랜치에 push될 때 워크플로우가 실행됩니다.
+      - '08-cicd'
     paths:
       - 'leafy-frontend/**'
       - '.github/workflows/leafy-frontend-build-and-push.yml'
 
 jobs:
-  # --- 1. 빌드 및 푸시 Job ---
   build:
     runs-on: ubuntu-latest
     outputs:
@@ -37,7 +36,6 @@ jobs:
           tags: ${{ secrets.DOCKERHUB_USERNAME }}/leafy-frontend:${{ steps.get_sha.outputs.sha }}
           platforms: linux/amd64
 
-  # --- 2. 배포 Job ---
   deploy:
     needs: build
     runs-on: ubuntu-latest
@@ -53,10 +51,50 @@ jobs:
             export IMAGE_NAME=${{ secrets.DOCKERHUB_USERNAME }}/leafy-frontend:$IMAGE_TAG
             
             echo "Deploying image: $IMAGE_NAME"
+
+            # docker-compose.yml 파일이 없을 경우를 대비한 초기 생성 스크립트 추가
+            if [ ! -f docker-compose.yml ]; then
+              echo "Creating initial docker-compose.yml"
+              cat << 'EOF' > docker-compose.yml
+              version: '3.8'
+              services:
+                leafy-postgres:
+                  image: ${{ secrets.DOCKERHUB_USERNAME }}/leafy-postgres:latest
+                  ports:
+                    - "5432:5432"
+                  environment:
+                    - POSTGRES_USER=${{ secrets.DATASOURCE_USERNAME }}
+                    - POSTGRES_PASSWORD=${{ secrets.DATASOURCE_PASSWORD }}
+                    - POSTGRES_DB=postgres
+                  volumes:
+                    - leafy_data:/var/lib/postgresql/data
+                  restart: always
+                  healthcheck:
+                    test: ["CMD-SHELL", "pg_isready -U postgres"]
+                    interval: 5s
+                    timeout: 5s
+                    retries: 5
+                leafy-backend:
+                  image: ${{ secrets.DOCKERHUB_USERNAME }}/leafy-backend:initial
+                  restart: on-failure
+                  depends_on:
+                    leafy-postgres:
+                      condition: service_healthy
+                leafy-front:
+                  image: ${{ secrets.DOCKERHUB_USERNAME }}/leafy-frontend:initial
+                  restart: on-failure
+                  ports:
+                    - "80:80"
+                  depends_on:
+                    - leafy-backend
+              volumes:
+                leafy_data:
+              EOF
+            fi
             
             sed -i "s|image: ${{ secrets.DOCKERHUB_USERNAME }}/leafy-frontend:.*|image: \$IMAGE_NAME|g" docker-compose.yml
             
-            docker login -u "${{ secrets.DOCKERHUB_USERNAME }}" -p "${{ secrets.DOCKERHUB_TOKEN }}"
-            docker-compose pull leafy-frontend
-            docker-compose up -d --remove-orphans
-            docker image prune -af
+            sudo docker login -u "${{ secrets.DOCKERHUB_USERNAME }}" -p "${{ secrets.DOCKERHUB_TOKEN }}"
+            sudo docker-compose pull leafy-frontend
+            sudo docker-compose up -d --remove-orphans
+            sudo docker image prune -af
