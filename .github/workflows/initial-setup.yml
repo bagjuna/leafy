@@ -25,11 +25,7 @@ jobs:
                 sudo curl -L "https://github.com/docker/compose/releases/latest/download/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
                 sudo chmod +x /usr/local/bin/docker-compose
             fi
-
-            # --- 2. docker-compose.yml 파일 생성 (healthcheck 수정) ---
-            echo "Creating docker-compose.yml..."
-            # 'EOF'에서 작은따옴표를 제거해야 secrets 변수가 확장됩니다.
-            cat << EOF > docker-compose.yml
+            
             version: '3.8'
             services:
               leafy-postgres:
