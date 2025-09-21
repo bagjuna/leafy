@@ -37,6 +37,7 @@ jobs:
                 environment:
                   - POSTGRES_USER=${{ secrets.DATASOURCE_USERNAME }}
                   - POSTGRES_PASSWORD=${{ secrets.DATASOURCE_PASSWORD }}
+                  - POSTGRES_DB=${{ secrets.DATASOURCE_URL }}
                 ports:
                   - "5432:5432"
                 volumes:
