@@ -41,3 +41,4 @@ jobs:
         # 이미지를 레지스트리에 푸시합니다.
         tags: ${{ secrets.DOCKERHUB_USERNAME }}/leafy-postgres:${{ github.sha }}
 
+        platforms: linux/amd64,linux/arm64
