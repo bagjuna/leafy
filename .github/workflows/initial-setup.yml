@@ -26,9 +26,8 @@ jobs:
             fi
 
             # --- 2. docker-compose.yml 파일 생성 (검증된 버전) ---
-            echo "Creating docker-compose.yml..."
+            echo "Creating docker-compose.yml with variables"
             cat << EOF > docker-compose.yml
-            version: '3.8'
             services:
               leafy-postgres:
                 image: ${{ secrets.DOCKERHUB_USERNAME }}/leafy-postgres:latest
@@ -47,7 +46,7 @@ jobs:
                   timeout: 5s
                   retries: 5
               leafy-backend:
-                image: ${{ secrets.DOCKERHUB_USERNAME }}/leafy-backend:latest
+                image: \${BACKEND_IMAGE_TAG}
                 restart: on-failure
                 environment:
                   - SPRING_DATASOURCE_URL=jdbc:postgresql://leafy-postgres:5432/${{ secrets.DATASOURCE_URL }}
@@ -58,7 +57,7 @@ jobs:
                   leafy-postgres:
                     condition: service_healthy
               leafy-front:
-                image: ${{ secrets.DOCKERHUB_USERNAME }}/leafy-frontend:latest
+                image: \${FRONTEND_IMAGE_TAG}
                 restart: on-failure
                 ports:
                   - "80:80"
@@ -71,6 +70,18 @@ jobs:
               leafy_data:
             EOF
 
+            echo "Creating initial .env file"
+            cat << EOF > .env
+            # Image Tags
+            BACKEND_IMAGE_TAG=dojuna/leafy-backend:latest
+            FRONTEND_IMAGE_TAG=dojuna/leafy-frontend:latest
+
+            # Datasource Credentials
+            POSTGRES_USER=${{ secrets.DATASOURCE_USERNAME }}
+            POSTGRES_PASSWORD=${{ secrets.DATASOURCE_PASSWORD }}
+            POSTGRES_DB=${{ secrets.DATASOURCE_URL }}
+            EOF
+            
             # --- 3. 서비스 시작 ---
             echo "Starting services..."
             sudo docker login -u "${{ secrets.DOCKERHUB_USERNAME }}" -p "${{ secrets.DOCKERHUB_TOKEN }}"
