@@ -106,7 +106,7 @@ INSERT INTO user_plants (user_id, plant_id, plant_nickname) VALUES
 
 -- Plant_Logs 테이블에 데이터 삽입
 INSERT INTO plant_logs (user_plant_id, log_date, note, watered) VALUES
-(1, '2023-03-22', '관리가 어려워서 죽었습니다', false),
+(1, '2023-03-22', '관리가 어려워서 죽게됐습니다.', false),
 (1, '2023-03-23', '새로운 아이비를 구입했습니다', true),
 (1, '2023-03-24', '1주일에 한 번 비료를 주기로 했습니다', false),
 (2, '2023-03-22', '잎이 탈색되어 있습니다', false),
