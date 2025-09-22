@@ -62,6 +62,9 @@ jobs:
                 restart: on-failure
                 ports:
                   - "80:80"
+                environment:
+                    - BACKEND_HOST=leafy-backend
+                    - BACKEND_PORT=8080
                 depends_on:
                   - leafy-backend
             volumes:
