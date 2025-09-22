@@ -54,7 +54,6 @@ jobs:
             if [ ! -f docker-compose.yml ]; then
               echo "Creating initial docker-compose.yml"
             cat << 'EOF' > docker-compose.yml
-            version: '3.8'
             services:
               leafy-postgres:
                 image: ${{ secrets.DOCKERHUB_USERNAME }}/leafy-postgres:latest
@@ -90,10 +89,9 @@ jobs:
             fi
             
             # --- 2. 백엔드 이미지 태그만 수정 ---
-            export IMAGE_NAME=${{ secrets.DOCKERHUB_USERNAME }}/leafy-backend:${{ needs.build.outputs.sha_tag }}
-            sed -i "s|image: ${{ secrets.DOCKERHUB_USERNAME }}/leafy-backend:.*|image: \$IMAGE_NAME|g" docker-compose.yml
-            
-            
+            sed -i "s|image: ${{ secrets.DOCKERHUB_USERNAME }}/leafy-backend:.*|image: ${{ secrets.DOCKERHUB_USERNAME }}/leafy-backend:${{ needs.build.outputs.sha_tag }}|g" docker-compose.yml
+
+                      
             sudo docker login -u "${{ secrets.DOCKERHUB_USERNAME }}" -p "${{ secrets.DOCKERHUB_TOKEN }}"
             sudo docker-compose pull leafy-backend
             sudo docker-compose up -d --remove-orphans
