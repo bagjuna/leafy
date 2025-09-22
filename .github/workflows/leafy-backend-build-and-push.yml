@@ -53,40 +53,40 @@ jobs:
             # --- 1. docker-compose.yml 파일이 없으면 새로 생성 ---
             if [ ! -f docker-compose.yml ]; then
               echo "Creating initial docker-compose.yml"
-              cat << 'EOF' > docker-compose.yml
-              version: '3.8'
-              services:
-                leafy-postgres:
-                  image: ${{ secrets.DOCKERHUB_USERNAME }}/leafy-postgres:latest
-                  ports: ["5432:5432"]
-                  environment:
-                    - POSTGRES_USER=${{ secrets.DATASOURCE_USERNAME }}
-                    - POSTGRES_PASSWORD=${{ secrets.DATASOURCE_PASSWORD }}
-                    - POSTGRES_DB=${{ secrets.DATASOURCE_URL }}
-                  volumes: [- leafy_data:/var/lib/postgresql/data]
-                  restart: always
-                  healthcheck:
-                    test: ["CMD-SHELL", "pg_isready -U ${{ secrets.DATASOURCE_USERNAME }}"]
-                    interval: 5s
-                    timeout: 5s
-                    retries: 5
-                leafy-backend:
-                  image: ${{ secrets.DOCKERHUB_USERNAME }}/leafy-backend:${{ needs.build.outputs.sha_tag }}
-                  restart: on-failure
-                  environment:
-                    - SPRING_DATASOURCE_URL=jdbc:postgresql://leafy-postgres:5432/${{ secrets.DATASOURCE_URL }}
-                    - SPRING_DATASOURCE_USERNAME=${{ secrets.DATASOURCE_USERNAME }}
-                    - SPRING_DATASOURCE_PASSWORD=${{ secrets.DATASOURCE_PASSWORD }}
-                  depends_on:
-                    leafy-postgres: { condition: service_healthy }
-                leafy-front:
-                  image: ${{ secrets.DOCKERHUB_USERNAME }}/leafy-frontend:latest
-                  restart: on-failure
-                  ports: ["80:80"]
-                  depends_on: ["leafy-backend"]
-              volumes:
-                leafy_data:
-              EOF
+            cat << 'EOF' > docker-compose.yml
+            version: '3.8'
+            services:
+              leafy-postgres:
+                image: ${{ secrets.DOCKERHUB_USERNAME }}/leafy-postgres:latest
+                ports: ["5432:5432"]
+                environment:
+                  - POSTGRES_USER=${{ secrets.DATASOURCE_USERNAME }}
+                  - POSTGRES_PASSWORD=${{ secrets.DATASOURCE_PASSWORD }}
+                  - POSTGRES_DB=${{ secrets.DATASOURCE_URL }}
+                volumes: [- leafy_data:/var/lib/postgresql/data]
+                restart: always
+                healthcheck:
+                  test: ["CMD-SHELL", "pg_isready -U ${{ secrets.DATASOURCE_USERNAME }}"]
+                  interval: 5s
+                  timeout: 5s
+                  retries: 5
+              leafy-backend:
+                image: ${{ secrets.DOCKERHUB_USERNAME }}/leafy-backend:${{ needs.build.outputs.sha_tag }}
+                restart: on-failure
+                environment:
+                  - SPRING_DATASOURCE_URL=jdbc:postgresql://leafy-postgres:5432/${{ secrets.DATASOURCE_URL }}
+                  - SPRING_DATASOURCE_USERNAME=${{ secrets.DATASOURCE_USERNAME }}
+                  - SPRING_DATASOURCE_PASSWORD=${{ secrets.DATASOURCE_PASSWORD }}
+                depends_on:
+                  leafy-postgres: { condition: service_healthy }
+              leafy-front:
+                image: ${{ secrets.DOCKERHUB_USERNAME }}/leafy-frontend:latest
+                restart: on-failure
+                ports: ["80:80"]
+                depends_on: ["leafy-backend"]
+            volumes:
+              leafy_data:
+            EOF
             fi
             
             # --- 2. 백엔드 이미지 태그만 수정 ---
