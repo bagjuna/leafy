@@ -56,7 +56,7 @@ CREATE TABLE plant_logs (
 -- $2a$10$ke3IM6noeWfQtX6POjZHl.49gSolYbqfrSTIn8sOQubdwjP2IT94q = password789
 INSERT INTO users (name, email, password, gender, birth_date) VALUES
 ('John', 'john123@qmail.com', '$2a$10$vYR4pPQqR/oZcUDZfXrahecEejQHY0kLkDB5s.FctPRMcEMh1PYhG', 'M', '1988-05-01'),
-('Juna', 'juna123@qmail.com', '$2a$10$vYR4pPQqR/oZcUDZfXrahecEejQHY0kLkDB5s.FctPRMcEMh1PYhG', 'F', '2001-01-24'),
+('Juna', 'juna123@qmail.com', '$2a$10$vYR4pPQqR/oZcUDZfXrahecEejQHY0kLkDB5s.FctPRMcEMh1PYhG', 'M', '2001-01-24'),
 ('Peter', 'peter789@qmail.com', '$2a$10$vYR4pPQqR/oZcUDZfXrahecEejQHY0kLkDB5s.FctPRMcEMh1PYhG', 'M', '1981-12-25'),
 ('Susan', 'susan321@qmail.com', '$2a$10$vYR4pPQqR/oZcUDZfXrahecEejQHY0kLkDB5s.FctPRMcEMh1PYhG', 'F', '1990-06-02'),
 ('David', 'david654@qmail.com', '$2a$10$vYR4pPQqR/oZcUDZfXrahecEejQHY0kLkDB5s.FctPRMcEMh1PYhG', 'M', '1992-03-11'),
@@ -106,7 +106,7 @@ INSERT INTO user_plants (user_id, plant_id, plant_nickname) VALUES
 
 -- Plant_Logs 테이블에 데이터 삽입
 INSERT INTO plant_logs (user_plant_id, log_date, note, watered) VALUES
-(1, '2023-03-22', '관리가 어려워서 죽었습니다', false),
+(1, '2023-03-22', '관리가 어려워서 죽게됐습니다.', false),
 (1, '2023-03-23', '새로운 아이비를 구입했습니다', true),
 (1, '2023-03-24', '1주일에 한 번 비료를 주기로 했습니다', false),
 (2, '2023-03-22', '잎이 탈색되어 있습니다', false),

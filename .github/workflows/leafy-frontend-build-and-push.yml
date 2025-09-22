@@ -1,44 +1,103 @@
 name: Frontend Build and Push
-
+# .github/workflows/frontend-cicd.yml
 on:
   push:
     branches:
-      - 08-cicd  
-      # 08-cicd 브랜치에 push될 때 워크플로우가 실행됩니다.
+      - '08-cicd'
     paths:
       - 'leafy-frontend/**'
+      - '.github/workflows/leafy-frontend-build-and-push.yml'
 
 jobs:
-  build-and-push:
-    runs-on: ubuntu-latest  
-    # 가장 최신의 Ubuntu 러너를 사용합니다.
-
+  build:
+    runs-on: ubuntu-latest
+    outputs:
+      sha_tag: ${{ steps.get_sha.outputs.sha }}
     steps:
-    - name: Checkout Repository
-      uses: actions/checkout@v2  
-      # 현재 리포지토리를 체크아웃합니다.
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+      - name: Get short commit sha
+        id: get_sha
+        run: echo "sha=$(echo ${{ github.sha }} | cut -c1-7)" >> $GITHUB_OUTPUT
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+      - name: Login to Docker Hub
+        uses: docker/login-action@v3
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+      - name: Build and Push Docker Image
+        uses: docker/build-push-action@v5
+        with:
+          context: ./leafy-frontend
+          file: ./leafy-frontend/Dockerfile
+          push: true
+          tags: ${{ secrets.DOCKERHUB_USERNAME }}/leafy-frontend:${{ steps.get_sha.outputs.sha }},${{ secrets.DOCKERHUB_USERNAME }}/leafy-frontend:latest
+          platforms: linux/amd64
 
-    - name: Set up Docker Buildx
-      uses: docker/setup-buildx-action@v1  
-      # Docker Buildx를 설정합니다.
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+      - name: Deploy to EC2 instance
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: ${{ secrets.EC2_HOST }}
+          username: ${{ secrets.EC2_USERNAME }}
+          key: ${{ secrets.EC2_SSH_PRIVATE_KEY }}
+          script: |
+            
+            # --- 1. docker-compose.yml 파일이 없으면 새로 생성 ---
+            if [ ! -f docker-compose.yml ]; then
+              echo "Creating initial docker-compose.yml"
+            cat << 'EOF' > docker-compose.yml
+            version: '3.8'
+            services:
+              leafy-postgres:
+                image: ${{ secrets.DOCKERHUB_USERNAME }}/leafy-postgres:latest
+                ports:
+                  - "5432:5432"
+                environment:
+                  - POSTGRES_USER=${{ secrets.DATASOURCE_USERNAME }}
+                  - POSTGRES_PASSWORD=${{ secrets.DATASOURCE_PASSWORD }}
+                  - POSTGRES_DB=${{ secrets.DATASOURCE_URL }}
+                volumes:
+                  - leafy_data:/var/lib/postgresql/data
+                restart: always
+                healthcheck:
+                  test: ["CMD-SHELL", "pg_isready -U ${{ secrets.DATASOURCE_USERNAME }}"]
+                  interval: 5s
+                  timeout: 5s
+                  retries: 5
+              leafy-backend:
+                image: ${{ secrets.DOCKERHUB_USERNAME }}/leafy-backend:latest
+                restart: on-failure
+                environment:
+                  - SPRING_DATASOURCE_URL=jdbc:postgresql://leafy-postgres:5432/${{ secrets.DATASOURCE_URL }}
+                  - SPRING_DATASOURCE_USERNAME=${{ secrets.DATASOURCE_USERNAME }}
+                  - SPRING_DATASOURCE_PASSWORD=${{ secrets.DATASOURCE_PASSWORD }}
+                depends_on:
+                  leafy-postgres:
+                    condition: service_healthy
+              leafy-front:
+                image: ${{ secrets.DOCKERHUB_USERNAME }}/leafy-frontend:${{ needs.build.outputs.sha_tag }}
+                restart: on-failure
+                ports:
+                  - "80:80"
+                depends_on:
+                  - leafy-backend
+            volumes:
+              leafy_data:
+            EOF
+            fi
 
-    - name: Login to Docker Hub
-      uses: docker/login-action@v1
-      with:
-        username: ${{ secrets.DOCKERHUB_USERNAME }}  
-        # GitHub Secret에서 Docker Hub 사용자 이름을 가져옵니다.
-        password: ${{ secrets.DOCKERHUB_TOKEN }}     
-        # GitHub Secret에서 Docker Hub 액세스 토큰을 가져옵니다.
-
-    - name: Build and Push
-      uses: docker/build-push-action@v2
-      with:
-        context: ./leafy-frontend  
-        # Dockerfile이 있는 위치입니다.
-        file: ./leafy-frontend/Dockerfile  
-        # Dockerfile의 경로입니다.
-        push: true  
-        # 이미지를 레지스트리에 푸시합니다.
-        tags: ${{ secrets.DOCKERHUB_USERNAME }}/leafy-frontend:${{ github.sha }}  
-        platforms: linux/amd64,linux/arm64,windows/amd64
-
+            echo "Starting services..."
+            
+            export IMAGE_NAME=${{ secrets.DOCKERHUB_USERNAME }}/leafy-frontend:${{ needs.build.outputs.sha_tag }}
+            # 프론트엔드 이미지 태그만 수정
+            sed -i "s|image: ${{ secrets.DOCKERHUB_USERNAME }}/leafy-frontend:.*|image: \$IMAGE_NAME|g" docker-compose.yml
+            
+            sudo docker login -u "${{ secrets.DOCKERHUB_USERNAME }}" -p "${{ secrets.DOCKERHUB_TOKEN }}"
+            sudo docker-compose pull leafy-frontend
+            sudo docker-compose up -d --remove-orphans
+            sudo docker image prune -af
