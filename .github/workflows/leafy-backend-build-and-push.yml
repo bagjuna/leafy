@@ -50,21 +50,23 @@ jobs:
           username: ${{ secrets.EC2_USERNAME }}
           key: ${{ secrets.EC2_SSH_PRIVATE_KEY }}
           script: |
-            
             # --- 1. docker-compose.yml 파일이 없으면 새로 생성 ---
             if [ ! -f docker-compose.yml ]; then
               echo "Creating initial docker-compose.yml"
               cat << 'EOF' > docker-compose.yml
-            
               version: '3.8'
               services:
                 leafy-postgres:
                   image: ${{ secrets.DOCKERHUB_USERNAME }}/leafy-postgres:latest
-                  volumes: ["leafy_data:/var/lib/postgresql/data"]
                   ports: ["5432:5432"]
+                  environment:
+                    - POSTGRES_USER=${{ secrets.DATASOURCE_USERNAME }}
+                    - POSTGRES_PASSWORD=${{ secrets.DATASOURCE_PASSWORD }}
+                    - POSTGRES_DB=${{ secrets.DATASOURCE_URL }}
+                  volumes: [- leafy_data:/var/lib/postgresql/data]
                   restart: always
                   healthcheck:
-                    test: ["CMD-SHELL", "pg_isready -U postgres"]
+                    test: ["CMD-SHELL", "pg_isready -U ${{ secrets.DATASOURCE_USERNAME }}"]
                     interval: 5s
                     timeout: 5s
                     retries: 5
