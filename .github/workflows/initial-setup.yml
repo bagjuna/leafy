@@ -37,7 +37,7 @@ jobs:
                 environment:
                   - POSTGRES_USER=${{ secrets.DATASOURCE_USERNAME }}
                   - POSTGRES_PASSWORD=${{ secrets.DATASOURCE_PASSWORD }}
-                  - POSTGRES_DB=postgres
+                  - POSTGRES_DB=${{ secrets.DATASOURCE_URL }}
                 volumes:
                   - leafy_data:/var/lib/postgresql/data
                 restart: always
