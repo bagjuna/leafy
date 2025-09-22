@@ -36,7 +36,7 @@ jobs:
           file: ./leafy-backend/Dockerfile
           push: true
           tags: ${{ secrets.DOCKERHUB_USERNAME }}/leafy-backend:${{ steps.get_sha.outputs.sha }},${{ secrets.DOCKERHUB_USERNAME }}/leafy-backend:latest
-          platforms: linux/amd64,linux/arm64
+          platforms: linux/amd64
 
   # --- 2. 배포 Job ---
   deploy:
