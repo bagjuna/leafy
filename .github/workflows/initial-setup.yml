@@ -47,7 +47,7 @@ jobs:
                   timeout: 5s
                   retries: 5
               leafy-backend:
-                image: ${{ secrets.DOCKERHUB_USERNAME }}/leafy-backend:f1b0bbc
+                image: ${{ secrets.DOCKERHUB_USERNAME }}/leafy-backend:latest
                 restart: on-failure
                 environment:
                   - SPRING_DATASOURCE_URL=jdbc:postgresql://leafy-postgres:5432/${{ secrets.DATASOURCE_URL }}
