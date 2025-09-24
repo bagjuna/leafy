@@ -59,10 +59,10 @@ public class UserService {
      * @return 생성된 사용자 정보
      */
     public UserResponseDto createUser(UserRequestDto userRequestDto) {
-        userRequestDto.setCreatedAt(LocalDateTime.now());
-        userRequestDto.setUpdatedAt(LocalDateTime.now());
         userRequestDto.setPassword(passwordEncoder.encode(userRequestDto.getPassword())); // 비밀번호 암호화
         User user = new User(userRequestDto);
+        user.setCreatedAt(LocalDateTime.now());
+        user.setUpdatedAt(LocalDateTime.now());
         userRepository.save(user);
         return UserMapper.toResponseDto(user);
     }
@@ -94,7 +94,6 @@ public class UserService {
     public UserResponseDto updateUser(Long userId, UserPutRequestDto userPutRequestDto) {
         UserRequestDto userRequestDto = new UserRequestDto();
         userRequestDto.setName(userPutRequestDto.getName());
-        userRequestDto.setUpdatedAt(LocalDateTime.now());
         // 비밀번호 암호화
         if (userPutRequestDto.getPassword() != null) {
             userRequestDto.setPassword(passwordEncoder.encode(userPutRequestDto.getPassword()));
@@ -103,8 +102,6 @@ public class UserService {
         User user = findUserById(userId);
         userRequestDto.setEmail(user.getEmail());
         userRequestDto.setGender(user.getGender());
-        userRequestDto.setBirthDate(user.getBirthDate());
-        userRequestDto.setCreatedAt(user.getCreatedAt());
 
         user.updateEntity(userRequestDto);
         userRepository.save(user);

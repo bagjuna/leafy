@@ -1,22 +1,36 @@
-version: '3'
+version: '3.8'
 services:
   leafy-postgres:
     build: ./leafy-postgresql
     image: leafy-postgres:5.0.0-compose
+    ports:
+      - "5432:5432"
+    environment:
+      - POSTGRES_USER=${DATASOURCE_USERNAME}
+      - POSTGRES_PASSWORD=${DATASOURCE_PASSWORD}
+      - POSTGRES_DB=${DATASOURCE_URL}
     volumes:
-      - mydata:/var/lib/postgresql/data
+      - leafy_data:/var/lib/postgresql/data
     deploy:
       resources:
         limits:
           cpus: '1'
           memory: 256M
     restart: always
+    healthcheck:
+      test: [ "CMD-SHELL", "pg_isready -U ${DATASOURCE_URL}" ]
+      interval: 5s
+      timeout: 5s
+      retries: 5
 
   leafy-backend:
     build: ./leafy-backend
     image: leafy-backend:5.0.0-compose
     environment:
-      - DB_URL=leafy-postgres
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://leafy-postgres:5432/${DATASOURCE_URL}
+      - SPRING_DATASOURCE_USERNAME=${DATASOURCE_USERNAME}
+      - SPRING_DATASOURCE_PASSWORD=${DATASOURCE_PASSWORD}
+      - SPRING_JPA_PROPERTIES_HIBERNATE_DIALECT=org.hibernate.dialect.PostgreSQLDialect
     depends_on:
       - leafy-postgres
     deploy:
@@ -31,6 +45,7 @@ services:
     image: leafy-front:5.0.0-compose
     environment:
       - BACKEND_HOST=leafy-backend
+      - BACKEND_PORT=8080
     ports:
       - 80:80
     depends_on:
@@ -43,4 +58,4 @@ services:
     restart: on-failure
 
 volumes:
-  mydata:
+  leafy_data:
