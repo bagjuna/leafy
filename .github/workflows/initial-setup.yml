@@ -28,6 +28,7 @@ jobs:
             # --- 2. docker-compose.yml 파일 생성 (검증된 버전) ---
             echo "Creating docker-compose.yml with variables"
             cat << EOF > docker-compose.yml
+
             services:
               leafy-postgres:
                 image: ${{ secrets.DOCKERHUB_USERNAME }}/leafy-postgres:latest
@@ -47,6 +48,7 @@ jobs:
                   retries: 5
               leafy-backend:
                 image: \${BACKEND_IMAGE_TAG}
+
                 restart: on-failure
                 environment:
                   - SPRING_DATASOURCE_URL=jdbc:postgresql://leafy-postgres:5432/${{ secrets.DATASOURCE_URL }}

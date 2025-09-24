@@ -51,7 +51,7 @@ jobs:
             # 1. .env 파일에서 프론트엔드 이미지 태그 라인만 찾아 교체합니다.
             sed -i "s|^FRONTEND_IMAGE_TAG=.*|FRONTEND_IMAGE_TAG=${{ secrets.DOCKERHUB_USERNAME }}/leafy-frontend:${{ needs.build.outputs.sha_tag }}|" .env
             
-            # 2. (안정성 강화) 만약 .env 파일에 해당 라인이 없다면 추가해줍니다.
+            # 2. 만약 .env 파일에 해당 라인이 없다면 추가해줍니다.
             if ! grep -q "FRONTEND_IMAGE_TAG=" .env; then
               echo "FRONTEND_IMAGE_TAG=${{ secrets.DOCKERHUB_USERNAME }}/leafy-frontend:${{ needs.build.outputs.sha_tag }}" >> .env
             fi
