@@ -19,6 +19,4 @@ public class UserRequestDto {
     private String gender;
     @NotNull
     private LocalDate birthDate;
-    private LocalDateTime createdAt;
-    private LocalDateTime updatedAt;
 }

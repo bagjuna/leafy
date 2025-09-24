@@ -50,49 +50,24 @@ jobs:
           username: ${{ secrets.EC2_USERNAME }}
           key: ${{ secrets.EC2_SSH_PRIVATE_KEY }}
           script: |
-            # --- 1. docker-compose.yml 파일이 없으면 새로 생성 ---
-            if [ ! -f docker-compose.yml ]; then
-              echo "Creating initial docker-compose.yml"
-            cat << 'EOF' > docker-compose.yml
-            services:
-              leafy-postgres:
-                image: ${{ secrets.DOCKERHUB_USERNAME }}/leafy-postgres:latest
-                ports: ["5432:5432"]
-                environment:
-                  - POSTGRES_USER=${{ secrets.DATASOURCE_USERNAME }}
-                  - POSTGRES_PASSWORD=${{ secrets.DATASOURCE_PASSWORD }}
-                  - POSTGRES_DB=${{ secrets.DATASOURCE_URL }}
-                volumes: [- leafy_data:/var/lib/postgresql/data]
-                restart: always
-                healthcheck:
-                  test: ["CMD-SHELL", "pg_isready -U ${{ secrets.DATASOURCE_USERNAME }}"]
-                  interval: 5s
-                  timeout: 5s
-                  retries: 5
-              leafy-backend:
-                image: ${{ secrets.DOCKERHUB_USERNAME }}/leafy-backend:${{ needs.build.outputs.sha_tag }}
-                restart: on-failure
-                environment:
-                  - SPRING_DATASOURCE_URL=jdbc:postgresql://leafy-postgres:5432/${{ secrets.DATASOURCE_URL }}
-                  - SPRING_DATASOURCE_USERNAME=${{ secrets.DATASOURCE_USERNAME }}
-                  - SPRING_DATASOURCE_PASSWORD=${{ secrets.DATASOURCE_PASSWORD }}
-                depends_on:
-                  leafy-postgres: { condition: service_healthy }
-              leafy-front:
-                image: ${{ secrets.DOCKERHUB_USERNAME }}/leafy-frontend:latest
-                restart: on-failure
-                ports: ["80:80"]
-                depends_on: ["leafy-backend"]
-            volumes:
-              leafy_data:
-            EOF
-            fi
+            # .env 파일에서 백엔드 이미지 태그 라인만 수정
+            # 'BACKEND_IMAGE_TAG='로 시작하는 줄을 찾아 새로운 태그로 교체합니다.
+            # 파일이 없거나 해당 라인이 없어도 sed가 조용히 넘어갑니다.
+            sed -i "s|^BACKEND_IMAGE_TAG=.*|BACKEND_IMAGE_TAG=${{ secrets.DOCKERHUB_USERNAME }}/leafy-backend:${{ needs.build.outputs.sha_tag }}|" .env
             
-            # --- 2. 백엔드 이미지 태그만 수정 ---
-            sed -i "s|image: ${{ secrets.DOCKERHUB_USERNAME }}/leafy-backend:.*|image: ${{ secrets.DOCKERHUB_USERNAME }}/leafy-backend:${{ needs.build.outputs.sha_tag }}|g" docker-compose.yml
-
-                      
+            # 만약 .env 파일에 BACKEND_IMAGE_TAG 라인이 아예 없다면 추가해줍니다.
+            if ! grep -q "BACKEND_IMAGE_TAG=" .env; then
+            echo "BACKEND_IMAGE_TAG=${{ secrets.DOCKERHUB_USERNAME }}/leafy-backend:${{ needs.build.outputs.sha_tag }}" >> .env
+            fi
+          
+            echo "Updated .env file with new backend image tag."
+            
+            # Docker 로그인
             sudo docker login -u "${{ secrets.DOCKERHUB_USERNAME }}" -p "${{ secrets.DOCKERHUB_TOKEN }}"
+            
+            # 백엔드 서비스만 새로 pull 받고 재시작
             sudo docker-compose pull leafy-backend
-            sudo docker-compose up -d --remove-orphans
+            sudo docker-compose up -d --no-deps leafy-backend
+            
+  
             sudo docker image prune -af

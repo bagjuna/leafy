@@ -7,11 +7,13 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import javax.persistence.*;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 
+@Setter
 @Entity
 @NoArgsConstructor
 @AllArgsConstructor
@@ -82,7 +84,5 @@ public class User {
         this.password = createDto.getPassword();
         this.gender = createDto.getGender();
         this.birthDate = createDto.getBirthDate();
-        this.createdAt = LocalDateTime.now();
-        this.updatedAt = LocalDateTime.now();
     }
 }

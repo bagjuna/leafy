@@ -1,19 +1,32 @@
 <template>
   <div class="login-container">
     <h1>LEAFY</h1>
-    <form @submit.prevent="submitLogin">
+    <form @submit.prevent="submitSignUp">
       <div class="form-group">
-        <input type="text" id="userEmail" v-model="userEmail" placeholder="이메일을 입력하세요." required />
+        <input type="text" id="userName" v-model="userName" placeholder="이름을 입력하세요." required />
+      </div>
+      <div class="form-group">
+        <input type="email" id="userEmail" v-model="userEmail" placeholder="이메일을 입력하세요." required />
       </div>
       <div class="form-group">
         <input type="password" id="userPassword" v-model="userPassword" placeholder="비밀번호를 입력하세요." required />
       </div>
-      <button type="submit">로그인</button>
+      <div class="form-group">
+        <select id="userGender" v-model="userGender" required>
+          <option value="">성별을 선택하세요.</option>
+          <option value="M">남성</option>
+          <option value="F">여성</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <input type="date" id="userBirthDate" v-model="userBirthDate" placeholder="생년월일을 입력하세요." required />
+      </div>
+      <button type="submit">회원가입</button>
     </form>
-    <!--회원 가입하러 가기    -->
+    <!--로그인하러 가기-->
     <div style="text-align: center; margin-top: 1rem;">
-      <span>계정이 없으신가요? </span>
-      <router-link to="/signup" style="color: #556B2F; font-weight: bold;">회원가입</router-link>
+      <span>아이디가 있으신가요? </span>
+      <router-link to="/login" style="color: #556B2F; font-weight: bold;">로그인</router-link>
     </div>
   </div>
 </template>
@@ -23,11 +36,14 @@ import api from '@/api/api';
 import { mapState, mapActions } from "vuex";
 
 export default {
-  name: "UserLogin",
+  name: "UserSignUp",
   data() {
     return {
+      userName: '',
       userEmail: '',
       userPassword: '',
+      userGender: '',
+      userBirthDate: '',
     };
   },
   mounted() {
@@ -39,30 +55,31 @@ export default {
     isLoggedIn() {
       return !!this.$store.state.user;
     },
-    computed: {
-      ...mapState(["popup", "user"])
-    },
+    ...mapState(["popup", "user"])
   },
   methods: {
     ...mapActions(["showPopup"]),
-    async submitLogin() {
+    async submitSignUp() {
       try {
-        const response = await api.post('/api/v1/users/login', {
+        const response = await api.post('/api/v1/users/signup', {
+          name: this.userName,
           email: this.userEmail,
           password: this.userPassword,
+          gender: this.userGender,
+          birthDate: this.userBirthDate,
         });
         this.$store.dispatch('loginUser', response.data);
         this.$store.dispatch("showPopup", {
-          title: "로그인 성공",
+          title: "회원가입 성공",
           message: `${response.data.name}님, 환영합니다.`,
           status: "success",
           showingSecond: 1500
         });
-        this.$router.push({ name: 'HomePage' }); 
+        this.$router.replace({ name: 'UserLogin' });
       } catch (error) {
         this.$store.dispatch("showPopup", {
-          title: "로그인 실패",
-          message: "로그인에 실패하였습니다. 아이디와 비밀번호를 확인해주세요.",
+          title: "회원가입 실패",
+          message: "회원가입에 실패하였습니다. 아이디와 비밀번호를 확인해주세요.",
           status: "error",
           showingSecond: 1500
         });
@@ -104,7 +121,10 @@ label {
   margin-bottom: 0.3rem;
 }
 input[type="text"],
-input[type="password"] {
+input[type="password"],
+input[type="email"],
+input[type="date"],
+select {
   padding: 0.6rem;
   font-size: 1rem;
   border: 1px solid #ccc;
