@@ -19,8 +19,8 @@ RUN npm run build
 # 프로덕션 스테이지
 FROM nginx:1.21.4-alpine 
 COPY nginx.conf /etc/nginx/conf.d/default.conf.template
-ENV BACKEND_HOST leafy
-ENV BACKEND_PORT 8080
+ENV BACKEND_HOST=leafy
+ENV BACKEND_PORT=8080
 
 COPY docker-entrypoint.sh /usr/local/bin/
 RUN chmod +x /usr/local/bin/docker-entrypoint.sh
