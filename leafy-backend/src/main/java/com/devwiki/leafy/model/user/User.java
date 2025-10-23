@@ -1,26 +1,42 @@
 package com.devwiki.leafy.model.user;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.util.HashSet;
+import java.util.Set;
+
 import com.devwiki.leafy.dto.user.UserDto;
 import com.devwiki.leafy.dto.user.UserRequestDto;
 import com.devwiki.leafy.dto.user.UserResponseDto;
+import com.devwiki.leafy.util.BaseEntity;
+
+import jakarta.persistence.CascadeType;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.JoinTable;
+import jakarta.persistence.ManyToMany;
+import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import lombok.Setter;
-
-import javax.persistence.*;
-import java.time.LocalDate;
-import java.time.LocalDateTime;
+import lombok.ToString;
 
 @Setter
+@ToString
+@RequiredArgsConstructor
 @Entity
-@NoArgsConstructor
 @AllArgsConstructor
 @Table(name = "users")
 @Getter
 @Builder
-public class User {
+public class User extends BaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -39,21 +55,22 @@ public class User {
     @Column(name = "gender")
     private String gender;
 
+    @ManyToMany(fetch = FetchType.LAZY, cascade={CascadeType.MERGE})
+    @JoinTable(name = "user_roles", joinColumns = { @JoinColumn(name = "user_id") }, inverseJoinColumns = {
+        @JoinColumn(name = "role_id") })
+    @ToString.Exclude
+    @Builder.Default
+    private Set<Role> userRoles = new HashSet<>();
+
     @Column(name = "birthDate")
     private LocalDate birthDate;
 
-    @Column(name = "created_at", nullable = false)
-    private LocalDateTime createdAt;
-
-    @Column(name = "updated_at")
-    private LocalDateTime updatedAt;
 
     public void updateEntity(UserRequestDto userRequestDto) {
         this.name = userRequestDto.getName();
         this.password = userRequestDto.getPassword();
         this.gender = userRequestDto.getGender();
         this.birthDate = userRequestDto.getBirthDate();
-        this.updatedAt = LocalDateTime.now();
     }
 
     public User(UserDto userDto) {
@@ -63,8 +80,6 @@ public class User {
         this.password = userDto.getPassword();
         this.gender = userDto.getGender();
         this.birthDate = userDto.getBirthDate();
-        this.createdAt = userDto.getCreatedAt();
-        this.updatedAt = userDto.getUpdatedAt();
     }
 
     public User(UserResponseDto userResponseDto) {
@@ -74,8 +89,6 @@ public class User {
         this.password = userResponseDto.getPassword();
         this.gender = userResponseDto.getGender();
         this.birthDate = userResponseDto.getBirthDate();
-        this.createdAt = userResponseDto.getCreatedAt();
-        this.updatedAt = userResponseDto.getUpdatedAt();
     }
 
     public User(UserRequestDto createDto) {

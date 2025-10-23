@@ -50,7 +50,7 @@ export default {
 
     const fetchUser = async () => {
       const userId = user.value.userId;
-      api.get(`/api/v1/users/${userId}`)
+      api.get(`/api/users/${userId}`)
         .then(response => {
           state.currentUser = response.data;
         })
@@ -65,7 +65,7 @@ export default {
     
     const editUser = async () =>{
       try {
-        await api.post('/api/v1/users/login', {
+        await api.post('/api/users/login', {
           email: user.value.email,
           password: state.password,
         });
@@ -146,4 +146,3 @@ export default {
   cursor: pointer;
 }
 </style>
-  

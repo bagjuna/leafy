@@ -118,7 +118,7 @@ export default {
     async addPlant() {
       if (this.$refs.form.validate()) {
         try {
-          await api.post("/api/v1/plants", {
+          await api.post("/api/plants", {
             plantName: this.plantName,
             plantType: this.plantType,
             plantDesc: this.plantDesc,

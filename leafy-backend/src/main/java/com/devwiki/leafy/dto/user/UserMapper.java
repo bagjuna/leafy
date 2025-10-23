@@ -9,9 +9,13 @@ public class UserMapper {
     public static UserResponseDto toResponseDto(User user) {
         UserResponseDto userResponseDto = new UserResponseDto();
         userResponseDto.setUserId(user.getUserId());
+        userResponseDto.setPassword(null);
         userResponseDto.setName(user.getName());
         userResponseDto.setEmail(user.getEmail());
         userResponseDto.setGender(user.getGender());
+        userResponseDto.setBirthDate(user.getBirthDate());
+        userResponseDto.setCreatedAt(user.getCreatedAt());
+        userResponseDto.setUpdatedAt(user.getUpdatedAt());
         return userResponseDto;
     }
 
@@ -23,8 +27,6 @@ public class UserMapper {
         userDto.setPassword(user.getPassword());
         userDto.setGender(user.getGender());
         userDto.setBirthDate(user.getBirthDate());
-        userDto.setCreatedAt(user.getCreatedAt());
-        userDto.setUpdatedAt(user.getUpdatedAt());
         return userDto;
     }
 }

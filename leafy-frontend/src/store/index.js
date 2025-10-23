@@ -19,6 +19,7 @@ export default createStore({
     },
     setUser(state, user) {
       state.user = user;
+      console.log("user", user);
     },
   },
   actions: {

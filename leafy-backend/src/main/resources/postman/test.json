@@ -12,7 +12,7 @@
         "header": [],
         "body": {},
         "url": {
-          "raw": "{{base_url}}/api/v1/plants",
+          "raw": "{{base_url}}/api/plants",
           "protocol": "{{base_url}}",
           "host": [
             "api",
@@ -40,7 +40,7 @@
         "header": [],
         "body": {},
         "url": {
-          "raw": "{{base_url}}/api/v1/plants/1",
+          "raw": "{{base_url}}/api/plants/1",
           "protocol": "{{base_url}}",
           "host": [
             "api",
@@ -77,7 +77,7 @@
           "raw": "{\n    \"name\": \"Test Plant\",\n    \"description\": \"This is a test plant\",\n    \"image\": \"https://example.com/plant.jpg\"\n}"
         },
         "url": {
-          "raw": "{{base_url}}/api/v1/plants",
+          "raw": "{{base_url}}/api/plants",
           "protocol": "{{base_url}}",
           "host": [
             "api",
@@ -113,7 +113,7 @@
           "raw": "{\n    \"name\": \"Updated Test Plant\",\n    \"description\": \"This is an updated test plant\",\n    \"image\": \"https://example.com/plant-updated.jpg\"\n}"
         },
         "url": {
-          "raw": "{{base_url}}/api/v1/plants/1",
+          "raw": "{{base_url}}/api/plants/1",
           "protocol": "{{base_url}}",
           "host": [
             "api",
@@ -142,7 +142,7 @@
         "header": [],
         "body": {},
         "url": {
-          "raw": "{{base_url}}/api/v1/plants/1",
+          "raw": "{{base_url}}/api/plants/1",
           "protocol": "{{base_url}}",
           "host": [
             "api",
@@ -170,7 +170,7 @@
         "header": [],
         "body": {},
         "url": {
-          "raw": "{{base_url}}/api/v1/plant-logs",
+          "raw": "{{base_url}}/api/plant-logs",
           "protocol": "{{base_url}}",
           "host": [
             "api",
@@ -198,7 +198,7 @@
         "header": [],
         "body": {},
         "url": {
-          "raw": "{{base_url}}/api/v1/plant-logs/1",
+          "raw": "{{base_url}}/api/plant-logs/1",
           "protocol": "{{base_url}}",
           "host": [
             "api",
@@ -235,7 +235,7 @@
           "raw": "{\n    \"userPlantId\": 1,\n    \"date\": \"2022-03-28T18:23:54.000Z\",\n    \"watered\": true,\n    \"fertilized\": false,\n    \"pruned\": false\n}"
         },
         "url": {
-          "raw": "{{base_url}}/api/v1/plant-logs",
+          "raw": "{{base_url}}/api/plant-logs",
           "protocol": "{{base_url}}",
           "host": [
             "api",
@@ -272,7 +272,7 @@
           "raw": "{\n    \"userPlantId\": 1,\n    \"date\": \"2022-03-28T18:23:54.000Z\",\n    \"watered\": true,\n    \"fertilized\": true,\n    \"pruned\": true\n}"
         },
         "url": {
-          "raw": "{{base_url}}/api/v1/plant-logs/1",
+          "raw": "{{base_url}}/api/plant-logs/1",
           "protocol": "{{base_url}}",
           "host": [
             "api",
@@ -301,7 +301,7 @@
         "header": [],
         "body": {},
         "url": {
-          "raw": "{{base_url}}/api/v1/plant-logs/1",
+          "raw": "{{base_url}}/api/plant-logs/1",
           "protocol": "{{base_url}}",
           "host": [
             "api",
@@ -329,7 +329,7 @@
         "header": [],
         "body": {},
         "url": {
-          "raw": "{{base_url}}/api/v1/user-plants?userId=1",
+          "raw": "{{base_url}}/api/user-plants?userId=1",
           "protocol": "{{base_url}}",
           "host": [
             "api",
@@ -363,7 +363,7 @@
         "header": [],
         "body": {},
         "url": {
-          "raw": "{{base_url}}/api/v1/user-plants/1",
+          "raw": "{{base_url}}/api/user-plants/1",
           "protocol": "{{base_url}}",
           "host": [
             "api",

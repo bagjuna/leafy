@@ -47,7 +47,7 @@ export default {
     ...mapActions(["showPopup"]),
     async submitLogin() {
       try {
-        const response = await api.post('/api/v1/users/login', {
+        const response = await api.post('/api/users/login', {
           email: this.userEmail,
           password: this.userPassword,
         });

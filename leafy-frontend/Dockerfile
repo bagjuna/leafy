@@ -1,5 +1,5 @@
-# 빌드 이미지로 node:14 지정 
-FROM node:14 AS build
+# 빌드 이미지로 node:18 지정
+FROM node:20 AS build
 
 WORKDIR /app
 
@@ -8,7 +8,7 @@ COPY package.json .
 COPY package-lock.json .
 
 # 라이브러리 설치
-RUN npm ci
+RUN npm install
 
 # 소스코드 복사
 COPY . /app
