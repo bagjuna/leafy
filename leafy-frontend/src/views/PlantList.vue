@@ -42,7 +42,7 @@ export default {
   methods: {
     fetchPlants() {
       // Make a GET request to retrieve all plants
-      api.get('/api/v1/plants')
+      api.get('/api/plants')
         .then(response => {
           this.plants = response.data;
         })

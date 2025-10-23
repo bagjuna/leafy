@@ -76,7 +76,7 @@ export default {
 
     const fetchLogs = async () => {
       const userId = user.value.userId;
-      api.get(`/api/v1/plant-logs/user/${userId}`)
+      api.get(`/api/plant-logs/user/${userId}`)
         .then(response => {
           state.logs = response.data;
         })
@@ -86,7 +86,7 @@ export default {
     };
 
     const addLog = async () => {
-      await api.post('/api/v1/plant-logs', state.newLog);
+      await api.post('/api/plant-logs', state.newLog);
       state.dialog = false;
       state.newLog = {
         note: '',
@@ -104,7 +104,7 @@ export default {
     };
 
     const deleteLog = async (plantLogId) => {
-      await api.delete(`/api/v1/plant-logs/${plantLogId}`);
+      await api.delete(`/api/plant-logs/${plantLogId}`);
       await fetchLogs();
     };
 

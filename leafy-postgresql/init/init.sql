@@ -1,3 +1,4 @@
+/*
 -- Users table creation
 CREATE TABLE users (
     user_id SERIAL PRIMARY KEY,
@@ -181,3 +182,4 @@ INSERT INTO plant_logs (user_plant_id, log_date, note, watered) VALUES
 (25, '2023-03-22', '잎에 먼지가 많이 쌓여서 닦아주었습니다', false),
 (25, '2023-03-23', '새로운 잎이 많이 나오기 시작했습니다', true),
 (25, '2023-03-24', '잎의 상태가 좋아지고 성장하는 모습이 보입니다', false);
+*/

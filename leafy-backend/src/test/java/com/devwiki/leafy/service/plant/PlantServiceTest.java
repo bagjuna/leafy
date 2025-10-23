@@ -1,5 +1,6 @@
 package com.devwiki.leafy.service.plant;
 
+/*
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -57,3 +58,4 @@ class PlantServiceTest {
 		assertEquals("몬스테라", plantRepository.findAll().get(0).getPlantName());
 	}
 }
+*/

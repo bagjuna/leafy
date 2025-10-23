@@ -6,6 +6,7 @@ import com.devwiki.leafy.model.user.User;
 import com.devwiki.leafy.repository.user.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -17,7 +18,7 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class UserService {
     private final UserRepository userRepository;
-    private final BCryptPasswordEncoder passwordEncoder;
+    private final PasswordEncoder passwordEncoder;
 
     /**
      * 모든 사용자 조회
@@ -61,8 +62,6 @@ public class UserService {
     public UserResponseDto createUser(UserRequestDto userRequestDto) {
         userRequestDto.setPassword(passwordEncoder.encode(userRequestDto.getPassword())); // 비밀번호 암호화
         User user = new User(userRequestDto);
-        user.setCreatedAt(LocalDateTime.now());
-        user.setUpdatedAt(LocalDateTime.now());
         userRepository.save(user);
         return UserMapper.toResponseDto(user);
     }

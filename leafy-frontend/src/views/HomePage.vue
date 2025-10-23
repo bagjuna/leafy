@@ -59,7 +59,7 @@ export default {
 
     const fetchRecentLogs = async () => {
       const userId = user.value.userId;
-      api.get(`/api/v1/plant-logs/recent/user/${userId}`)
+      api.get(`/api/plant-logs/recent/user/${userId}`)
         .then(response => {
           state.logs = response.data;
         })
@@ -71,7 +71,7 @@ export default {
     const fetchMyPlants = async () =>{
       // Make a GET request to retrieve all plants
       const userId = user.value.userId;
-      api.get(`/api/v1/user-plants/user/${userId}`)
+      api.get(`/api/user-plants/user/${userId}`)
         .then(response => {
           state.userPlants = response.data;
         })

@@ -98,7 +98,7 @@ export default {
 
     const fetchPlantDetail = async () => {
       try {
-        const response = await api.get(`/api/v1/plants/${props.plantId}`);
+        const response = await api.get(`/api/plants/${props.plantId}`);
         plantDetail.value = response.data;
       } catch (error) {
         console.error(error);
@@ -107,7 +107,7 @@ export default {
 
     const removePlant = async () => {
       try {
-        await api.delete(`/api/v1/plants/${props.plantId}`);
+        await api.delete(`/api/plants/${props.plantId}`);
         emit('removed-plant');
         close();
       } catch (error) {
@@ -121,7 +121,7 @@ export default {
 
     const submitMyPlant = async () => {
       try {
-        await api.post(`/api/v1/user-plants`, {
+        await api.post(`/api/user-plants`, {
             user: {
                 userId: user.value.userId
             },

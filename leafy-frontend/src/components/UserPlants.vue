@@ -31,7 +31,7 @@ export default {
 
     const fetchUserPlants = async () => {
       try {
-        const response = await api.get(`/api/v1/user-plants/user/${props.userId}`);
+        const response = await api.get(`/api/user-plants/user/${props.userId}`);
         userPlantList.value = response.data.
         filter(plant => plant.plant !== null).
         map(plant => ({

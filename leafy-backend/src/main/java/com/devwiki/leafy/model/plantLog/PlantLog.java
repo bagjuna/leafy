@@ -3,7 +3,7 @@ package com.devwiki.leafy.model.plantLog;
 import com.devwiki.leafy.dto.plantLog.PlantLogDto;
 import com.devwiki.leafy.model.userPlant.UserPlant;
 import lombok.*;
-import javax.persistence.*;
+import jakarta.persistence.*;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 
