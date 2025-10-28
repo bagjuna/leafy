@@ -28,4 +28,4 @@ COPY --from=build /app/build/libs/*.jar /app/leafy.jar
 EXPOSE 8080
 
 # 최종 실행 명령어: ENTRYPOINT와 CMD를 결합하여 사용
-ENTRYPOINT ["java", "-jar", "leafy.jar"]
+ENTRYPOINT ["java", "-Djdk.cgroup.disabled=true", "-jar", "leafy.jar"]
