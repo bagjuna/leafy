@@ -29,7 +29,11 @@ jobs:
         with:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
-      - name: Build and Push Docker Image
+      - name: Build Gradle Project (No Cache)
+        working-directory: ./leafy-backend # Gradle 프로젝트가 있는 폴더로 이동
+        run: ./gradlew clean build --no-daemon --no-build-cache # <-- Gradle 캐시 비활성화
+
+      - name: Build and Push Docker Image (No Cache)
         uses: docker/build-push-action@v5
         with:
           context: ./leafy-backend
@@ -37,7 +41,7 @@ jobs:
           push: true
           tags: ${{ secrets.DOCKERHUB_USERNAME }}/leafy-backend:${{ steps.get_sha.outputs.sha }},${{ secrets.DOCKERHUB_USERNAME }}/leafy-backend:latest
           platforms: linux/amd64
-
+          no-cache: true  # [!!! Docker 빌드 캐시 비활성화 추가 !!!]
   # --- 2. 배포 Job ---
   deploy:
     needs: build
