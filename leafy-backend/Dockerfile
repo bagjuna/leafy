@@ -17,14 +17,13 @@ RUN gradle clean build --no-daemon
 # ----------------------------------------------------
 
 # 런타임 이미지로 java-17로 지정 (더 작고 안전함)
-FROM openjdk:17-jdk-slim
+FROM amazoncorretto:17-alpine-jdk AS runtime
 
 # 애플리케이션을 실행할 작업 디렉토리를 생성
 WORKDIR /app
 
 # 빌드 이미지에서 생성된 JAR 파일을 런타임 이미지로 복사
 COPY --from=build /app/build/libs/*.jar /app/leafy.jar
-
 EXPOSE 8080
 
 # 최종 실행 명령어 (2025-10-28 최종 확인)
