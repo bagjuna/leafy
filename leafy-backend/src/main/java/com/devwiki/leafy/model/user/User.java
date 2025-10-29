@@ -21,21 +21,19 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.JoinTable;
 import jakarta.persistence.ManyToMany;
 import jakarta.persistence.Table;
-import lombok.AllArgsConstructor;
+import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
-import lombok.RequiredArgsConstructor;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 
 @Setter
 @ToString
-@RequiredArgsConstructor
 @Entity
-@AllArgsConstructor
 @Table(name = "users")
 @Getter
-@Builder
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class User extends BaseEntity {
 
     @Id
@@ -59,12 +57,20 @@ public class User extends BaseEntity {
     @JoinTable(name = "user_roles", joinColumns = { @JoinColumn(name = "user_id") }, inverseJoinColumns = {
         @JoinColumn(name = "role_id") })
     @ToString.Exclude
-    @Builder.Default
     private Set<Role> userRoles = new HashSet<>();
 
     @Column(name = "birthDate")
     private LocalDate birthDate;
 
+
+    @Builder
+    public User(String email, String name, String password, String gender, LocalDate birthDate) {
+        this.email = email;
+        this.name = name;
+        this.password = password;
+        this.gender = gender;
+        this.birthDate = birthDate;
+    }
 
     public void updateEntity(UserRequestDto userRequestDto) {
         this.name = userRequestDto.getName();

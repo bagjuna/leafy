@@ -5,6 +5,8 @@ import com.devwiki.leafy.exception.ResourceNotFoundException;
 import com.devwiki.leafy.model.user.User;
 import com.devwiki.leafy.repository.user.UserRepository;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -14,6 +16,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class UserService {
@@ -61,7 +64,15 @@ public class UserService {
      */
     public UserResponseDto createUser(UserRequestDto userRequestDto) {
         userRequestDto.setPassword(passwordEncoder.encode(userRequestDto.getPassword())); // 비밀번호 암호화
-        User user = new User(userRequestDto);
+        log.info("Encoded password: " + userRequestDto.getPassword());
+        // User user = new User(userRequestDto);
+        User user = User.builder()
+            .name(userRequestDto.getName())
+            .email(userRequestDto.getEmail())
+            .password(userRequestDto.getPassword())
+            .gender(userRequestDto.getGender())
+            .birthDate(userRequestDto.getBirthDate())
+            .build();
         userRepository.save(user);
         return UserMapper.toResponseDto(user);
     }
