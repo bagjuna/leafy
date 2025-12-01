@@ -75,6 +75,7 @@ jobs:
                   - SPRING_DATA_REDIS_PASSWORD=${{ secrets.REDIS_PASSWORD }}
                   - DISCORD_500_WEBHOOK_URI=${{secrets.DISCORD_500_WEBHOOK_URI}}
                   - DISCORD_400_WEBHOOK_URI=${{secrets.DISCORD_400_WEBHOOK_URI}}
+                  - JWT_SECRET=${{ secrets.JWT_SECRET }}
                   - SPRING_JPA_PROPERTIES_HIBERNATE_DIALECT=org.hibernate.dialect.PostgreSQLDialect
                 depends_on:
                   leafy-postgres:
