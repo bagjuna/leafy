@@ -10,6 +10,7 @@ on:
       - 'leafy-redis/**' # redis 폴더 내 변경사항이 있을 때만 동작
       - '.github/workflows/redis-build.yml'
 
+# 1. 빌드 및 푸시 단계
 jobs:
   build-and-push:
     runs-on: ubuntu-latest
@@ -37,3 +38,27 @@ jobs:
             ${{ secrets.DOCKERHUB_USERNAME }}/leafy-redis:latest
 
           platforms: linux/amd64,linux/arm64
+
+  # 2. 배포 단계
+  deploy:
+    needs: build-and-push # 빌드가 끝나야 실행됨
+    runs-on: ubuntu-latest
+    steps:
+      - name: Deploy to EC2
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: ${{ secrets.EC2_HOST }}
+          username: ${{ secrets.EC2_USERNAME }}
+          key: ${{ secrets.EC2_SSH_PRIVATE_KEY }}
+          script: |
+            # 1. Docker Hub 로그인 (비공개 리포지토리일 경우 필수)
+            sudo docker login -u "${{ secrets.DOCKERHUB_USERNAME }}" -p "${{ secrets.DOCKERHUB_TOKEN }}"
+
+            # 2. Redis 이미지만 최신 버전으로 당겨오기
+            sudo docker-compose pull redis
+
+            # 3. Redis 컨테이너만 재생성 (다른건 건드리지 않음)
+            sudo docker-compose up -d --no-deps redis
+
+            # 4. 불필요한 이미지 정리
+            sudo docker image prune -f
