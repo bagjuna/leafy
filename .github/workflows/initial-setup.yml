@@ -46,6 +46,21 @@ jobs:
                   interval: 5s
                   timeout: 5s
                   retries: 5
+              redis:
+                image: ${{ secrets.DOCKERHUB_USERNAME }}/leafy-redis:latest  # 혹은 본인 ID
+                container_name: redis-server
+                # command: redis-server /usr/local/etc/redis/redis.conf --requirepass ... (이전 답변 참고)
+                restart: always
+                volumes:
+                  - redis_data:/data
+                networks:
+                  - default # 백엔드와 통신하기 위해
+                healthcheck:
+                  test: [ "CMD", "redis-cli", "ping" ]
+                  interval: 10s
+                  timeout: 5s
+                  retries: 5
+            
               leafy-backend:
                 image: \${BACKEND_IMAGE_TAG}
 
@@ -77,8 +92,10 @@ jobs:
                     - BACKEND_PORT=8080
                 depends_on:
                   - leafy-backend
+              
             volumes:
               leafy_data:
+              redis_data:
             EOF
 
             echo "Creating initial .env file"
