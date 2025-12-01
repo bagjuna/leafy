@@ -1,0 +1,668 @@
+POST http://localhost:8080/api/users/login
+Content-Type: application/json
+X-Requested-With: XMLHttpRequest
+Content-Length: 63
+User-Agent: IntelliJ HTTP Client/IntelliJ IDEA 2025.1.3
+Accept-Encoding: br, deflate, gzip, x-gzip
+Accept: */*
+Cookie: JSESSIONID=199601C60A322E841BFA8C304181A7BD
+
+{
+  "email": "john123@qmail.com",
+  "password": "password123"
+}
+
+<> 2025-10-23T213806.200.json
+
+###
+
+POST http://localhost:8080/api/users/login
+Content-Type: application/json
+X-Requested-With: XMLHttpRequest
+Content-Length: 63
+User-Agent: IntelliJ HTTP Client/IntelliJ IDEA 2025.1.3
+Accept-Encoding: br, deflate, gzip, x-gzip
+Accept: */*
+Cookie: JSESSIONID=9E8115A26A7D4FA1C9ECB815360A4164
+
+{
+  "email": "john123@qmail.com",
+  "password": "password123"
+}
+
+<> 2025-10-23T213529.200.json
+
+###
+
+POST http://localhost:8080/api/users/login
+Content-Type: application/json
+X-Requested-With: XMLHttpRequest
+Content-Length: 63
+User-Agent: IntelliJ HTTP Client/IntelliJ IDEA 2025.1.3
+Accept-Encoding: br, deflate, gzip, x-gzip
+Accept: */*
+Cookie: JSESSIONID=53100BB2002790FC0558016CDDFFE6B1
+
+{
+  "email": "john123@qmail.com",
+  "password": "password123"
+}
+
+<> 2025-10-23T212933.200.json
+
+###
+
+POST http://localhost:8080/api/users/login
+Content-Type: application/json
+X-Requested-With: XMLHttpRequest
+Content-Length: 63
+User-Agent: IntelliJ HTTP Client/IntelliJ IDEA 2025.1.3
+Accept-Encoding: br, deflate, gzip, x-gzip
+Accept: */*
+Cookie: JSESSIONID=8E7B27158F0D4F51A4E5F526C6CFDB9B
+
+{
+  "email": "john123@qmail.com",
+  "password": "password123"
+}
+
+<> 2025-10-23T210550.200.json
+
+###
+
+POST http://localhost:8080/api/users/login
+Content-Type: application/json
+X-Requested-With: XMLHttpRequest
+Content-Length: 63
+User-Agent: IntelliJ HTTP Client/IntelliJ IDEA 2025.1.3
+Accept-Encoding: br, deflate, gzip, x-gzip
+Accept: */*
+Cookie: JSESSIONID=0326A1481EBAD84BF900182A1483766B
+
+{
+  "email": "john123@qmail.com",
+  "password": "password123"
+}
+
+<> 2025-10-23T205554.200.json
+
+###
+
+POST http://localhost:8080/api/users/login
+Content-Type: application/json
+X-Requested-With: XMLHttpRequest
+Content-Length: 63
+User-Agent: IntelliJ HTTP Client/IntelliJ IDEA 2025.1.3
+Accept-Encoding: br, deflate, gzip, x-gzip
+Accept: */*
+Cookie: JSESSIONID=35291F956DFA00FD5516CA55BF57454B
+
+{
+  "email": "john123@qmail.com",
+  "password": "password123"
+}
+
+<> 2025-10-23T205502.200.json
+
+###
+
+POST http://localhost:8080/api/users/login
+Content-Type: application/json
+X-Requested-With: XMLHttpRequest
+Content-Length: 63
+User-Agent: IntelliJ HTTP Client/IntelliJ IDEA 2025.1.3
+Accept-Encoding: br, deflate, gzip, x-gzip
+Accept: */*
+Cookie: JSESSIONID=9457DCA10E05ED84AF71C2D0D88B6EC4
+
+{
+  "email": "john123@qmail.com",
+  "password": "password123"
+}
+
+<> 2025-10-23T205202.200.json
+
+###
+
+POST http://localhost:8080/api/users/login
+Content-Type: application/json
+X-Requested-With: XMLHttpRequest
+Content-Length: 63
+User-Agent: IntelliJ HTTP Client/IntelliJ IDEA 2025.1.3
+Accept-Encoding: br, deflate, gzip, x-gzip
+Accept: */*
+Cookie: JSESSIONID=7B08DF2CA6663922DD31B762AD3BAB22
+
+{
+  "email": "john123@qmail.com",
+  "password": "password123"
+}
+
+<> 2025-10-23T204922.200.json
+
+###
+
+POST http://localhost:8080/api/users/login
+Content-Type: application/json
+X-Requested-With: XMLHttpRequest
+Content-Length: 63
+User-Agent: IntelliJ HTTP Client/IntelliJ IDEA 2025.1.3
+Accept-Encoding: br, deflate, gzip, x-gzip
+Accept: */*
+Cookie: JSESSIONID=A9A1AC71B92C0B274C9D6D34C0ABDC92
+
+{
+  "email": "john123@qmail.com",
+  "password": "password123"
+}
+
+<> 2025-10-23T204854.200.json
+
+###
+
+POST http://localhost:8080/api/users/login
+Content-Type: application/json
+X-Requested-With: XMLHttpRequest
+Content-Length: 53
+User-Agent: IntelliJ HTTP Client/IntelliJ IDEA 2025.1.3
+Accept-Encoding: br, deflate, gzip, x-gzip
+Accept: */*
+Cookie: JSESSIONID=A9A1AC71B92C0B274C9D6D34C0ABDC92
+
+{
+  "email": "john123",
+  "password": "password123"
+}
+
+<> 2025-10-23T204839.500.json
+
+###
+
+POST http://localhost:8080/api/users/login
+Content-Type: application/json
+X-Requested-With: XMLHttpRequest
+Content-Length: 50
+User-Agent: IntelliJ HTTP Client/IntelliJ IDEA 2025.1.3
+Accept-Encoding: br, deflate, gzip, x-gzip
+Accept: */*
+Cookie: JSESSIONID=A9A1AC71B92C0B274C9D6D34C0ABDC92
+
+{
+  "email": "john123",
+  "password": "password"
+}
+
+<> 2025-10-23T204831.500.json
+
+###
+
+GET http://localhost:8080/api/plants
+Content-Type: application/json
+User-Agent: IntelliJ HTTP Client/IntelliJ IDEA 2025.1.3
+Accept-Encoding: br, deflate, gzip, x-gzip
+Accept: */*
+Cookie: JSESSIONID=A9A1AC71B92C0B274C9D6D34C0ABDC92
+
+<> 2025-10-23T204654.200.json
+
+###
+
+GET http://localhost:8080/api/plants
+Content-Type: application/json
+User-Agent: IntelliJ HTTP Client/IntelliJ IDEA 2025.1.3
+Accept-Encoding: br, deflate, gzip, x-gzip
+Accept: */*
+Cookie: JSESSIONID=A9A1AC71B92C0B274C9D6D34C0ABDC92
+
+<> 2025-10-23T204649.200.json
+
+###
+
+GET http://localhost:8080/api/plants
+Content-Type: application/json
+User-Agent: IntelliJ HTTP Client/IntelliJ IDEA 2025.1.3
+Accept-Encoding: br, deflate, gzip, x-gzip
+Accept: */*
+Cookie: JSESSIONID=A9A1AC71B92C0B274C9D6D34C0ABDC92
+
+<> 2025-10-23T204644.200.json
+
+###
+
+GET http://localhost:8080/api/plants
+Content-Type: application/json
+User-Agent: IntelliJ HTTP Client/IntelliJ IDEA 2025.1.3
+Accept-Encoding: br, deflate, gzip, x-gzip
+Accept: */*
+Cookie: JSESSIONID=A9A1AC71B92C0B274C9D6D34C0ABDC92
+
+<> 2025-10-23T204641.200.json
+
+###
+
+GET http://localhost:8080/api/plants
+Content-Type: application/json
+User-Agent: IntelliJ HTTP Client/IntelliJ IDEA 2025.1.3
+Accept-Encoding: br, deflate, gzip, x-gzip
+Accept: */*
+Cookie: JSESSIONID=A9A1AC71B92C0B274C9D6D34C0ABDC92
+
+<> 2025-10-23T204636.200.json
+
+###
+
+GET http://localhost:8080/api/plants
+Content-Type: application/json
+User-Agent: IntelliJ HTTP Client/IntelliJ IDEA 2025.1.3
+Accept-Encoding: br, deflate, gzip, x-gzip
+Accept: */*
+Cookie: JSESSIONID=A9A1AC71B92C0B274C9D6D34C0ABDC92
+
+<> 2025-10-23T204604.200.json
+
+###
+
+POST http://localhost:8080/api/users/login
+Content-Type: application/json
+X-Requested-With: XMLHttpRequest
+Content-Length: 60
+User-Agent: IntelliJ HTTP Client/IntelliJ IDEA 2025.1.3
+Accept-Encoding: br, deflate, gzip, x-gzip
+Accept: */*
+Cookie: JSESSIONID=A9A1AC71B92C0B274C9D6D34C0ABDC92
+
+{
+  "email": "john123@qmail.com",
+  "password": "password"
+}
+
+<> 2025-10-23T204550.401.json
+
+###
+
+GET http://localhost:8080/api/plants
+Content-Type: application/json
+User-Agent: IntelliJ HTTP Client/IntelliJ IDEA 2025.1.3
+Accept-Encoding: br, deflate, gzip, x-gzip
+Accept: */*
+Cookie: JSESSIONID=A9A1AC71B92C0B274C9D6D34C0ABDC92
+
+<> 2025-10-23T204547.200.json
+
+###
+
+POST http://localhost:8080/api/users/login
+Content-Type: application/json
+X-Requested-With: XMLHttpRequest
+Content-Length: 63
+User-Agent: IntelliJ HTTP Client/IntelliJ IDEA 2025.1.3
+Accept-Encoding: br, deflate, gzip, x-gzip
+Accept: */*
+Cookie: JSESSIONID=EE1498F9AC1FA6FB1EF294398F2DCB48
+
+{
+  "email": "john123@qmail.com",
+  "password": "password123"
+}
+
+<> 2025-10-23T204531.200.json
+
+###
+
+GET http://localhost:8080/api/plants
+Content-Type: application/json
+User-Agent: IntelliJ HTTP Client/IntelliJ IDEA 2025.1.3
+Accept-Encoding: br, deflate, gzip, x-gzip
+Accept: */*
+Cookie: JSESSIONID=EE1498F9AC1FA6FB1EF294398F2DCB48
+
+<> 2025-10-23T204528.200.json
+
+###
+
+GET http://localhost:8080/api/plants
+Content-Type: application/json
+User-Agent: IntelliJ HTTP Client/IntelliJ IDEA 2025.1.3
+Accept-Encoding: br, deflate, gzip, x-gzip
+Accept: */*
+Cookie: JSESSIONID=EE1498F9AC1FA6FB1EF294398F2DCB48
+
+<> 2025-10-23T204520.200.json
+
+###
+
+POST http://localhost:8080/api/users/login
+Content-Type: application/json
+X-Requested-With: XMLHttpRequest
+Content-Length: 63
+User-Agent: IntelliJ HTTP Client/IntelliJ IDEA 2025.1.3
+Accept-Encoding: br, deflate, gzip, x-gzip
+Accept: */*
+Cookie: JSESSIONID=5D8913122AFE99C5AF4279B88C39824E
+
+{
+  "email": "john123@qmail.com",
+  "password": "password123"
+}
+
+<> 2025-10-23T204448.200.json
+
+###
+
+GET http://localhost:8080/api/plants
+Content-Type: application/json
+User-Agent: IntelliJ HTTP Client/IntelliJ IDEA 2025.1.3
+Accept-Encoding: br, deflate, gzip, x-gzip
+Accept: */*
+Cookie: JSESSIONID=5D8913122AFE99C5AF4279B88C39824E
+
+<> 2025-10-23T204437.401.json
+
+###
+
+GET http://localhost:8080/api/plants
+Content-Type: application/json
+User-Agent: IntelliJ HTTP Client/IntelliJ IDEA 2025.1.3
+Accept-Encoding: br, deflate, gzip, x-gzip
+Accept: */*
+Cookie: JSESSIONID=5D8913122AFE99C5AF4279B88C39824E
+
+<> 2025-10-23T204430.401.json
+
+###
+
+GET http://localhost:8080/api/plants
+Content-Type: application/json
+User-Agent: IntelliJ HTTP Client/IntelliJ IDEA 2025.1.3
+Accept-Encoding: br, deflate, gzip, x-gzip
+Accept: */*
+Cookie: JSESSIONID=5D8913122AFE99C5AF4279B88C39824E
+
+<> 2025-10-23T204424.401.json
+
+###
+
+GET http://localhost:8080/api/plants
+Content-Type: application/json
+User-Agent: IntelliJ HTTP Client/IntelliJ IDEA 2025.1.3
+Accept-Encoding: br, deflate, gzip, x-gzip
+Accept: */*
+Cookie: JSESSIONID=5D8913122AFE99C5AF4279B88C39824E
+
+<> 2025-10-23T204319.401.json
+
+###
+
+GET http://localhost:8080/api/plants
+Content-Type: application/json
+User-Agent: IntelliJ HTTP Client/IntelliJ IDEA 2025.1.3
+Accept-Encoding: br, deflate, gzip, x-gzip
+Accept: */*
+Cookie: JSESSIONID=5D8913122AFE99C5AF4279B88C39824E
+
+<> 2025-10-23T204302-2.401.json
+
+###
+
+GET http://localhost:8080/api/plants
+Content-Type: application/json
+User-Agent: IntelliJ HTTP Client/IntelliJ IDEA 2025.1.3
+Accept-Encoding: br, deflate, gzip, x-gzip
+Accept: */*
+Cookie: JSESSIONID=5D8913122AFE99C5AF4279B88C39824E
+
+<> 2025-10-23T204302-1.401.json
+
+###
+
+GET http://localhost:8080/api/plants
+Content-Type: application/json
+User-Agent: IntelliJ HTTP Client/IntelliJ IDEA 2025.1.3
+Accept-Encoding: br, deflate, gzip, x-gzip
+Accept: */*
+Cookie: JSESSIONID=5D8913122AFE99C5AF4279B88C39824E
+
+<> 2025-10-23T204302.401.json
+
+###
+
+GET http://localhost:8080/api/plants
+Content-Type: application/json
+User-Agent: IntelliJ HTTP Client/IntelliJ IDEA 2025.1.3
+Accept-Encoding: br, deflate, gzip, x-gzip
+Accept: */*
+Cookie: JSESSIONID=5D8913122AFE99C5AF4279B88C39824E
+
+<> 2025-10-23T204259.401.json
+
+###
+
+GET http://localhost:8080/api/plants
+Content-Type: application/json
+User-Agent: IntelliJ HTTP Client/IntelliJ IDEA 2025.1.3
+Accept-Encoding: br, deflate, gzip, x-gzip
+Accept: */*
+Cookie: JSESSIONID=5D8913122AFE99C5AF4279B88C39824E
+
+<> 2025-10-23T204244.401.json
+
+###
+
+GET http://localhost:8080/api/plants
+Content-Type: application/json
+User-Agent: IntelliJ HTTP Client/IntelliJ IDEA 2025.1.3
+Accept-Encoding: br, deflate, gzip, x-gzip
+Accept: */*
+Cookie: JSESSIONID=5D8913122AFE99C5AF4279B88C39824E
+
+<> 2025-10-23T204238.401.json
+
+###
+
+GET http://localhost:8080/api/users/login
+Content-Type: application/json
+X-Requested-With: XMLHttpRequest
+User-Agent: IntelliJ HTTP Client/IntelliJ IDEA 2025.1.3
+Accept-Encoding: br, deflate, gzip, x-gzip
+Accept: */*
+Cookie: JSESSIONID=5D8913122AFE99C5AF4279B88C39824E
+content-length: 63
+
+{
+  "email": "john123@qmail.com",
+  "password": "password123"
+}
+
+<> 2025-10-23T204104.400.json
+
+###
+
+GET http://localhost:8080/api/users/login
+Content-Type: application/json
+X-Requested-With: XMLHttpRequest
+User-Agent: IntelliJ HTTP Client/IntelliJ IDEA 2025.1.3
+Accept-Encoding: br, deflate, gzip, x-gzip
+Accept: */*
+Cookie: JSESSIONID=5D8913122AFE99C5AF4279B88C39824E
+content-length: 63
+
+{
+  "email": "john123@qmail.com",
+  "password": "password123"
+}
+
+<> 2025-10-23T204057.400.json
+
+###
+
+GET http://localhost:8080/api/plants
+Content-Type: application/json
+User-Agent: IntelliJ HTTP Client/IntelliJ IDEA 2025.1.3
+Accept-Encoding: br, deflate, gzip, x-gzip
+Accept: */*
+Cookie: JSESSIONID=F45B6B2EF750E6FAF38FF892828798E7
+
+<> 2025-10-23T203939.401.json
+
+###
+
+GET http://localhost:8080/api/plants
+Content-Type: application/json
+User-Agent: IntelliJ HTTP Client/IntelliJ IDEA 2025.1.3
+Accept-Encoding: br, deflate, gzip, x-gzip
+Accept: */*
+Cookie: JSESSIONID=F45B6B2EF750E6FAF38FF892828798E7
+
+<> 2025-10-23T203851.401.json
+
+###
+
+GET http://localhost:8080/api/plants
+Content-Type: application/json
+User-Agent: IntelliJ HTTP Client/IntelliJ IDEA 2025.1.3
+Accept-Encoding: br, deflate, gzip, x-gzip
+Accept: */*
+Cookie: JSESSIONID=F45B6B2EF750E6FAF38FF892828798E7
+
+<> 2025-10-23T203808.401.json
+
+###
+
+GET http://localhost:8080/api/plants
+Content-Type: application/json
+User-Agent: IntelliJ HTTP Client/IntelliJ IDEA 2025.1.3
+Accept-Encoding: br, deflate, gzip, x-gzip
+Accept: */*
+Cookie: JSESSIONID=F45B6B2EF750E6FAF38FF892828798E7
+
+<> 2025-10-23T203715.401.json
+
+###
+
+GET http://localhost:8080/api/plants
+Content-Type: application/json
+User-Agent: IntelliJ HTTP Client/IntelliJ IDEA 2025.1.3
+Accept-Encoding: br, deflate, gzip, x-gzip
+Accept: */*
+Cookie: JSESSIONID=F45B6B2EF750E6FAF38FF892828798E7
+
+<> 2025-10-23T203705.401.json
+
+###
+
+GET http://localhost:8080/api/plants
+Content-Type: application/json
+User-Agent: IntelliJ HTTP Client/IntelliJ IDEA 2025.1.3
+Accept-Encoding: br, deflate, gzip, x-gzip
+Accept: */*
+Cookie: JSESSIONID=F45B6B2EF750E6FAF38FF892828798E7
+
+<> 2025-10-23T203649.401.json
+
+###
+
+GET http://localhost:8080/api/plants
+Content-Type: application/json
+User-Agent: IntelliJ HTTP Client/IntelliJ IDEA 2025.1.3
+Accept-Encoding: br, deflate, gzip, x-gzip
+Accept: */*
+Cookie: JSESSIONID=F45B6B2EF750E6FAF38FF892828798E7
+
+<> 2025-10-23T203615.401.json
+
+###
+
+GET http://localhost:8080/api/plants
+Content-Type: application/json
+User-Agent: IntelliJ HTTP Client/IntelliJ IDEA 2025.1.3
+Accept-Encoding: br, deflate, gzip, x-gzip
+Accept: */*
+Cookie: JSESSIONID=F45B6B2EF750E6FAF38FF892828798E7
+
+<> 2025-10-23T203605.401.json
+
+###
+
+GET http://localhost:8080/api/plants
+Content-Type: application/json
+User-Agent: IntelliJ HTTP Client/IntelliJ IDEA 2025.1.3
+Accept-Encoding: br, deflate, gzip, x-gzip
+Accept: */*
+Cookie: JSESSIONID=F45B6B2EF750E6FAF38FF892828798E7
+
+<> 2025-10-23T203541.401.json
+
+###
+
+GET http://localhost:8080/api/plants
+Content-Type: application/json
+User-Agent: IntelliJ HTTP Client/IntelliJ IDEA 2025.1.3
+Accept-Encoding: br, deflate, gzip, x-gzip
+Accept: */*
+Cookie: JSESSIONID=F45B6B2EF750E6FAF38FF892828798E7
+
+<> 2025-10-23T203538.401.json
+
+###
+
+GET http://localhost:8080/api/plants
+Content-Type: application/json
+User-Agent: IntelliJ HTTP Client/IntelliJ IDEA 2025.1.3
+Accept-Encoding: br, deflate, gzip, x-gzip
+Accept: */*
+Cookie: JSESSIONID=F45B6B2EF750E6FAF38FF892828798E7
+
+<> 2025-10-23T203519.401.json
+
+###
+
+GET http://localhost:8080/api/plants
+Content-Type: application/json
+User-Agent: IntelliJ HTTP Client/IntelliJ IDEA 2025.1.3
+Accept-Encoding: br, deflate, gzip, x-gzip
+Accept: */*
+Cookie: JSESSIONID=F45B6B2EF750E6FAF38FF892828798E7
+
+<> 2025-10-23T203422.401.json
+
+###
+
+GET http://localhost:8080/api/plants
+Content-Type: application/json
+User-Agent: IntelliJ HTTP Client/IntelliJ IDEA 2025.1.3
+Accept-Encoding: br, deflate, gzip, x-gzip
+Accept: */*
+Cookie: JSESSIONID=F45B6B2EF750E6FAF38FF892828798E7
+
+<> 2025-10-23T203345.401.json
+
+###
+
+POST http://localhost:8080/api/users/login
+Content-Type: application/json
+Content-Length: 63
+User-Agent: IntelliJ HTTP Client/IntelliJ IDEA 2025.1.3
+Accept-Encoding: br, deflate, gzip, x-gzip
+Accept: */*
+Cookie: JSESSIONID=F45B6B2EF750E6FAF38FF892828798E7
+
+{
+  "email": "john123@qmail.com",
+  "password": "password123"
+}
+
+<> 2025-10-23T203202.500.json
+
+###
+
+GET http://localhost:8080/api/plants
+Content-Type: application/json
+User-Agent: IntelliJ HTTP Client/IntelliJ IDEA 2025.1.3
+Accept-Encoding: br, deflate, gzip, x-gzip
+Accept: */*
+Cookie: JSESSIONID=F45B6B2EF750E6FAF38FF892828798E7
+
+<> 2025-10-23T203101.401.json
+
+###
+

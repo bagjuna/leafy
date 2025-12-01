@@ -1,0 +1,30 @@
+{
+  "userId": 1,
+  "name": "John",
+  "email": "john123@qmail.com",
+  "password": null,
+  "gender": "M",
+  "birthDate": [
+    1988,
+    5,
+    1
+  ],
+  "createdAt": [
+    2025,
+    10,
+    23,
+    21,
+    38,
+    1,
+    555877000
+  ],
+  "updatedAt": [
+    2025,
+    10,
+    23,
+    21,
+    38,
+    1,
+    555877000
+  ]
+}

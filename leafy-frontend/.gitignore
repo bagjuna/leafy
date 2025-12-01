@@ -21,3 +21,6 @@ pnpm-debug.log*
 *.njsproj
 *.sln
 *.sw?
+/.env.frontLocal
+/leafy-frontend.iml
+/test.ipynb
