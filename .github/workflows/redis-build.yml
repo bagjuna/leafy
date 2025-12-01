@@ -1,4 +1,5 @@
 # .github/workflows/redis-build.yml
+
 name: Redis Build and Push
 
 on:
@@ -34,4 +35,5 @@ jobs:
           tags: |
             ${{ secrets.DOCKERHUB_USERNAME }}/leafy-redis:${{ github.sha }}
             ${{ secrets.DOCKERHUB_USERNAME }}/leafy-redis:latest
-          platforms: linux/amd64
+
+          platforms: linux/amd64,linux/arm64
