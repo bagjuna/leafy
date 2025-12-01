@@ -2,10 +2,12 @@ package com.devwiki.leafy.controller.plantLog;
 
 import com.devwiki.leafy.dto.plantLog.PlantLogDto;
 import com.devwiki.leafy.dto.plantLog.PlantLogSimpleDto;
+import com.devwiki.leafy.dto.user.UserContext;
 import com.devwiki.leafy.service.plantLog.PlantLogService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import jakarta.validation.Valid;
@@ -44,12 +46,12 @@ public class PlantLogController {
 
     /**
      * 특정 사용자의 모든 식물 로그 조회(최근 5건)
-     *
      * @return 모든 식물 로그 리스트
      */
-    @GetMapping("/recent/user/{userId}")
-    public ResponseEntity<List<PlantLogSimpleDto>> getAllPlantRecentLogsByUserId(@PathVariable Long userId) {
-        List<PlantLogSimpleDto> plantLogDtoList = plantLogService.getAllPlantLogsByUserId(userId)
+    @GetMapping("/recent/user")
+    public ResponseEntity<List<PlantLogSimpleDto>> getAllPlantRecentLogsByUserId(@AuthenticationPrincipal UserContext userContext) {
+
+        List<PlantLogSimpleDto> plantLogDtoList = plantLogService.getAllPlantLogsByUserId(userContext.getLoginDto().getUserId())
                 .stream().limit(4)
                 .collect(Collectors.toList());
         return new ResponseEntity<>(plantLogDtoList, HttpStatus.OK);

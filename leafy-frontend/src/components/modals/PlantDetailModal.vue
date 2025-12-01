@@ -1,203 +1,222 @@
 <template>
   <v-dialog v-model="isDialogOpen" max-width="600px">
-    <v-card v-if="plantDetail">
+    <v-card v-if="plantDetail" class="pa-4">
+
+      <img :src="plantDetail.imageUrl" alt="Plant Image" class="plant-image" v-if="plantDetail.imageUrl" />
+
       <v-card-title class="text-center">
-        <h3 style="margin-top: 20px;">식물 정보</h3>
+        <div class="plant-name">{{ plantDetail.plantName }}</div>
+        <div class="plant-type text-grey">{{ plantDetail.plantType }}</div>
       </v-card-title>
+
       <v-card-text>
-        <v-container>
-          <v-row>
-            <v-col cols="12">
-              <img :src="plantDetail.imageUrl" class="plant-image">
-            </v-col>
-            <v-col cols="12">
-              <h2 class="plant-name">{{ plantDetail.plantName }}</h2>
-              <p class="plant-type">{{ plantDetail.plantType }}</p>
-              <p class="plant-desc">{{ plantDetail.plantDesc }}</p>
-            </v-col>
-            <v-col cols="6">
-              <p class="plant-info-label">온도 범위:</p>
-              <p>{{ plantDetail.temperatureLow }}℃ ~ {{ plantDetail.temperatureHigh }}℃</p>
-            </v-col>
-            <v-col cols="6">
-              <p class="plant-info-label">습도 범위:</p>
-              <p>{{ plantDetail.humidityLow }}% ~ {{ plantDetail.humidityHigh }}%</p>
-            </v-col>
-            <v-col cols="12">
-              <p class="plant-info-label">물 주기:</p>
-              <p>{{ plantDetail.wateringInterval }}일</p>
-            </v-col>
-          </v-row>
-        </v-container>
+        <div class="plant-desc">{{ plantDetail.plantDesc }}</div>
+
+        <v-divider class="my-3"></v-divider>
+
+        <v-row>
+          <v-col cols="6">
+            <span class="plant-info-label">온도:</span>
+            {{ plantDetail.temperatureLow }} ~ {{ plantDetail.temperatureHigh }}°C
+          </v-col>
+          <v-col cols="6">
+            <span class="plant-info-label">습도:</span>
+            {{ plantDetail.humidityLow }} ~ {{ plantDetail.humidityHigh }}%
+          </v-col>
+          <v-col cols="12" class="mt-2">
+            <span class="plant-info-label">물주기:</span>
+            {{ plantDetail.wateringInterval }}일에 한 번
+          </v-col>
+        </v-row>
       </v-card-text>
-      <v-row class="button-group" align="center" justify="center">
-        <v-col :cols="deleteButton ? 4 : 10">
-          <v-btn block color="#999999" @click="close">닫기</v-btn>
-        </v-col>
-        <v-col v-if="deleteButton" cols="4">
-          <v-btn block color="#556B2F" @click="removePlant">삭제</v-btn>
-        </v-col>
-        <v-col v-if="deleteButton" cols="4">
-          <v-btn block color="green" @click="addMyPlant">내 식물 추가</v-btn>
-        </v-col>
-      </v-row>
+
+      <v-card-actions class="justify-center button-group">
+        <v-btn color="grey" variant="text" @click="close">닫기</v-btn>
+
+        <v-btn v-if="deleteButton" color="error" variant="text" @click="removePlant">
+          삭제
+        </v-btn>
+
+        <v-btn color="#556B2F" class="text-white" @click="openNicknameDialog">
+          내 식물로 추가
+        </v-btn>
+      </v-card-actions>
     </v-card>
+
     <v-dialog v-model="nicknameDialogOpen" max-width="400px">
       <v-card>
-        <v-card-title class="text-center">
-          <h3>식물 이름 입력</h3>
-        </v-card-title>
+        <v-card-title>식물 애칭 정하기</v-card-title>
         <v-card-text>
-          <v-text-field v-model="plantNickname" label="이름" />
+          <v-text-field
+              v-model="plantNickname"
+              label="애칭을 입력해주세요"
+              placeholder="예: 초록이"
+              autofocus
+              @keyup.enter="submitMyPlant"
+          ></v-text-field>
         </v-card-text>
         <v-card-actions>
           <v-spacer></v-spacer>
-          <v-btn color="green" text @click="nicknameDialogOpen = false">취소</v-btn>
-          <v-btn color="green" text @click="submitMyPlant">확인</v-btn>
-          <v-spacer></v-spacer>
+          <v-btn color="grey" @click="nicknameDialogOpen = false">취소</v-btn>
+          <v-btn color="#556B2F" text @click="submitMyPlant">확인</v-btn>
         </v-card-actions>
       </v-card>
     </v-dialog>
+
   </v-dialog>
 </template>
 
-<script>
+<script setup>
 import { ref, watch, computed } from 'vue';
 import api from '@/api/api.js';
-import { useStore } from 'vuex';
+import { useAuthStore } from '@/store/auth'; // Ensure this path is correct
 
-export default {
-  props: {
-    isOpen: {
-      type: Boolean,
-      required: true,
-    },
-    plantId: {
-      type: Number,
-      required: true,
-    },
-    deleteButton: {
-      type: Boolean,
-      defaultValue: false,
-    }
+// 1. Props Definition
+const props = defineProps({
+  isOpen: {
+    type: Boolean,
+    required: true,
   },
-  emits: ['update:isOpen', 'removed-plant'],
-  setup(props, { emit }) {
-    const isDialogOpen = ref(false);
-    const plantDetail = ref(null);
-    const nicknameDialogOpen = ref(false);
-    const plantNickname = ref('');
+  plantId: {
+    type: [Number, null], // Allow null initially
+    required: true,
+  },
+  deleteButton: {
+    type: Boolean,
+    default: false,
+  }
+});
 
-    const store = useStore();
+// 2. Emits Definition
+const emit = defineEmits(['update:isOpen', 'removed-plant']);
 
-    const user = computed(() => store.state.user);
+// 3. State
+// Sync internal state with prop using a computed setter/getter is often cleaner,
+// but using a watcher + ref is also fine for dialogs.
+const isDialogOpen = computed({
+  get: () => props.isOpen,
+  set: (val) => emit('update:isOpen', val)
+});
 
-    const close = () => {
-      emit('update:isOpen', false);
-    };
+const plantDetail = ref(null);
+const nicknameDialogOpen = ref(false);
+const plantNickname = ref('');
 
-    const fetchPlantDetail = async () => {
-      try {
-        const response = await api.get(`/api/plants/${props.plantId}`);
-        plantDetail.value = response.data;
-      } catch (error) {
-        console.error(error);
-      }
-    };
+const authStore = useAuthStore();
 
-    const removePlant = async () => {
-      try {
-        await api.delete(`/api/plants/${props.plantId}`);
-        emit('removed-plant');
-        close();
-      } catch (error) {
-        console.error(error);
-      }
-    };
+// 4. Methods
+const close = () => {
+  isDialogOpen.value = false;
+};
 
-    const addMyPlant = async () => {
-      nicknameDialogOpen.value = true;
-    };
+const fetchPlantDetail = async () => {
+  if (!props.plantId) return; // Guard clause
 
-    const submitMyPlant = async () => {
-      try {
-        await api.post(`/api/user-plants`, {
-            user: {
-                userId: user.value.userId
-            },
-            plant: {
-                plantId: props.plantId
-            },
-            plantNickname: plantNickname.value,
-          });
-        emit('removed-plant');
-        close();
-      } catch (error) {
-        console.error(error);
-      }
-      plantNickname.value = '';
-    };
+  try {
+    const response = await api.get(`/api/plants/${props.plantId}`);
+    plantDetail.value = response.data;
+  } catch (error) {
+    console.error("Failed to fetch plant detail:", error);
+  }
+};
 
-    watch(() => props.isOpen, (newVal) => {
-      isDialogOpen.value = newVal;
-      if (newVal) {
-        fetchPlantDetail();
-        nicknameDialogOpen.value = false;
-      }
+const removePlant = async () => {
+  if (!confirm("정말 이 식물을 삭제하시겠습니까?")) return;
+
+  try {
+    await api.delete(`/api/plants/${props.plantId}`);
+    emit('removed-plant'); // Notify parent to refresh list
+    close();
+  } catch (error) {
+    console.error("Failed to remove plant:", error);
+  }
+};
+
+const openNicknameDialog = () => {
+  nicknameDialogOpen.value = true;
+};
+
+const submitMyPlant = async () => {
+  if (!plantNickname.value.trim()) {
+    alert("애칭을 입력해주세요!");
+    return;
+  }
+
+  try {
+    await api.post(`/api/user-plants`, {
+      user: {
+        userId: authStore.user?.userId
+      },
+      plant: {
+        plantId: props.plantId
+      },
+      plantNickname: plantNickname.value,
     });
 
-    return {
-      isDialogOpen,
-      plantDetail,
-      close,
-      removePlant,
-      addMyPlant,
-      nicknameDialogOpen,
-      plantNickname,
-      submitMyPlant,
-    };
-  },
+    // Optional: Notify success
+    alert("내 식물로 추가되었습니다!");
+
+    // Close nickname dialog and main dialog
+    nicknameDialogOpen.value = false;
+    plantNickname.value = '';
+    close();
+
+  } catch (error) {
+    console.error("Failed to add user plant:", error);
+    alert("식물 추가에 실패했습니다.");
+  }
 };
+
+// 5. Watchers
+// Fetch data when dialog opens
+watch(() => props.isOpen, (newVal) => {
+  if (newVal && props.plantId) {
+    fetchPlantDetail();
+  }
+});
 </script>
+
 <style scoped>
-.v-btn{
-  color: white;
+/* Button text color fix */
+.text-white {
+  color: white !important;
 }
 
-.button-group{
+.button-group {
   margin: 1rem;
 }
 
 .plant-image {
-  max-width: 80%;
-  height: auto;
-  object-fit: cover;
-  border-radius: 5px;
+  width: 100%;
+  max-height: 300px;
+  object-fit: cover; /* Ensures image covers area nicely */
+  border-radius: 8px;
   margin-bottom: 1rem;
   display: block;
-  margin-left: auto;
-  margin-right: auto;
 }
 
 .plant-name {
-  font-size: 1.5rem;
+  font-size: 1.8rem;
   font-weight: bold;
-  margin-bottom: 0.5rem;
+  color: #333;
 }
 
 .plant-type {
-  font-size: 1.25rem;
+  font-size: 1.1rem;
   font-weight: normal;
-  margin-bottom: 1rem;
+  margin-bottom: 0.5rem;
 }
 
 .plant-desc {
   font-size: 1rem;
+  line-height: 1.6;
+  color: #555;
   margin-bottom: 1.5rem;
 }
 
 .plant-info-label {
   font-weight: bold;
+  color: #556B2F; /* Brand color */
+  margin-right: 5px;
 }
-
 </style>

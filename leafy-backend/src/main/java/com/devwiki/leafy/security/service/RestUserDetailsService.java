@@ -27,7 +27,7 @@ public class RestUserDetailsService implements UserDetailsService {
 	private final UserRepository userRepository;
 
 	@Override
-	@Transactional
+	@Transactional(readOnly = true)
 	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
 		User user = userRepository.findByEmail(username).orElseThrow(
 
@@ -43,5 +43,22 @@ public class RestUserDetailsService implements UserDetailsService {
 
 		return new UserContext(loginDto, authorities);
 
+	}
+
+	@Transactional(readOnly = true)
+	public UserDetails loadUserById(Long id) throws UsernameNotFoundException {
+		User user = userRepository.findById(id).orElseThrow(
+			() -> new UsernameNotFoundException("User not found with id: " + id)
+		);
+
+		List<GrantedAuthority> authorities = user.getUserRoles()
+			.stream()
+			.map(Role::getRoleName)
+			.collect(Collectors.toSet())
+			.stream().map(SimpleGrantedAuthority::new).collect(Collectors.toList());
+		ModelMapper mapper = new ModelMapper();
+		UserDto loginDto = mapper.map(user, UserDto.class);
+
+		return new UserContext(loginDto, authorities);
 	}
 }

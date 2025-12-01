@@ -1,225 +1,253 @@
 <template>
-  <div class="log-container">
-    <v-btn v-if="!dialog" class="add-log-btn" @click="dialog = !dialog">
+  <v-container class="main-container">
+    <v-btn
+        block
+        color="#556B2F"
+        size="large"
+        class="add-log-btn mb-6"
+        @click="openAddDialog"
+    >
       일기 추가
     </v-btn>
-    <transition name="slide-fade">
-      <v-card v-if="dialog" class="log-card">
-        <div class="add-log-body">
-          <v-card-text>
-            <UserPlants :userId="user.userId" @updated-userplant-id="updateUserPlantId" />
-            <v-text-field v-model="newLog.note" label="Note" required></v-text-field>
-            <v-switch
-              v-model="newLog.watered"
-              hide-details
-              label="물을 주었음"
-              color="primary"
-            ></v-switch>
-          </v-card-text>
-          <v-card-actions>
-            <v-spacer></v-spacer>
-            <v-btn color="blue" @click="dialog = false">Cancel</v-btn>
-            <v-btn color="primary" @click="addLog">Add</v-btn>
-          </v-card-actions>
+
+    <div v-if="isLoading" class="text-center my-4">데이터 로딩 중...</div>
+    <div v-else-if="error" class="text-center error--text">데이터 로드 실패: {{ error.message }}</div>
+
+    <div v-else class="log-list">
+      <v-card
+          v-for="log in logs"
+          :key="log.plantLogId"
+          class="log-card mb-5 pa-4"
+          variant="outlined"
+      >
+        <div class="card-header d-flex justify-end">
+          <v-icon v-if="log.watered" color="indigo darken-2" class="mr-2">mdi-water</v-icon>
+          <v-icon color="red lighten-1" @click.stop="deleteLog(log.plantLogId)" style="cursor: pointer;">
+            mdi-delete
+          </v-icon>
+        </div>
+
+        <div class="card-body text-center" @click="openPlantDetailModal(log.userPlant.plant.plantId)">
+          <h3 class="plant-name-title mb-2">
+            {{ log.userPlant.plantNickname }}
+            <span class="plant-species">({{ log.userPlant.plant ? log.userPlant.plant.plantName : '?' }})</span>
+          </h3>
+          <p class="log-note">{{ log.note }}</p>
+        </div>
+
+        <div class="card-footer text-right mt-3">
+          <span class="date-text">[ {{ formatDate(log.createdAt) }} ]</span>
         </div>
       </v-card>
-    </transition>
-    <v-card v-for="log in logs" :key="log.plantLogId" class="log-card" variant="outlined">
-      <div class="log-header">
-        <v-icon v-if="log.watered" color="indigo darken-4" large> mdi-water-check </v-icon>
-        <v-icon color="#DC143C" @click="deleteLog(log.plantLogId)"> mdi-delete </v-icon>
-      </div>
-      <div class="log-body">
-        <v-card-text class="log-title" > 
-          <h5 style="color: green; font-weight: bold; cursor: pointer;" @click="openPlantDetailModal(log.userPlant.plant.plantId)">{{ log.userPlant.plantNickname }}({{ log.userPlant.plant ? log.userPlant.plant.plantName : '알 수 없는 식물' }})</h5>            {{ log.note }}
+    </div>
+
+    <v-dialog v-model="showAddDialog" max-width="500px">
+      <v-card class="pa-4 rounded-lg">
+        <v-card-title class="text-center font-weight-bold mb-2">
+          내 식물 리스트
+        </v-card-title>
+
+        <v-card-text>
+          <v-select
+              v-model="newLog.userPlantId"
+              :items="userPlants"
+              item-title="plantNickname"
+              item-value="userPlantId"
+              label="식물 선택"
+              variant="filled"
+              background-color="grey lighten-4"
+              class="mb-2"
+          ></v-select>
+
+          <v-text-field
+              v-model="newLog.note"
+              label="Note"
+              variant="filled"
+              background-color="grey lighten-4"
+          ></v-text-field>
+
+          <div class="d-flex align-center mt-2">
+            <v-switch
+                v-model="newLog.watered"
+                color="grey darken-1"
+                hide-details
+            ></v-switch>
+            <span class="ml-2">물을 주었음</span>
+          </div>
         </v-card-text>
-      </div>
-      <div class="log-footer">
-        <v-card-text>{{ log.logDate }}</v-card-text>
-      </div>
-    </v-card>
-    <PlantDetailModal :isOpen="showPlantDetailModal" @update:isOpen="showPlantDetailModal = $event" :plantId="selectedPlantId" />
-  </div>
+
+        <v-card-actions class="justify-end">
+          <v-btn color="blue darken-1" variant="text" @click="closeAddDialog">CANCEL</v-btn>
+          <v-btn color="blue darken-1" variant="text" @click="submitLog">ADD</v-btn>
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
+
+    <PlantDetailModal
+        :deleteButton="false"
+        v-model:isOpen="showPlantDetailModal"
+        :plantId="selectedPlantId"
+        @removed-plant="fetchMyPlants"
+    />
+  </v-container>
 </template>
-<script>
-import { reactive, toRefs, computed } from 'vue';
-import api from '@/api/api';
+
+<script setup>
+import {ref, reactive} from 'vue';
+import {usePlantData} from '@/composables/usePlantData';
 import PlantDetailModal from '@/components/modals/PlantDetailModal.vue';
-import UserPlants from '@/components/UserPlants.vue';
-import { useStore } from 'vuex';
+import api from '@/api/api'; // API 호출을 위해 import
+import {useAuthStore} from '@/store/auth'; // userId 가져오기 위해 필요
 
-export default {
-  name: 'PlantlogList',
-  components: {
-    PlantDetailModal,
-    UserPlants
-  },
-  setup() {
-    const store = useStore();
+// Composable 사용
+const {logs, userPlants, isLoading, error, fetchMyPlants, fetchRecentLogs} = usePlantData();
+const authStore = useAuthStore();
 
-    const state = reactive({
-      logs: [],
-      newLog: {
-        userPlant: {
-          userPlantId: ""
-        },
-        note: '',
-        logDate: new Date().toISOString().slice(0, 10),
-        watered: false,
-      },
-      dialog: false,
-      showPlantDetailModal: false,
-      selectedPlantId: null,
+
+// --- 상태 관리 ---
+const showPlantDetailModal = ref(false);
+const selectedPlantId = ref(null);
+const showAddDialog = ref(false);
+
+// 새 일기 데이터
+const newLog = reactive({
+  userPlantId: null,
+  note: '',
+  watered: false
+});
+
+// --- 함수 정의 ---
+
+// 1. 식물 상세 모달 열기
+const openPlantDetailModal = (plantId) => {
+  selectedPlantId.value = plantId;
+  showPlantDetailModal.value = true;
+};
+
+// 2. 일기 추가 모달 열기/닫기
+const openAddDialog = () => {
+  // 모달 열 때 입력값 초기화
+  newLog.userPlantId = null;
+  newLog.note = '';
+  newLog.watered = false;
+  showAddDialog.value = true;
+};
+
+const closeAddDialog = () => {
+  showAddDialog.value = false;
+};
+
+
+// 일기 저장 함수
+const submitLog = async () => {
+  if (!newLog.userPlantId) {
+    alert("식물을 선택해주세요!");
+    return;
+  }
+
+  try {
+    await api.post('/api/plant-logs', {
+      userPlant: { userPlantId: newLog.userPlantId },
+      note: newLog.note,
+      watered: newLog.watered,
     });
-    
-    const user = computed(() => store.state.user);
 
-    const fetchLogs = async () => {
-      const userId = user.value.userId;
-      api.get(`/api/plant-logs/user/${userId}`)
-        .then(response => {
-          state.logs = response.data;
-        })
-        .catch(error => {
-          console.error(error);
-        });
-    };
+    // ✅ [핵심] 저장이 완료되면 목록을 다시 불러옵니다.
+    await fetchRecentLogs();
 
-    const addLog = async () => {
-      await api.post('/api/plant-logs', state.newLog);
-      state.dialog = false;
-      state.newLog = {
-        note: '',
-        userPlant: {
-          userPlantId: ""
-        },
-        logDate: new Date().toISOString().slice(0, 10),
-        watered: false,
-      };
-      await fetchLogs();
-    };
+    closeAddDialog();
+    // 입력창 초기화
+    newLog.note = '';
+    newLog.watered = false;
+    newLog.userPlantId = null;
 
-    const editLog = async (plantLogId) => {
-      console.log(plantLogId);
-    };
+  } catch (err) {
+    console.error("일기 저장 실패:", err);
+    alert("일기 저장 중 오류가 발생했습니다.");
+  }
+};
 
-    const deleteLog = async (plantLogId) => {
-      await api.delete(`/api/plant-logs/${plantLogId}`);
-      await fetchLogs();
-    };
+// 일기 삭제 함수
+const deleteLog = async (logId) => {
+  if (!confirm("정말 이 일기를 삭제하시겠습니까?")) return;
 
-    const openPlantDetailModal = (plantId) => {
-      state.selectedPlantId = plantId;
-      state.showPlantDetailModal = true;
-    };
-    
-    const updateUserPlantId = (newPlantId) => {
-      state.newLog.userPlant.userPlantId = newPlantId;
-    };
+  try {
+    await api.delete(`/api/plant-logs/${logId}`);
 
-    fetchLogs();
+    // ✅ [핵심] 삭제가 완료되면 목록을 다시 불러옵니다.
+    await fetchRecentLogs();
 
-    return {
-      ...toRefs(state),
-      user,
-      addLog,
-      editLog,
-      deleteLog,
-      openPlantDetailModal,
-      updateUserPlantId
-    };
-  },
-}
+  } catch (err) {
+    console.error("일기 삭제 실패:", err);
+  }
+};
+
+
+// 5. 날짜 포맷팅 함수 (예: [ 2023, 3, 24 ])
+const formatDate = (dateArray) => {
+  if (!dateArray) return '';
+  // 배열 [2025, 11, 19, ...] 형태로 온다고 가정
+  if (Array.isArray(dateArray)) {
+    return `${dateArray[0]}, ${dateArray[1]}, ${dateArray[2]}`;
+  }
+  // 문자열이면 Date 객체로 변환
+  const d = new Date(dateArray);
+  return `${d.getFullYear()}, ${d.getMonth() + 1}, ${d.getDate()}`;
+};
 </script>
+
 <style scoped>
-.log-container {
-  margin: 30px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
+.main-container {
+  max-width: 800px;
+  margin: 0 auto;
+  padding-top: 20px;
 }
 
-.log-title {
-  font-size: 20px;
+/* 버튼 스타일 */
+.add-log-btn {
+  color: white !important;
   font-weight: bold;
-  padding: 20px;
-  border-bottom: 1px solid #e9ebee;
-}
-
-.log-actions {
-  display: flex;
-  justify-content: center;
-  padding: 20px;
-}
-
-.log-card {
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 30px;
-  width: 800px;
-  max-width: 90%;
-  border-radius: 10px;
-  border-color: #d9d9d9;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  padding: 20px;
-}
-
-.log-header {
-  display: flex;
-  justify-content: flex-end;
-  width: 100%;
-}
-
-.add-log-body {
-  justify-content: center;
-  width: 100%;
-}
-
-.log-body {
-  justify-content: center;
-  width: 100%;
-}
-
-.log-footer {
-  display: flex;
-  justify-content: flex-end;
-  width: 100%;
-  text-align: right;
-}
-
-.add-log-btn {
-  width: 800px;
-  max-width: 90%;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  bottom: 20px;
-  position: relative;
-  z-index: 1;
-}
-
-.add-log-btn {
-  display: block;
   font-size: 1rem;
-  font-weight: bold;
-  color: white;
-  background-color: #38a169;
-  margin-left: auto;
-  margin-right: auto;
-  text-align: center; 
+  border-radius: 5px;
 }
 
-.slide-fade-enter-active {
-  transition: all 0.7s ease-out;
+/* 카드 스타일 */
+.log-card {
+  border-radius: 12px;
+  border: 1px solid #e0e0e0;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05) !important;
+  transition: transform 0.2s;
 }
 
-.slide-fade-leave-active {
-  transition: all 0.1s cubic-bezier(1, 0.5, 0.8, 1);
+.log-card:hover {
+  transform: translateY(-2px);
 }
 
-.slide-fade-enter-from,
-.slide-fade-leave-to {
-  transform: translateY(-20px);
-  opacity: 0;
+.plant-name-title {
+  color: #556B2F; /* 녹색 */
+  font-weight: 700;
+  font-size: 1.1rem;
+}
+
+.plant-species {
+  color: #556B2F;
+  font-weight: 400;
+}
+
+.log-note {
+  font-size: 1rem;
+  font-weight: 600;
+  color: #333;
+  margin-top: 10px;
+}
+
+.date-text {
+  color: #757575;
+  font-size: 0.85rem;
+}
+
+/* 커서 스타일 */
+.card-body {
+  cursor: pointer;
 }
 </style>

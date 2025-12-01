@@ -7,6 +7,7 @@
       <li><router-link to="/setting">Setting</router-link></li>
     </ul>
   </nav>
+
 </template>
 <script>
 export default {

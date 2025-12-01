@@ -1,14 +1,11 @@
 package com.devwiki.leafy.controller.user;
 
-import com.devwiki.leafy.dto.user.LoginDto;
 import com.devwiki.leafy.dto.user.UserPutRequestDto;
 import com.devwiki.leafy.dto.user.UserRequestDto;
 import com.devwiki.leafy.dto.user.UserResponseDto;
 import com.devwiki.leafy.service.user.UserService;
 import lombok.RequiredArgsConstructor;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -17,6 +14,7 @@ import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
 
 import java.util.List;
+import java.util.Map;
 
 @Slf4j
 @RestController
@@ -24,12 +22,10 @@ import java.util.List;
 @RequiredArgsConstructor
 public class UserController {
 
-    // private static final Logger log = LogManager.getLogger(UserController.class);
     private final UserService userService;
 
     /**
      * 모든 사용자 조회
-     *
      * @return 모든 사용자 리스트
      */
     @GetMapping("")
@@ -44,7 +40,7 @@ public class UserController {
      * @param userId 조회할 사용자 ID
      * @return 조회된 사용자
      */
-    @GetMapping("/{userId}")
+    @GetMapping("/details/{userId}")
     public ResponseEntity<UserResponseDto> getUserById(@PathVariable Long userId) {
         UserResponseDto userResponseDto = userService.getUserResponseById(userId);
         return new ResponseEntity<>(userResponseDto, HttpStatus.OK);
@@ -57,9 +53,8 @@ public class UserController {
      * @return 추가된 사용자 정보
      */
     @PostMapping("/signup")
-    public ResponseEntity<UserResponseDto> addUser(@Valid @RequestBody UserRequestDto userRequestDto) {
-        UserResponseDto addedUserResponseDto = userService.createUser(userRequestDto);
-        return new ResponseEntity<>(addedUserResponseDto, HttpStatus.CREATED);
+    public ResponseEntity<?> addUser(@Valid @RequestBody UserRequestDto userRequestDto) {
+        return userService.createUser(userRequestDto);
     }
 
     /**
@@ -98,20 +93,17 @@ public class UserController {
 //        return new ResponseEntity<>(userResponseDto, HttpStatus.OK);
 //    }
 
-    /**
-     * 사용자 로그인
-     *
-     * @param loginDto 로그인 정보
-     * @return 로그인한 사용자 정보
-     */
-    @PostMapping("/login")
-    public ResponseEntity<UserResponseDto> login(@RequestBody LoginDto loginDto) {
-        log.info("Login attempt for email: {}", loginDto.getEmail());
-        UserResponseDto userResponseDto = userService.getUserByEmailAndPassword(loginDto.getEmail(), loginDto.getPassword());
-        if (userResponseDto.getUserId() != null) {
-            return new ResponseEntity<>(userResponseDto, HttpStatus.OK);
+
+
+    @PostMapping("/reissue")
+    public ResponseEntity<?> reissue(@RequestBody Map<String, String> request) {
+        String refreshToken = request.get("refreshToken");
+
+        Map<String, String> newTokens = userService.reissueTokens(refreshToken);
+        if (newTokens != null) {
+            return ResponseEntity.ok(newTokens);
         } else {
-            return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid refresh token");
         }
     }
 

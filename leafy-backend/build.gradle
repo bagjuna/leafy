@@ -39,6 +39,38 @@ dependencies {
 	testImplementation 'com.h2database:h2'
 
 	implementation 'org.springframework.boot:spring-boot-starter-actuator'
+
+	// JWT
+	implementation 'io.jsonwebtoken:jjwt-api:0.11.5'
+	runtimeOnly 'io.jsonwebtoken:jjwt-impl:0.11.5'
+	runtimeOnly 'io.jsonwebtoken:jjwt-jackson:0.11.5'
+
+
+	// 10. redis 추가
+	implementation 'org.springframework.boot:spring-boot-starter-data-redis'
+
+	// PDF 처리 라이브러리
+	implementation 'org.apache.pdfbox:pdfbox:2.0.30'
+	// 11.  WebClient를 사용하기 위한 WebFlux 스타터 추가
+	implementation 'org.springframework.boot:spring-boot-starter-webflux'
+
+	// 12. 크롤링 위한 라이브러리
+	implementation 'org.jsoup:jsoup:1.17.2'
+	implementation 'org.seleniumhq.selenium:selenium-java:4.11.0'
+	implementation 'io.github.bonigarcia:webdrivermanager:5.4.1'
+
+	//13.이메일
+	implementation 'org.springframework.boot:spring-boot-starter-mail'
+
+	//14.타임리프
+	implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
+
+	// 15. AWS S3 (Spring Cloud AWS Starter - 안정 버전)
+//	implementation 'io.awspring.cloud:spring-cloud-aws-starter-s3:3.0.2'
+
+	implementation 'com.fasterxml.jackson.core:jackson-databind:2.17.1'
+	implementation 'com.fasterxml.jackson.core:jackson-core:2.17.1'
+	implementation 'com.fasterxml.jackson.core:jackson-annotations:2.17.1'
 }
 
 tasks.named('test') {
