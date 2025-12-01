@@ -12,6 +12,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -35,11 +36,13 @@ public class PlantLogService {
 
     /**
      * 사용자의 모든 식물 로그 조회
-     *
      * @return 모든 식물 로그 리스트
      */
     public List<PlantLogSimpleDto> getAllPlantLogsByUserId(Long userId) {
         List<PlantLog> plantLogs = plantLogRepository.findAllByUserPlant_User_UserId_OrderByLogDateDesc(userId);
+        if(plantLogs.isEmpty()){
+            return List.of(new PlantLogSimpleDto());
+        }
         return plantLogs.stream().map(PlantLogMapper::toSimpleDto).collect(Collectors.toList());
     }
 
@@ -75,7 +78,7 @@ public class PlantLogService {
     public PlantLogSimpleDto addPlantLog(PlantLogDto plantLogDto) {
         plantLogDto.setCreatedAt(LocalDateTime.now());
         plantLogDto.setUpdatedAt(LocalDateTime.now());
-
+        plantLogDto.setLogDate(LocalDate.now());
         //기존 UserPlant 정보가 조회하는 지 확인
         UserPlantDto userPlantDto = userPlantService.getUserPlantById(plantLogDto.getUserPlant().getUserPlantId());
         plantLogDto.setUserPlant(userPlantDto);

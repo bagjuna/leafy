@@ -16,3 +16,4 @@ public class PlantLogSimpleDto {
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
 }
+

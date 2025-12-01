@@ -1,0 +1,13 @@
+<component name="ArtifactManager">
+  <artifact type="exploded-war" name="Leafy.main:Web exploded">
+    <output-path>$PROJECT_DIR$/out/artifacts/Leafy_main_Web_exploded</output-path>
+    <root id="root">
+      <element id="javaee-facet-resources" facet="Leafy.main/web/Web" />
+      <element id="directory" name="WEB-INF">
+        <element id="directory" name="classes">
+          <element id="module-output" name="Leafy.main" />
+        </element>
+      </element>
+    </root>
+  </artifact>
+</component>

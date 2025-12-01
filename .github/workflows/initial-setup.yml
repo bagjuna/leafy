@@ -54,10 +54,19 @@ jobs:
                   - SPRING_DATASOURCE_URL=jdbc:postgresql://leafy-postgres:5432/${{ secrets.DATASOURCE_URL }}
                   - SPRING_DATASOURCE_USERNAME=${{ secrets.DATASOURCE_USERNAME }}
                   - SPRING_DATASOURCE_PASSWORD=${{ secrets.DATASOURCE_PASSWORD }}
+                  - SPRING_DATA_REDIS_HOST=redis
+                  - SPRING_DATA_REDIS_PORT=6379
+                  - REDIS_PASSWORD=${{ secrets.REDIS_PASSWORD }}
+                  - SPRING_DATA_REDIS_PASSWORD=${{ secrets.REDIS_PASSWORD }}
+                  - DISCORD_500_WEBHOOK_URI=${{secrets.DISCORD_500_WEBHOOK_URI}}
+                  - DISCORD_400_WEBHOOK_URI=${{secrets.DISCORD_400_WEBHOOK_URI}}
                   - SPRING_JPA_PROPERTIES_HIBERNATE_DIALECT=org.hibernate.dialect.PostgreSQLDialect
                 depends_on:
                   leafy-postgres:
                     condition: service_healthy
+                  redis:
+                    condition: service_healthy
+            
               leafy-front:
                 image: \${FRONTEND_IMAGE_TAG}
                 restart: on-failure

@@ -1,0 +1,37 @@
+# .github/workflows/redis-build.yml
+name: Redis Build and Push
+
+on:
+  push:
+    branches:
+      - '08-cicd'
+    paths:
+      - 'leafy-redis/**' # redis 폴더 내 변경사항이 있을 때만 동작
+      - '.github/workflows/redis-build.yml'
+
+jobs:
+  build-and-push:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Login to Docker Hub
+        uses: docker/login-action@v3
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+
+      - name: Build and Push
+        uses: docker/build-push-action@v5
+        with:
+          context: ./leafy-redis   # Dockerfile이 있는 경로
+          file: ./leafy-redis/Dockerfile
+          push: true
+          tags: |
+            ${{ secrets.DOCKERHUB_USERNAME }}/leafy-redis:${{ github.sha }}
+            ${{ secrets.DOCKERHUB_USERNAME }}/leafy-redis:latest
+          platforms: linux/amd64

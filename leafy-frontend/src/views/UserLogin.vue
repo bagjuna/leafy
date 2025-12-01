@@ -1,15 +1,17 @@
 <template>
   <div class="login-container">
     <h1>LEAFY</h1>
-    <form @submit.prevent="submitLogin">
+
+    <form @submit.prevent="handleLogin">
       <div class="form-group">
-        <input type="text" id="userEmail" v-model="userEmail" placeholder="이메일을 입력하세요." required />
+        <input type="text" id="userEmail" v-model="email" placeholder="이메일을 입력하세요." required />
       </div>
       <div class="form-group">
-        <input type="password" id="userPassword" v-model="userPassword" placeholder="비밀번호를 입력하세요." required />
+        <input type="password" id="userPassword" v-model="password" placeholder="비밀번호를 입력하세요." required />
       </div>
       <button type="submit">로그인</button>
     </form>
+
     <!--회원 가입하러 가기    -->
     <div style="text-align: center; margin-top: 1rem;">
       <span>계정이 없으신가요? </span>
@@ -18,58 +20,49 @@
   </div>
 </template>
 
-<script>
-import api from '@/api/api';
-import { mapState, mapActions } from "vuex";
 
-export default {
-  name: "UserLogin",
-  data() {
-    return {
-      userEmail: '',
-      userPassword: '',
-    };
-  },
-  mounted() {
-    if (this.isLoggedIn) {
-      this.$router.replace({ name: 'HomePage' });
-    }
-  },
-  computed: {
-    isLoggedIn() {
-      return !!this.$store.state.user;
-    },
-    computed: {
-      ...mapState(["popup", "user"])
-    },
-  },
-  methods: {
-    ...mapActions(["showPopup"]),
-    async submitLogin() {
-      try {
-        const response = await api.post('/api/users/login', {
-          email: this.userEmail,
-          password: this.userPassword,
-        });
-        this.$store.dispatch('loginUser', response.data);
-        this.$store.dispatch("showPopup", {
-          title: "로그인 성공",
-          message: `${response.data.name}님, 환영합니다.`,
-          status: "success",
-          showingSecond: 1500
-        });
-        this.$router.push({ name: 'HomePage' }); 
-      } catch (error) {
-        this.$store.dispatch("showPopup", {
-          title: "로그인 실패",
-          message: "로그인에 실패하였습니다. 아이디와 비밀번호를 확인해주세요.",
-          status: "error",
-          showingSecond: 1500
-        });
-        console.error(error);
-      }
-    },
-  },
+<script setup>
+import { ref } from 'vue';
+import { useRouter } from 'vue-router';
+import api from '@/api/api';
+import { useAuthStore } from '@/store/auth'; // 1. 스토어 import
+
+const router = useRouter();
+const authStore = useAuthStore(); // 2. 스토어 인스턴스 생성
+
+const email = ref('');
+const password = ref('');
+
+const handleLogin = async () => {
+  try {
+    const response = await api.post('/api/users/login', {
+      email: email.value,
+      password: password.value
+    });
+
+    // 응답 구조 예시: { accessToken: "...", refreshToken: "...", user: { ... } }
+    console.log('서버 응답:', response.data);
+    const { accessToken, refreshToken, user } = response.data
+    console.log('로그인 성공:', user);
+    console.log('accessToken:', accessToken);
+    console.log('refreshToken:', refreshToken);
+    // 3. Pinia 액션 호출 (함수 쓰듯이 바로 호출!)
+    authStore.loginUser({
+      user,
+      accessToken,
+      refreshToken
+    });
+
+    router.push('/');
+
+  } catch (error) {
+    console.error(error);
+    // 팝업 띄우기
+    authStore.showPopup({
+      message: '로그인 실패! 정보를 확인해주세요.',
+      status: 'error'
+    });
+  }
 };
 </script>
 

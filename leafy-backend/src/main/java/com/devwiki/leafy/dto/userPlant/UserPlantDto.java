@@ -5,9 +5,11 @@ import com.devwiki.leafy.dto.plant.PlantSimpleDto;
 import com.devwiki.leafy.dto.user.UserDto;
 import com.devwiki.leafy.dto.user.UserResponseDto;
 import lombok.Data;
+import lombok.ToString;
 
 import java.time.LocalDateTime;
 
+@ToString
 @Data
 public class UserPlantDto {
 

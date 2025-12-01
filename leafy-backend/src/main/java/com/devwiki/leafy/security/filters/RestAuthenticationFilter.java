@@ -53,8 +53,7 @@ public class RestAuthenticationFilter extends AbstractAuthenticationProcessingFi
 		IOException,
 		ServletException {
 
-		if (!HttpMethod.POST.name().equals(request.getMethod()) ||
-			!WebUtil.isAjax(request)) {
+		if (!HttpMethod.POST.name().equals(request.getMethod())) {
 			throw new IllegalArgumentException("Authentication method not supported");
 		}
 		UserDto userDto = objectMapper.readValue(request.getReader(), UserDto.class);

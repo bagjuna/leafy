@@ -18,6 +18,13 @@ public class UserMapper {
         userResponseDto.setUpdatedAt(user.getUpdatedAt());
         return userResponseDto;
     }
+    public static UserResponseDto userResponseDto(User user, String accessToken, String refreshToken) {
+        UserResponseDto userResponseDto = toResponseDto(user);
+        userResponseDto.setAccessToken(accessToken);
+        userResponseDto.setRefreshToken(refreshToken);
+        return userResponseDto;
+
+    }
 
     public static UserDto toDto(User user) {
         UserDto userDto = new UserDto();

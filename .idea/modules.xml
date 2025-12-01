@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/.github/.github.iml" filepath="$PROJECT_DIR$/.github/.github.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/Leafy.main.iml" filepath="$PROJECT_DIR$/.idea/modules/Leafy.main.iml" />
+      <module fileurl="file://$PROJECT_DIR$/http/http.iml" filepath="$PROJECT_DIR$/http/http.iml" />
+      <module fileurl="file://$PROJECT_DIR$/leafy-frontend/leafy-frontend.iml" filepath="$PROJECT_DIR$/leafy-frontend/leafy-frontend.iml" />
+      <module fileurl="file://$PROJECT_DIR$/leafy-postgresql/leafy-postgresql.iml" filepath="$PROJECT_DIR$/leafy-postgresql/leafy-postgresql.iml" />
+      <module fileurl="file://$PROJECT_DIR$/leafy-redis/leafy-redis.iml" filepath="$PROJECT_DIR$/leafy-redis/leafy-redis.iml" />
+    </modules>
+  </component>
+</project>

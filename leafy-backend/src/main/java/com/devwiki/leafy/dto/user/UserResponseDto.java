@@ -21,4 +21,7 @@ public class UserResponseDto {
     private LocalDateTime createdAt;
     @JsonIgnore
     private LocalDateTime updatedAt;
+
+    private String accessToken;
+    private String refreshToken;
 }

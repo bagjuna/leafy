@@ -1,4 +1,4 @@
-package com.devwiki.leafy.security.config;
+package com.devwiki.leafy.global.security.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

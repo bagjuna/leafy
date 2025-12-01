@@ -1,16 +1,24 @@
 package com.devwiki.leafy.controller.userPlant;
 
+import com.devwiki.leafy.dto.user.UserContext;
 import com.devwiki.leafy.dto.userPlant.UserPlantDto;
 import com.devwiki.leafy.dto.userPlant.UserPlantSimpleDto;
 import com.devwiki.leafy.service.userPlant.UserPlantService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
 import jakarta.validation.Valid;
+import lombok.extern.slf4j.Slf4j;
+
 import java.util.List;
 
+@Slf4j
 @RestController
 @RequestMapping("/api/user-plants")
 @RequiredArgsConstructor
@@ -20,15 +28,16 @@ public class UserPlantController {
 
     /**
      * 사용자가 가지고 있는 모든 식물 정보 조회
-     *
-     * @param userId 조회할 사용자 id
      * @return 사용자가 가지고 있는 모든 식물 정보
      */
-    @GetMapping("/user/{userId}")
-    public ResponseEntity<List<UserPlantSimpleDto>> getUserPlantsByUserId(@PathVariable Long userId) {
-        List<UserPlantSimpleDto> userPlantDtoList = userPlantService.getUserPlantsByUserIdWithWaterRequired(userId);
+    @GetMapping("/user")
+    public ResponseEntity<List<UserPlantSimpleDto>> getUserPlantsByUserId(@AuthenticationPrincipal UserContext userContext) {
+
+        List<UserPlantSimpleDto> userPlantDtoList = userPlantService.getUserPlantsByUserIdWithWaterRequired(userContext.getLoginDto().getUserId());
         return new ResponseEntity<>(userPlantDtoList, HttpStatus.OK);
     }
+
+
 
     /**
      * 사용자가 가지고 있는 특정 식물 정보 조회
@@ -54,17 +63,18 @@ public class UserPlantController {
         return new ResponseEntity<>(addedUserPlantDto, HttpStatus.CREATED);
     }
 
-
     /**
      * 사용자가 가지고 있는 특정 식물 정보 수정
      *
-     * @param userPlantId  수정할 사용자 식물 id
      * @param userPlantDto 수정할 사용자 식물 정보
      * @return 수정된 사용자 식물 정보
      */
     @PutMapping("/{userPlantId}")
-    public ResponseEntity<UserPlantSimpleDto> updateUserPlant(@PathVariable Long userPlantId, @RequestBody UserPlantDto userPlantDto) {
-        UserPlantSimpleDto updatedUserPlantDto = userPlantService.updateUserPlant(userPlantId, userPlantDto);
+    public ResponseEntity<UserPlantSimpleDto> updateUserPlant(@RequestBody UserPlantDto userPlantDto
+        , @AuthenticationPrincipal UserContext userContext) {
+        log.info("updateUserPlant userPlantDto: {}", userPlantDto);
+        UserPlantSimpleDto updatedUserPlantDto = userPlantService.updateUserPlant(userContext.getLoginDto().getUserId(),
+            userPlantDto);
         return new ResponseEntity<>(updatedUserPlantDto, HttpStatus.OK);
     }
 

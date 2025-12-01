@@ -1,0 +1,836 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="SELECTIVE" />
+  </component>
+  <component name="ChangeListManager">
+    <list default="true" id="23cdc14c-3792-45ec-b830-c3c4969eff2a" name="Changes" comment="index.html 추적" />
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="ExternalProjectsData">
+    <projectState path="$PROJECT_DIR$/leafy-backend">
+      <ProjectState />
+    </projectState>
+  </component>
+  <component name="ExternalProjectsManager">
+    <system id="GRADLE">
+      <state>
+        <task path="$PROJECT_DIR$/leafy-backend">
+          <activation />
+        </task>
+        <projects_view>
+          <tree_state>
+            <expand>
+              <path>
+                <item name="" type="6a2764b6:ExternalProjectsStructure$RootNode" />
+                <item name="Leafy" type="f1a62948:ProjectNode" />
+              </path>
+              <path>
+                <item name="" type="6a2764b6:ExternalProjectsStructure$RootNode" />
+                <item name="Leafy" type="f1a62948:ProjectNode" />
+                <item name="Tasks" type="e4a08cd1:TasksNode" />
+              </path>
+              <path>
+                <item name="" type="6a2764b6:ExternalProjectsStructure$RootNode" />
+                <item name="Leafy" type="f1a62948:ProjectNode" />
+                <item name="Tasks" type="e4a08cd1:TasksNode" />
+                <item name="build" type="c8890929:TasksNode$1" />
+              </path>
+              <path>
+                <item name="" type="6a2764b6:ExternalProjectsStructure$RootNode" />
+                <item name="Leafy" type="f1a62948:ProjectNode" />
+                <item name="Tasks" type="e4a08cd1:TasksNode" />
+                <item name="help" type="c8890929:TasksNode$1" />
+              </path>
+              <path>
+                <item name="" type="6a2764b6:ExternalProjectsStructure$RootNode" />
+                <item name="Leafy" type="f1a62948:ProjectNode" />
+                <item name="Run Configurations" type="7b0102dc:RunConfigurationsNode" />
+              </path>
+            </expand>
+            <select />
+          </tree_state>
+        </projects_view>
+      </state>
+    </system>
+  </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="kotlin.jupyter.empty" />
+        <option value="workflow" />
+      </list>
+    </option>
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+    <option name="UPDATE_TYPE" value="REBASE" />
+  </component>
+  <component name="GitHubPullRequestSearchHistory">{
+  &quot;lastFilter&quot;: {
+    &quot;state&quot;: &quot;OPEN&quot;,
+    &quot;assignee&quot;: &quot;bagjuna&quot;
+  }
+}</component>
+  <component name="GitToolBoxStore">
+    <option name="recentBranches">
+      <RecentBranches>
+        <option name="branchesForRepo">
+          <list>
+            <RecentBranchesForRepo>
+              <option name="branches">
+                <list>
+                  <RecentBranch>
+                    <option name="branchName" value="08-cicd" />
+                    <option name="lastUsedInstant" value="1761654006" />
+                  </RecentBranch>
+                  <RecentBranch>
+                    <option name="branchName" value="feature/5-마이그레이션-spring_and_vue" />
+                    <option name="lastUsedInstant" value="1761654005" />
+                  </RecentBranch>
+                </list>
+              </option>
+              <option name="repositoryRootUrl" value="file://$PROJECT_DIR$" />
+            </RecentBranchesForRepo>
+          </list>
+        </option>
+      </RecentBranches>
+    </option>
+  </component>
+  <component name="GithubPullRequestsUISettings">{
+  &quot;selectedUrlAndAccountId&quot;: {
+    &quot;url&quot;: &quot;git@github.com:bagjuna/leafy.git&quot;,
+    &quot;accountId&quot;: &quot;17ffdce9-2c95-46e4-8651-de0a42de625d&quot;
+  }
+}</component>
+  <component name="HighlightingSettingsPerFile">
+    <setting file="file://$PROJECT_DIR$/leafy-frontend/node_modules/axios/index.d.cts" root0="SKIP_INSPECTION" />
+  </component>
+  <component name="KubernetesApiPersistence">{}</component>
+  <component name="KubernetesApiProvider">{
+  &quot;isMigrated&quot;: true
+}</component>
+  <component name="ProblemsViewState">
+    <option name="selectedTabId" value="CurrentFile" />
+  </component>
+  <component name="ProjectColorInfo">{
+  &quot;associatedIndex&quot;: 0
+}</component>
+  <component name="ProjectId" id="32zg7JjPW0KyOE1GAgREGzoGLDy" />
+  <component name="ProjectViewState">
+    <option name="abbreviatePackageNames" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;Application.LeafyApplication.executor&quot;: &quot;Run&quot;,
+    &quot;Docker.Unnamed.executor&quot;: &quot;Run&quot;,
+    &quot;Docker.docker-compose.yml: Compose Deployment.executor&quot;: &quot;Run&quot;,
+    &quot;Docker.myleafy.executor&quot;: &quot;Run&quot;,
+    &quot;Docker.myleafyApp.executor&quot;: &quot;Run&quot;,
+    &quot;Gradle.Build leafy-backend.executor&quot;: &quot;Run&quot;,
+    &quot;Gradle.Download Sources.executor&quot;: &quot;Run&quot;,
+    &quot;Gradle.leafy-backend [bootJarMainClassName].executor&quot;: &quot;Run&quot;,
+    &quot;Gradle.leafy-backend [bootJar].executor&quot;: &quot;Run&quot;,
+    &quot;Gradle.leafy-backend [bootRun].executor&quot;: &quot;Run&quot;,
+    &quot;Gradle.leafy-backend [build].executor&quot;: &quot;Run&quot;,
+    &quot;Gradle.leafy-backend [classes].executor&quot;: &quot;Run&quot;,
+    &quot;Gradle.leafy-backend [clean].executor&quot;: &quot;Run&quot;,
+    &quot;Gradle.leafy-backend [compileJava].executor&quot;: &quot;Run&quot;,
+    &quot;Gradle.leafy-backend [jar].executor&quot;: &quot;Run&quot;,
+    &quot;HTTP Request.api | #1.executor&quot;: &quot;Run&quot;,
+    &quot;HTTP Request.api | #2.executor&quot;: &quot;Run&quot;,
+    &quot;HTTP Request.api | Fetch Plants.executor&quot;: &quot;Run&quot;,
+    &quot;HTTP Request.auth | #1.executor&quot;: &quot;Run&quot;,
+    &quot;HTTP Request.test | 로그인.executor&quot;: &quot;Run&quot;,
+    &quot;JUnit.Whole project.executor&quot;: &quot;Run&quot;,
+    &quot;ModuleVcsDetector.initialDetectionPerformed&quot;: &quot;true&quot;,
+    &quot;RequestMappingsPanelOrder0&quot;: &quot;0&quot;,
+    &quot;RequestMappingsPanelOrder1&quot;: &quot;1&quot;,
+    &quot;RequestMappingsPanelWidth0&quot;: &quot;75&quot;,
+    &quot;RequestMappingsPanelWidth1&quot;: &quot;75&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
+    &quot;Spring Boot.LeafyApplication.executor&quot;: &quot;Run&quot;,
+    &quot;com.intellij.ml.llm.matterhorn.ej.ui.settings.DefaultAutoModeForALLUsers.v1&quot;: &quot;true&quot;,
+    &quot;com.intellij.ml.llm.matterhorn.ej.ui.settings.DefaultModelSelectionForGA.v1&quot;: &quot;true&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;feat/스프링-시큐리티-설정&quot;,
+    &quot;junie.onboarding.icon.badge.shown&quot;: &quot;true&quot;,
+    &quot;last_opened_file_path&quot;: &quot;/Users/bagjun-a/inflearn/docker-wiki/my-leafy/leafy-backend/src/main/java/com/devwiki/leafy/global&quot;,
+    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
+    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
+    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
+    &quot;nodejs_interpreter_path&quot;: &quot;node&quot;,
+    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
+    &quot;npm.npm.executor&quot;: &quot;Run&quot;,
+    &quot;project.structure.last.edited&quot;: &quot;Modules&quot;,
+    &quot;project.structure.proportion&quot;: &quot;0.15&quot;,
+    &quot;project.structure.side.proportion&quot;: &quot;0.2689655&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;preferences.lookFeel&quot;,
+    &quot;to.speed.mode.migration.done&quot;: &quot;true&quot;,
+    &quot;ts.external.directory.path&quot;: &quot;/Applications/IntelliJ IDEA.app/Contents/plugins/javascript-plugin/jsLanguageServicesImpl/external&quot;,
+    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
+  },
+  &quot;keyToStringList&quot;: {
+    &quot;DatabaseDriversLRU&quot;: [
+      &quot;postgresql&quot;,
+      &quot;java.sql.Driver&quot;
+    ],
+    &quot;com.intellij.ide.scratch.ScratchImplUtil$2/New Scratch File&quot;: [
+      &quot;JAVA&quot;
+    ]
+  }
+}</component>
+  <component name="RecentsManager">
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/leafy-backend/src/main/java/com/devwiki/leafy/global" />
+      <recent name="$PROJECT_DIR$/leafy-backend/src/main/java/com/devwiki/leafy" />
+      <recent name="$PROJECT_DIR$/leafy-backend/src/main/resources/db" />
+      <recent name="$PROJECT_DIR$/leafy-frontend/src/views" />
+    </key>
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/leafy-frontend" />
+      <recent name="$PROJECT_DIR$/leafy-backend/src/main/resources" />
+      <recent name="$PROJECT_DIR$" />
+    </key>
+  </component>
+  <component name="RunManager" selected="Docker.myleafyApp">
+    <configuration name="leafy-backend [build]" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
+      <ExternalSystemSettings>
+        <option name="executionName" />
+        <option name="externalProjectPath" value="$PROJECT_DIR$/leafy-backend" />
+        <option name="externalSystemIdString" value="GRADLE" />
+        <option name="scriptParameters" />
+        <option name="taskDescriptions">
+          <list />
+        </option>
+        <option name="taskNames">
+          <list>
+            <option value="build" />
+          </list>
+        </option>
+        <option name="vmOptions" />
+      </ExternalSystemSettings>
+      <ExternalSystemDebugServerProcess>true</ExternalSystemDebugServerProcess>
+      <ExternalSystemReattachDebugProcess>true</ExternalSystemReattachDebugProcess>
+      <DebugAllEnabled>false</DebugAllEnabled>
+      <RunAsTest>false</RunAsTest>
+      <method v="2" />
+    </configuration>
+    <configuration name="leafy-backend [classes]" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
+      <ExternalSystemSettings>
+        <option name="executionName" />
+        <option name="externalProjectPath" value="$PROJECT_DIR$/leafy-backend" />
+        <option name="externalSystemIdString" value="GRADLE" />
+        <option name="scriptParameters" />
+        <option name="taskDescriptions">
+          <list />
+        </option>
+        <option name="taskNames">
+          <list>
+            <option value="classes" />
+          </list>
+        </option>
+        <option name="vmOptions" />
+      </ExternalSystemSettings>
+      <ExternalSystemDebugServerProcess>true</ExternalSystemDebugServerProcess>
+      <ExternalSystemReattachDebugProcess>true</ExternalSystemReattachDebugProcess>
+      <DebugAllEnabled>false</DebugAllEnabled>
+      <RunAsTest>false</RunAsTest>
+      <method v="2" />
+    </configuration>
+    <configuration name="auth | #1" type="HttpClient.HttpRequestRunConfigurationType" factoryName="HTTP Request" temporary="true" nameIsGenerated="true" path="$PROJECT_DIR$/http/auth.http" executionIdentifier="#1" runType="Run single request">
+      <method v="2" />
+    </configuration>
+    <configuration name="test | 로그인" type="HttpClient.HttpRequestRunConfigurationType" factoryName="HTTP Request" temporary="true" nameIsGenerated="true" path="$PROJECT_DIR$/leafy-backend/src/test/test.http" executionIdentifier="로그인" runType="Run single request">
+      <method v="2" />
+    </configuration>
+    <configuration name="Whole project" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <option name="PACKAGE_NAME" value="" />
+      <option name="TEST_OBJECT" value="package" />
+      <option name="TEST_SEARCH_SCOPE">
+        <value defaultName="wholeProject" />
+      </option>
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration default="true" type="JetRunConfigurationType">
+      <module name="my-leafy" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration default="true" type="KotlinStandaloneScriptRunConfigurationType">
+      <module name="my-leafy" />
+      <option name="filePath" />
+      <method v="2" />
+    </configuration>
+    <configuration name="LeafyApplication" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot" nameIsGenerated="true">
+      <option name="FRAME_DEACTIVATION_UPDATE_POLICY" value="UpdateClassesAndResources" />
+      <module name="Leafy.main" />
+      <option name="SPRING_BOOT_MAIN_CLASS" value="com.devwiki.leafy.LeafyApplication" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="myleafy" type="docker-deploy" factoryName="docker-compose.yml">
+      <deployment type="docker-compose.yml">
+        <settings>
+          <option name="containerName" value="" />
+          <option name="envFilePath" value="" />
+          <option name="sourceFilePath" value="docker-compose.yml" />
+        </settings>
+      </deployment>
+      <method v="2" />
+    </configuration>
+    <configuration name="myleafyApp" type="docker-deploy" factoryName="docker-compose.yml" server-name="DockerOnMyPc">
+      <deployment type="docker-compose.yml">
+        <settings>
+          <option name="envFilePath" value="" />
+          <option name="commandLineOptions" value="--build" />
+          <option name="sourceFilePath" value="docker-compose.yml" />
+        </settings>
+      </deployment>
+      <method v="2" />
+    </configuration>
+    <configuration name="npm" type="js.build_tools.npm">
+      <package-json value="$PROJECT_DIR$/leafy-frontend/package.json" />
+      <command value="run" />
+      <scripts>
+        <script value="dev" />
+      </scripts>
+      <node-interpreter value="project" />
+      <envs />
+      <method v="2" />
+    </configuration>
+    <list>
+      <item itemvalue="Docker.myleafy" />
+      <item itemvalue="Docker.myleafyApp" />
+      <item itemvalue="Gradle.leafy-backend [build]" />
+      <item itemvalue="Gradle.leafy-backend [classes]" />
+      <item itemvalue="HTTP Request.auth | #1" />
+      <item itemvalue="HTTP Request.test | 로그인" />
+      <item itemvalue="JUnit.Whole project" />
+      <item itemvalue="npm.npm" />
+      <item itemvalue="Spring Boot.LeafyApplication" />
+    </list>
+    <recent_temporary>
+      <list>
+        <item itemvalue="HTTP Request.auth | #1" />
+        <item itemvalue="HTTP Request.test | 로그인" />
+      </list>
+    </recent_temporary>
+  </component>
+  <component name="SharedIndexes">
+    <attachedChunks>
+      <set>
+        <option value="bundled-jdk-9823dce3aa75-fbdcb00ec9e3-intellij.indexing.shared.core-IU-251.26927.53" />
+        <option value="bundled-js-predefined-d6986cc7102b-09060db00ec0-JavaScript-IU-251.26927.53" />
+      </set>
+    </attachedChunks>
+  </component>
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="23cdc14c-3792-45ec-b830-c3c4969eff2a" name="Changes" comment="" />
+      <created>1758428646098</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1758428646098</updated>
+      <workItem from="1758428648048" duration="31276000" />
+      <workItem from="1758467782982" duration="17652000" />
+      <workItem from="1758519196720" duration="7146000" />
+      <workItem from="1758527578763" duration="1377000" />
+      <workItem from="1758557940415" duration="12832000" />
+      <workItem from="1758688988190" duration="7509000" />
+      <workItem from="1758787790614" duration="75000" />
+      <workItem from="1759148684329" duration="1861000" />
+      <workItem from="1759759122666" duration="1421000" />
+      <workItem from="1760331598738" duration="5060000" />
+      <workItem from="1760375631919" duration="5247000" />
+      <workItem from="1760535705037" duration="804000" />
+      <workItem from="1760604730534" duration="2520000" />
+      <workItem from="1760806098249" duration="3557000" />
+      <workItem from="1761148042047" duration="886000" />
+      <workItem from="1761148935190" duration="753000" />
+      <workItem from="1761149695445" duration="23000" />
+      <workItem from="1761149761846" duration="6000" />
+      <workItem from="1761149825469" duration="29000" />
+      <workItem from="1761150168679" duration="3216000" />
+      <workItem from="1761181897551" duration="98000" />
+      <workItem from="1761182037896" duration="414000" />
+      <workItem from="1761182480435" duration="2000" />
+      <workItem from="1761182528188" duration="23000" />
+      <workItem from="1761182623954" duration="4000" />
+      <workItem from="1761191826647" duration="11000" />
+      <workItem from="1761191856820" duration="172000" />
+      <workItem from="1761192132256" duration="20837000" />
+      <workItem from="1761223115031" duration="2559000" />
+      <workItem from="1761228281968" duration="33000" />
+      <workItem from="1761229869745" duration="3109000" />
+      <workItem from="1761234181764" duration="4306000" />
+      <workItem from="1761637612163" duration="54192000" />
+      <workItem from="1761924406578" duration="716000" />
+      <workItem from="1761987943158" duration="6654000" />
+      <workItem from="1762165330035" duration="1374000" />
+      <workItem from="1762788915829" duration="9137000" />
+      <workItem from="1763294297239" duration="11429000" />
+      <workItem from="1763446783738" duration="56164000" />
+      <workItem from="1763802257562" duration="599000" />
+      <workItem from="1764055423357" duration="39489000" />
+      <workItem from="1764574133010" duration="204000" />
+    </task>
+    <task id="LOCAL-00047" summary="new 테스트 take 30&#10;- 다시 배포 시도">
+      <option name="closed" value="true" />
+      <created>1758469084729</created>
+      <option name="number" value="00047" />
+      <option name="presentableId" value="LOCAL-00047" />
+      <option name="project" value="LOCAL" />
+      <updated>1758469084729</updated>
+    </task>
+    <task id="LOCAL-00048" summary="new 테스트 take 31&#10;- 백엔드 배포 시도">
+      <option name="closed" value="true" />
+      <created>1758470264736</created>
+      <option name="number" value="00048" />
+      <option name="presentableId" value="LOCAL-00048" />
+      <option name="project" value="LOCAL" />
+      <updated>1758470264736</updated>
+    </task>
+    <task id="LOCAL-00049" summary="new 테스트 take 32&#10;- initial-setup.yml 수정&#10;- 백 프론트 추가">
+      <option name="closed" value="true" />
+      <created>1758471916558</created>
+      <option name="number" value="00049" />
+      <option name="presentableId" value="LOCAL-00049" />
+      <option name="project" value="LOCAL" />
+      <updated>1758471916558</updated>
+    </task>
+    <task id="LOCAL-00050" summary="new 테스트 take 33&#10;- ....">
+      <option name="closed" value="true" />
+      <created>1758473691081</created>
+      <option name="number" value="00050" />
+      <option name="presentableId" value="LOCAL-00050" />
+      <option name="project" value="LOCAL" />
+      <updated>1758473691083</updated>
+    </task>
+    <task id="LOCAL-00051" summary="new 테스트 take 34">
+      <option name="closed" value="true" />
+      <created>1758474094949</created>
+      <option name="number" value="00051" />
+      <option name="presentableId" value="LOCAL-00051" />
+      <option name="project" value="LOCAL" />
+      <updated>1758474094950</updated>
+    </task>
+    <task id="LOCAL-00052" summary="new 테스트 take 35&#10;-init setup">
+      <option name="closed" value="true" />
+      <created>1758477072198</created>
+      <option name="number" value="00052" />
+      <option name="presentableId" value="LOCAL-00052" />
+      <option name="project" value="LOCAL" />
+      <updated>1758477072198</updated>
+    </task>
+    <task id="LOCAL-00053" summary="new 테스트 take 36">
+      <option name="closed" value="true" />
+      <created>1758477273800</created>
+      <option name="number" value="00053" />
+      <option name="presentableId" value="LOCAL-00053" />
+      <option name="project" value="LOCAL" />
+      <updated>1758477273800</updated>
+    </task>
+    <task id="LOCAL-00054" summary="new 테스트 take 37">
+      <option name="closed" value="true" />
+      <created>1758478076512</created>
+      <option name="number" value="00054" />
+      <option name="presentableId" value="LOCAL-00054" />
+      <option name="project" value="LOCAL" />
+      <updated>1758478076512</updated>
+    </task>
+    <task id="LOCAL-00055" summary="new 테스트 take 38">
+      <option name="closed" value="true" />
+      <created>1758478219859</created>
+      <option name="number" value="00055" />
+      <option name="presentableId" value="LOCAL-00055" />
+      <option name="project" value="LOCAL" />
+      <updated>1758478219859</updated>
+    </task>
+    <task id="LOCAL-00056" summary="new 테스트 take 39">
+      <option name="closed" value="true" />
+      <created>1758478417491</created>
+      <option name="number" value="00056" />
+      <option name="presentableId" value="LOCAL-00056" />
+      <option name="project" value="LOCAL" />
+      <updated>1758478417491</updated>
+    </task>
+    <task id="LOCAL-00057" summary="new 테스트 take 40">
+      <option name="closed" value="true" />
+      <created>1758478640795</created>
+      <option name="number" value="00057" />
+      <option name="presentableId" value="LOCAL-00057" />
+      <option name="project" value="LOCAL" />
+      <updated>1758478640796</updated>
+    </task>
+    <task id="LOCAL-00058" summary="new 테스트 take 40">
+      <option name="closed" value="true" />
+      <created>1758478759907</created>
+      <option name="number" value="00058" />
+      <option name="presentableId" value="LOCAL-00058" />
+      <option name="project" value="LOCAL" />
+      <updated>1758478759908</updated>
+    </task>
+    <task id="LOCAL-00059" summary="new 테스트 take 41&#10;프론트 수정">
+      <option name="closed" value="true" />
+      <created>1758478890252</created>
+      <option name="number" value="00059" />
+      <option name="presentableId" value="LOCAL-00059" />
+      <option name="project" value="LOCAL" />
+      <updated>1758478890252</updated>
+    </task>
+    <task id="LOCAL-00060" summary="new 테스트 take 41&#10;프론트 수정">
+      <option name="closed" value="true" />
+      <created>1758479348880</created>
+      <option name="number" value="00060" />
+      <option name="presentableId" value="LOCAL-00060" />
+      <option name="project" value="LOCAL" />
+      <updated>1758479348880</updated>
+    </task>
+    <task id="LOCAL-00061" summary="new 테스트 take 42&#10;init 환경 변수 추가">
+      <option name="closed" value="true" />
+      <created>1758506535309</created>
+      <option name="number" value="00061" />
+      <option name="presentableId" value="LOCAL-00061" />
+      <option name="project" value="LOCAL" />
+      <updated>1758506535309</updated>
+    </task>
+    <task id="LOCAL-00062" summary="new 테스트 take 43&#10;- backend 수정">
+      <option name="closed" value="true" />
+      <created>1758507060002</created>
+      <option name="number" value="00062" />
+      <option name="presentableId" value="LOCAL-00062" />
+      <option name="project" value="LOCAL" />
+      <updated>1758507060002</updated>
+    </task>
+    <task id="LOCAL-00063" summary="new 테스트 take 44&#10;- backend 수정2">
+      <option name="closed" value="true" />
+      <created>1758507558063</created>
+      <option name="number" value="00063" />
+      <option name="presentableId" value="LOCAL-00063" />
+      <option name="project" value="LOCAL" />
+      <updated>1758507558063</updated>
+    </task>
+    <task id="LOCAL-00064" summary="new 테스트 take 45&#10;- backend 수정3">
+      <option name="closed" value="true" />
+      <created>1758507998031</created>
+      <option name="number" value="00064" />
+      <option name="presentableId" value="LOCAL-00064" />
+      <option name="project" value="LOCAL" />
+      <updated>1758507998031</updated>
+    </task>
+    <task id="LOCAL-00065" summary="new 테스트 take 46&#10;- backend 수정4">
+      <option name="closed" value="true" />
+      <created>1758509208875</created>
+      <option name="number" value="00065" />
+      <option name="presentableId" value="LOCAL-00065" />
+      <option name="project" value="LOCAL" />
+      <updated>1758509208875</updated>
+    </task>
+    <task id="LOCAL-00066" summary="new 테스트 take 47&#10;- init backend latest로 수정">
+      <option name="closed" value="true" />
+      <created>1758509609747</created>
+      <option name="number" value="00066" />
+      <option name="presentableId" value="LOCAL-00066" />
+      <option name="project" value="LOCAL" />
+      <updated>1758509609747</updated>
+    </task>
+    <task id="LOCAL-00067" summary="new 테스트 take 48&#10;- postgres 수정">
+      <option name="closed" value="true" />
+      <created>1758511928317</created>
+      <option name="number" value="00067" />
+      <option name="presentableId" value="LOCAL-00067" />
+      <option name="project" value="LOCAL" />
+      <updated>1758511928317</updated>
+    </task>
+    <task id="LOCAL-00068" summary="new 테스트 take 49&#10;- postgres 수정2">
+      <option name="closed" value="true" />
+      <created>1758512066819</created>
+      <option name="number" value="00068" />
+      <option name="presentableId" value="LOCAL-00068" />
+      <option name="project" value="LOCAL" />
+      <updated>1758512066819</updated>
+    </task>
+    <task id="LOCAL-00069" summary="new 테스트 take 50&#10;- front 수정">
+      <option name="closed" value="true" />
+      <created>1758512622109</created>
+      <option name="number" value="00069" />
+      <option name="presentableId" value="LOCAL-00069" />
+      <option name="project" value="LOCAL" />
+      <updated>1758512622109</updated>
+    </task>
+    <task id="LOCAL-00070" summary="new 테스트 take 51&#10;- front 수정2">
+      <option name="closed" value="true" />
+      <created>1758512800205</created>
+      <option name="number" value="00070" />
+      <option name="presentableId" value="LOCAL-00070" />
+      <option name="project" value="LOCAL" />
+      <updated>1758512800205</updated>
+    </task>
+    <task id="LOCAL-00071" summary="new 테스트 take 58&#10;- 프론트엔드 배포 간단화">
+      <option name="closed" value="true" />
+      <created>1758558239759</created>
+      <option name="number" value="00071" />
+      <option name="presentableId" value="LOCAL-00071" />
+      <option name="project" value="LOCAL" />
+      <updated>1758558239759</updated>
+    </task>
+    <task id="LOCAL-00072" summary="new 테스트 take 59&#10;- 자동화 배포 확인">
+      <option name="closed" value="true" />
+      <created>1758558658854</created>
+      <option name="number" value="00072" />
+      <option name="presentableId" value="LOCAL-00072" />
+      <option name="project" value="LOCAL" />
+      <updated>1758558658854</updated>
+    </task>
+    <task id="LOCAL-00073" summary="회원가입 기능 추가&#10;- 백엔드 자동화 확인&#10;- 프론트 자동화 확인">
+      <option name="closed" value="true" />
+      <created>1758693672991</created>
+      <option name="number" value="00073" />
+      <option name="presentableId" value="LOCAL-00073" />
+      <option name="project" value="LOCAL" />
+      <updated>1758693672991</updated>
+    </task>
+    <task id="LOCAL-00074" summary="자동화 확인&#10;프론트엔드">
+      <option name="closed" value="true" />
+      <created>1760332576779</created>
+      <option name="number" value="00074" />
+      <option name="presentableId" value="LOCAL-00074" />
+      <option name="project" value="LOCAL" />
+      <updated>1760332576779</updated>
+    </task>
+    <task id="LOCAL-00075" summary="- 자바를 17로 업그레이드&#10;- 스프링을 3.xx버전으로 업그레이드&#10;- vue를 vite로 업그레이드&#10;- node를 20으로 업그레이드">
+      <option name="closed" value="true" />
+      <created>1761230572451</created>
+      <option name="number" value="00075" />
+      <option name="presentableId" value="LOCAL-00075" />
+      <option name="project" value="LOCAL" />
+      <updated>1761230572451</updated>
+    </task>
+    <task id="LOCAL-00076" summary="index.html 추적">
+      <option name="closed" value="true" />
+      <created>1761231595142</created>
+      <option name="number" value="00076" />
+      <option name="presentableId" value="LOCAL-00076" />
+      <option name="project" value="LOCAL" />
+      <updated>1761231595142</updated>
+    </task>
+    <task id="LOCAL-00077" summary="postgres 새로운 이미지">
+      <option name="closed" value="true" />
+      <created>1761638592376</created>
+      <option name="number" value="00077" />
+      <option name="presentableId" value="LOCAL-00077" />
+      <option name="project" value="LOCAL" />
+      <updated>1761638592377</updated>
+    </task>
+    <task id="LOCAL-00078" summary="backend 무한 재시작 해결 1">
+      <option name="closed" value="true" />
+      <created>1761639148125</created>
+      <option name="number" value="00078" />
+      <option name="presentableId" value="LOCAL-00078" />
+      <option name="project" value="LOCAL" />
+      <updated>1761639148125</updated>
+    </task>
+    <task id="LOCAL-00079" summary="backend 무한 재시작 해결 2">
+      <option name="closed" value="true" />
+      <created>1761639602218</created>
+      <option name="number" value="00079" />
+      <option name="presentableId" value="LOCAL-00079" />
+      <option name="project" value="LOCAL" />
+      <updated>1761639602218</updated>
+    </task>
+    <task id="LOCAL-00080" summary="backend 무한 재시작 해결 3">
+      <option name="closed" value="true" />
+      <created>1761639821039</created>
+      <option name="number" value="00080" />
+      <option name="presentableId" value="LOCAL-00080" />
+      <option name="project" value="LOCAL" />
+      <updated>1761639821039</updated>
+    </task>
+    <task id="LOCAL-00081" summary="backend 무한 재시작 해결 4">
+      <option name="closed" value="true" />
+      <created>1761640986575</created>
+      <option name="number" value="00081" />
+      <option name="presentableId" value="LOCAL-00081" />
+      <option name="project" value="LOCAL" />
+      <updated>1761640986575</updated>
+    </task>
+    <task id="LOCAL-00082" summary="backend 무한 재시작 해결 5">
+      <option name="closed" value="true" />
+      <created>1761643495378</created>
+      <option name="number" value="00082" />
+      <option name="presentableId" value="LOCAL-00082" />
+      <option name="project" value="LOCAL" />
+      <updated>1761643495378</updated>
+    </task>
+    <task id="LOCAL-00083" summary="backend 무한 재시작 해결 6">
+      <option name="closed" value="true" />
+      <created>1761653139798</created>
+      <option name="number" value="00083" />
+      <option name="presentableId" value="LOCAL-00083" />
+      <option name="project" value="LOCAL" />
+      <updated>1761653139798</updated>
+    </task>
+    <task id="LOCAL-00084" summary="backend 무한 재시작 해결 7">
+      <option name="closed" value="true" />
+      <created>1761654064808</created>
+      <option name="number" value="00084" />
+      <option name="presentableId" value="LOCAL-00084" />
+      <option name="project" value="LOCAL" />
+      <updated>1761654064808</updated>
+    </task>
+    <task id="LOCAL-00085" summary="프론트 수정">
+      <option name="closed" value="true" />
+      <created>1761654433872</created>
+      <option name="number" value="00085" />
+      <option name="presentableId" value="LOCAL-00085" />
+      <option name="project" value="LOCAL" />
+      <updated>1761654433872</updated>
+    </task>
+    <task id="LOCAL-00086" summary="backend 무한 재시작 해결 8">
+      <option name="closed" value="true" />
+      <created>1761654593584</created>
+      <option name="number" value="00086" />
+      <option name="presentableId" value="LOCAL-00086" />
+      <option name="project" value="LOCAL" />
+      <updated>1761654593584</updated>
+    </task>
+    <task id="LOCAL-00087" summary="backend 무한 재시작 해결 9">
+      <option name="closed" value="true" />
+      <created>1761661733518</created>
+      <option name="number" value="00087" />
+      <option name="presentableId" value="LOCAL-00087" />
+      <option name="project" value="LOCAL" />
+      <updated>1761661733518</updated>
+    </task>
+    <task id="LOCAL-00088" summary="backend 무한 재시작 해결 10">
+      <option name="closed" value="true" />
+      <created>1761662088936</created>
+      <option name="number" value="00088" />
+      <option name="presentableId" value="LOCAL-00088" />
+      <option name="project" value="LOCAL" />
+      <updated>1761662088937</updated>
+    </task>
+    <task id="LOCAL-00089" summary="backend 무한 재시작 해결 11">
+      <option name="closed" value="true" />
+      <created>1761663426819</created>
+      <option name="number" value="00089" />
+      <option name="presentableId" value="LOCAL-00089" />
+      <option name="project" value="LOCAL" />
+      <updated>1761663426819</updated>
+    </task>
+    <task id="LOCAL-00090" summary="backend 무한 재시작 해결 12">
+      <option name="closed" value="true" />
+      <created>1761664468541</created>
+      <option name="number" value="00090" />
+      <option name="presentableId" value="LOCAL-00090" />
+      <option name="project" value="LOCAL" />
+      <updated>1761664468541</updated>
+    </task>
+    <task id="LOCAL-00091" summary="backend 무한 재시작 해결 13">
+      <option name="closed" value="true" />
+      <created>1761665962173</created>
+      <option name="number" value="00091" />
+      <option name="presentableId" value="LOCAL-00091" />
+      <option name="project" value="LOCAL" />
+      <updated>1761665962173</updated>
+    </task>
+    <task id="LOCAL-00092" summary="드디어 해결 !&#10;plants, user_plants, plant_logs&#10;init data test">
+      <option name="closed" value="true" />
+      <created>1761667171698</created>
+      <option name="number" value="00092" />
+      <option name="presentableId" value="LOCAL-00092" />
+      <option name="project" value="LOCAL" />
+      <updated>1761667171699</updated>
+    </task>
+    <task id="LOCAL-00093" summary="init 파일 의 createAt, updateAt 추가">
+      <option name="closed" value="true" />
+      <created>1761706806808</created>
+      <option name="number" value="00093" />
+      <option name="presentableId" value="LOCAL-00093" />
+      <option name="project" value="LOCAL" />
+      <updated>1761706806809</updated>
+    </task>
+    <task id="LOCAL-00094" summary="회원가입 동작 정상적으로 되게 수정">
+      <option name="closed" value="true" />
+      <created>1761716695633</created>
+      <option name="number" value="00094" />
+      <option name="presentableId" value="LOCAL-00094" />
+      <option name="project" value="LOCAL" />
+      <updated>1761716695633</updated>
+    </task>
+    <task id="LOCAL-00095" summary="- 패키지 구조 변경">
+      <option name="closed" value="true" />
+      <created>1761757917819</created>
+      <option name="number" value="00095" />
+      <option name="presentableId" value="LOCAL-00095" />
+      <option name="project" value="LOCAL" />
+      <updated>1761757917819</updated>
+    </task>
+    <option name="localTasksCounter" value="96" />
+    <servers />
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="3" />
+  </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State />
+          </value>
+        </entry>
+      </map>
+    </option>
+  </component>
+  <component name="VcsManagerConfiguration">
+    <MESSAGE value="new 테스트 take 58&#10;- 프론트엔드 배포 간단화" />
+    <MESSAGE value="new 테스트 take 59&#10;- 자동화 배포 확인" />
+    <MESSAGE value="회원가입 기능 추가&#10;- 백엔드 자동화 확인&#10;- 프론트 자동화 확인" />
+    <MESSAGE value="자동화 확인&#10;프론트엔드" />
+    <MESSAGE value="- 자바를 17로 업그레이드&#10;- 스프링을 3.xx버전으로 업그레이드&#10;- vue를 vite로 업그레이드&#10;- node를 20으로 업그레이드" />
+    <MESSAGE value="index.html 추적" />
+    <MESSAGE value="postgres 새로운 이미지" />
+    <MESSAGE value="backend 무한 재시작 해결 1" />
+    <MESSAGE value="backend 무한 재시작 해결 2" />
+    <MESSAGE value="backend 무한 재시작 해결 3" />
+    <MESSAGE value="backend 무한 재시작 해결 4" />
+    <MESSAGE value="backend 무한 재시작 해결 5" />
+    <MESSAGE value="backend 무한 재시작 해결 6" />
+    <MESSAGE value="backend 무한 재시작 해결 7" />
+    <MESSAGE value="프론트 수정" />
+    <MESSAGE value="backend 무한 재시작 해결 8" />
+    <MESSAGE value="backend 무한 재시작 해결 9" />
+    <MESSAGE value="backend 무한 재시작 해결 10" />
+    <MESSAGE value="backend 무한 재시작 해결 11" />
+    <MESSAGE value="backend 무한 재시작 해결 12" />
+    <MESSAGE value="backend 무한 재시작 해결 13" />
+    <MESSAGE value="드디어 해결 !&#10;plants, user_plants, plant_logs&#10;init data test" />
+    <MESSAGE value="init 파일 의 createAt, updateAt 추가" />
+    <MESSAGE value="회원가입 동작 정상적으로 되게 수정" />
+    <MESSAGE value="- 패키지 구조 변경" />
+    <option name="LAST_COMMIT_MESSAGE" value="- 패키지 구조 변경" />
+  </component>
+  <component name="XSLT-Support.FileAssociations.UIState">
+    <expand />
+    <select />
+  </component>
+  <component name="github-copilot-workspace">
+    <instructionFileLocations>
+      <option value=".github/instructions" />
+    </instructionFileLocations>
+    <promptFileLocations>
+      <option value=".github/prompts" />
+    </promptFileLocations>
+  </component>
+</project>

@@ -24,7 +24,7 @@ public class UserPlantMapper {
         UserPlantSimpleDto userPlantSimpleDto = new UserPlantSimpleDto();
 
         userPlantSimpleDto.setUserPlantId(userPlant.getUserPlantId());
-        userPlantSimpleDto.setUser(UserMapper.toResponseDto(userPlant.getUser()));
+        // userPlantSimpleDto.setUser(UserMapper.toResponseDto(userPlant.getUser()));
         if (userPlant.getPlant() != null) {
             userPlantSimpleDto.setPlant(PlantMapper.toSimpleDto(userPlant.getPlant()));
         }
