@@ -17,6 +17,7 @@ public class UserPlantSimpleDto {
     private PlantSimpleDto plant;
     private String plantNickname;
     private Boolean waterRequired;
+    private String imageUrl;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
 }

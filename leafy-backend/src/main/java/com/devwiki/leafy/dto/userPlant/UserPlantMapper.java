@@ -29,6 +29,7 @@ public class UserPlantMapper {
             userPlantSimpleDto.setPlant(PlantMapper.toSimpleDto(userPlant.getPlant()));
         }
         userPlantSimpleDto.setPlantNickname(userPlant.getPlantNickname());
+        userPlantSimpleDto.setImageUrl(userPlant.getPlant() != null ? userPlant.getPlant().getImageUrl() : null);
         userPlantSimpleDto.setCreatedAt(userPlant.getCreatedAt());
         userPlantSimpleDto.setUpdatedAt(userPlant.getUpdatedAt());
         return userPlantSimpleDto;

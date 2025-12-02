@@ -37,7 +37,13 @@
           삭제
         </v-btn>
 
-        <v-btn color="#556B2F" class="text-white" @click="openNicknameDialog">
+        <v-btn
+            v-if="!deleteButton"
+            color="#556B2F"
+            class="text-white"
+            variant="flat"
+            @click="openNicknameDialog"
+        >
           내 식물로 추가
         </v-btn>
       </v-card-actions>
