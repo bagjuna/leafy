@@ -17,7 +17,7 @@ export function usePlantData() {
     const fetchRecentLogs = async () => {
         try {
             // userId는 백엔드에서 토큰으로 처리하거나, 필요하다면 경로에 추가
-            const response = await api.get(`/api/plant-logs/recent/user`);
+            const response = await api.get(`/plant-logs/recent/user`);
             state.logs = response.data;
         } catch (error) {
             state.error = error;
@@ -28,7 +28,7 @@ export function usePlantData() {
     // 2. 식물 목록 조회 함수
     const fetchMyPlants = async () => {
         try {
-            const response = await api.get(`/api/user-plants/user`);
+            const response = await api.get(`/user-plants/user`);
             state.userPlants = response.data;
         } catch (error) {
             state.error = error;

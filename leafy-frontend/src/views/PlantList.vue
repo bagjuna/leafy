@@ -49,7 +49,7 @@ const selectedPlantId = ref(null);
 // 2. 데이터 조회 함수
 const fetchPlants = async () => {
   try {
-    const response = await api.get('/api/plants');
+    const response = await api.get('/plants');
     plants.value = response.data;
   } catch (error) {
     console.error("식물 목록 로딩 실패:", error);

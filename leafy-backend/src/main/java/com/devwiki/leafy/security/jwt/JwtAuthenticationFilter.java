@@ -9,6 +9,8 @@ import org.springframework.web.filter.OncePerRequestFilter;
 
 import com.devwiki.leafy.security.service.RestUserDetailsService;
 
+import io.jsonwebtoken.ExpiredJwtException;
+import io.jsonwebtoken.security.SignatureException;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -26,8 +28,14 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     private final JwtAuthenticationConverter authenticationConverter; // 컨버터 주입
 
     @Override
-    protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
+    protected boolean shouldNotFilter(HttpServletRequest request) throws ServletException {
+        String path = request.getRequestURI();
+        // "/api/users/reissue" 경로는 필터 검사를 건너뜁니다.
+        return path.equals("/api/users/reissue");
+    }
 
+    @Override
+    protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
         JwtAuthenticationToken authenticationRequest = authenticationConverter.convert(request);
         if (authenticationRequest == null) {
             filterChain.doFilter(request, response);
@@ -40,7 +48,6 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             jwtUtil.validateToken(token);
 
             String userId = jwtUtil.getUserIdFromToken(token);
-            log.info("userId from token: {}", userId);
             // 2. UserDetails 로딩 (DB 조회)
             UserDetails userDetails = restUserDetailsService.loadUserById(Long.parseLong(userId));
 
@@ -51,11 +58,14 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             SecurityContextHolder.getContext().setAuthentication(authenticatedToken);
             // log.info("FINAL SUCCESS: Security Context manually set for User: {}", userId); // ★★★ 최종 성공 로그 ★★★
 
+        } catch (SignatureException | ExpiredJwtException e) {
+            // [변경] 서명 오류나 만료는 해킹 시도가 아니라면 흔한 일이므로 error 대신 info나 warn으로 찍습니다.
+            log.warn("JWT 유효성 검증 실패 (정상적인 만료 혹은 서명 불일치): {}", e.getMessage());
+            SecurityContextHolder.clearContext();
         } catch (Exception e) {
-            // 토큰 만료, 서명 오류 시 Context 설정하지 않고 다음 필터로 넘김 (401 유도)
-            log.error("🔥🔥🔥 JWT 로직 치명적 오류 발생 🔥🔥🔥", e);
-            SecurityContextHolder.clearContext(); // Context를 명시적으로 비움
-            log.debug("JWT Token validation failed or user not found: {}", e.getMessage());
+            // 그 외의 진짜 알 수 없는 에러만 Error로 찍습니다.
+            log.error("🔥🔥🔥 JWT 처리 중 알 수 없는 오류 발생 🔥🔥🔥", e);
+            SecurityContextHolder.clearContext();
         }
 
         filterChain.doFilter(request, response);

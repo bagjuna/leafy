@@ -69,7 +69,7 @@ const fetchUserPlantDetail = async () => {
   if (!props.userPlantId) return;
   try {
     // API 엔드포인트 변경: /api/user-plants/{id}
-    const response = await api.get(`/api/user-plants/${props.userPlantId}`);
+    const response = await api.get(`/user-plants/${props.userPlantId}`);
     userPlant.value = response.data;
   } catch (error) {
     console.error("내 식물 정보 로딩 실패:", error);
@@ -82,7 +82,7 @@ const removeUserPlant = async () => {
   if (!confirm(`정말 '${userPlant.value.plantNickname}'을(를) 삭제하시겠습니까?\n관련된 일기도 모두 삭제됩니다.`)) return;
 
   try {
-    await api.delete(`/api/user-plants/${props.userPlantId}`);
+    await api.delete(`/user-plants/${props.userPlantId}`);
     emit('removed-plant'); // 목록 갱신 요청
     close();
   } catch (error) {

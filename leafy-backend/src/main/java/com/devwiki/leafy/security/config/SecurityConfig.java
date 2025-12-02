@@ -11,12 +11,11 @@ import org.springframework.security.config.annotation.web.configurers.AbstractHt
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.access.intercept.AuthorizationFilter;
-import org.springframework.security.web.context.SecurityContextHolderFilter;
 
 import com.devwiki.leafy.Discord.service.DiscordService;
-import com.devwiki.leafy.global.security.entrypoint.RestAuthenticationEntryPoint;
-import com.devwiki.leafy.global.security.entrypoint.RestAuthenticationFailureHandler;
 import com.devwiki.leafy.security.dsl.RestApiDsl;
+import com.devwiki.leafy.security.entrypoint.RestAuthenticationEntryPoint;
+import com.devwiki.leafy.security.entrypoint.RestAuthenticationFailureHandler;
 import com.devwiki.leafy.security.entrypoint.RestAuthenticationSuccessHandler;
 import com.devwiki.leafy.security.handler.RestAccessDeniedHandler;
 import com.devwiki.leafy.security.jwt.JwtAuthenticationConverter;
@@ -58,8 +57,8 @@ public class SecurityConfig {
 			.securityMatcher("/api/**")
 			.authorizeHttpRequests(auth -> auth
 				.requestMatchers("/css/**", "/images/**", "/js/**", "/favicon.*", "/*/icon-*").permitAll()
-				.requestMatchers("/api", "/api/users/login", "/api/users/signup").permitAll()
-				// .requestMatchers("/api/user").hasAuthority("ROLE_USER")
+				.requestMatchers("/api", "/api/users/login", "/api/users/signup","/api/users/reissue").permitAll()
+				// .requestMatchers("/api/user").h9asAuthority("ROLE_USER")
 				// .requestMatchers("/api/manager").hasAuthority("ROLE_MANAGER")
 				// .requestMatchers("/api/admin").hasAuthority("ROLE_ADMIN")
 				.anyRequest().authenticated()

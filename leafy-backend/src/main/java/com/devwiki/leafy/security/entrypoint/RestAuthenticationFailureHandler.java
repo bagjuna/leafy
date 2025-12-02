@@ -1,4 +1,4 @@
-package com.devwiki.leafy.global.security.entrypoint;
+package com.devwiki.leafy.security.entrypoint;
 
 import java.io.IOException;
 

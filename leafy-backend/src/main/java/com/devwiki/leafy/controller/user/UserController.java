@@ -98,7 +98,7 @@ public class UserController {
     @PostMapping("/reissue")
     public ResponseEntity<?> reissue(@RequestBody Map<String, String> request) {
         String refreshToken = request.get("refreshToken");
-
+        log.info("Reissuing tokens with refreshToken: {}", refreshToken);
         Map<String, String> newTokens = userService.reissueTokens(refreshToken);
         if (newTokens != null) {
             return ResponseEntity.ok(newTokens);

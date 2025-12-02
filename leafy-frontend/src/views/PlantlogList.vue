@@ -154,7 +154,7 @@ const submitLog = async () => {
   }
 
   try {
-    await api.post('/api/plant-logs', {
+    await api.post('/plant-logs', {
       userPlant: { userPlantId: newLog.userPlantId },
       note: newLog.note,
       watered: newLog.watered,
@@ -171,7 +171,7 @@ const deleteLog = async (logId) => {
   if (!confirm("정말 이 일기를 삭제하시겠습니까?")) return;
 
   try {
-    await api.delete(`/api/plant-logs/${logId}`);
+    await api.delete(`/plant-logs/${logId}`);
     await fetchRecentLogs();
   } catch (err) {
     console.error("일기 삭제 실패:", err);
