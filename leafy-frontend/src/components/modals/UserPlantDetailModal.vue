@@ -74,7 +74,6 @@ const fetchUserPlantDetail = async () => {
   } catch (error) {
     console.error("내 식물 정보 로딩 실패:", error);
   }
-  console.log(userPlant.value);
 };
 
 // 내 식물 삭제
