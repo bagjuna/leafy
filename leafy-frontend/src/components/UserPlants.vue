@@ -1,71 +1,69 @@
 <template>
-  <div class="user-plants">
-    <h3>내 식물 리스트</h3>
+  <div class="user-plants-select">
     <v-select
-      :items="userPlantList"
-      item-title="plantNicknameWithPlantName"
-      item-value="userPlantId"
-      label="식물 선택"
-      v-model="userPlantId"
-      dense
-      @input="onSelectChange"
+        v-model="selectedUserPlantId"
+        :items="userPlantList"
+        item-title="displayName"
+        item-value="userPlantId"
+        label="식물 선택"
+        variant="filled"
+        background-color="grey lighten-4"
+        hide-details
+        @update:model-value="onSelectChange"
     ></v-select>
   </div>
 </template>
 
-<script>
-import { ref, watch, onMounted } from 'vue';
+<script setup>
+import { ref, onMounted } from 'vue';
 import api from '@/api/api';
 
-export default {
-  name: 'UserPlants',
-  props: {
-    userId: {
-      type: Number,
-      required: true,
-    },
-  },
-  setup(props, { emit }) {
-    const userPlantList = ref([]);
-    const userPlantId = ref(null);
+// Emits 정의: 부모에게 선택된 ID를 알려줌
+const emit = defineEmits(['update:modelValue']);
 
-    const fetchUserPlants = async () => {
-      try {
-        const response = await api.get(`/api/user-plants/user`);
-        userPlantList.value = response.data.
-        filter(plant => plant.plant !== null).
-        map(plant => ({
+// Props 정의: v-model 지원을 위해 modelValue 사용
+const props = defineProps({
+  modelValue: {
+    type: Number,
+    default: null
+  }
+});
+
+const userPlantList = ref([]);
+const selectedUserPlantId = ref(props.modelValue);
+
+// 식물 목록 조회
+const fetchUserPlants = async () => {
+  try {
+    // userId는 토큰에 있으므로 URL 파라미터 불필요
+    const response = await api.get(`/api/user-plants/user`);
+
+    userPlantList.value = response.data
+        .filter(plant => plant.plant !== null)
+        .map(plant => ({
           ...plant,
-          plantNicknameWithPlantName: `${plant.plantNickname} (${plant.plant.plantName})`,
+          // 드롭다운에 표시될 이름 (예: "초록이 (몬스테라)")
+          displayName: `${plant.plantNickname} (${plant.plant.plantName})`
         }));
-      } catch (error) {
-        console.error(error);
-      }
-    };
-
-    const onSelectChange = (value) =>{
-      emit('updated-userplant-id', value);
-    }
-
-    onMounted(fetchUserPlants);
-
-    watch(
-      () => userPlantId.value,
-      (newUserPlantId, oldUserPlantId) => {
-        if (newUserPlantId !== oldUserPlantId) {
-          onSelectChange(userPlantId.value);
-        }
-      }
-    );
-
-
-    return { userPlantList, userPlantId, onSelectChange };
-  },
-  
+  } catch (error) {
+    console.error("내 식물 목록 로딩 실패:", error);
+  }
 };
+
+// 선택 변경 시 부모에게 알림
+const onSelectChange = (newValue) => {
+  emit('update:modelValue', newValue);
+};
+
+onMounted(() => {
+  fetchUserPlants();
+});
 </script>
 
 <style scoped>
+.user-plants-select {
+  width: 100%;
+}
 .user-plants {
   padding: 1rem;
   border: 1px solid #ccc;

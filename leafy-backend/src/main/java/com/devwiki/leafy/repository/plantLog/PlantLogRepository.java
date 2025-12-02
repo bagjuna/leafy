@@ -9,4 +9,6 @@ public interface PlantLogRepository extends JpaRepository<PlantLog, Long> {
     List<PlantLog> findAllByUserPlant_UserPlantId_OrderByLogDateDesc(Long userPlantId);
 
     List<PlantLog> findAllByUserPlant_User_UserId_OrderByLogDateDesc(Long userId);
+
+
 }

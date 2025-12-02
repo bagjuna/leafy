@@ -14,6 +14,10 @@
     <div v-else-if="error" class="text-center error--text">데이터 로드 실패: {{ error.message }}</div>
 
     <div v-else class="log-list">
+      <div v-if="logs.length === 0" class="text-center py-5 grey--text">
+        작성된 일기가 없습니다. 첫 일기를 남겨보세요!
+      </div>
+
       <v-card
           v-for="log in logs"
           :key="log.plantLogId"
@@ -27,11 +31,22 @@
           </v-icon>
         </div>
 
-        <div class="card-body text-center" @click="openPlantDetailModal(log.userPlant.plant.plantId)">
+        <div
+            v-if="log.userPlant"
+            class="card-body text-center"
+            @click="openUserPlantDetailModal(log.userPlant.userPlantId)"
+        >
           <h3 class="plant-name-title mb-2">
             {{ log.userPlant.plantNickname }}
-            <span class="plant-species">({{ log.userPlant.plant ? log.userPlant.plant.plantName : '?' }})</span>
+            <span class="plant-species" v-if="log.userPlant.plant">
+              ({{ log.userPlant.plant.plantName }})
+            </span>
           </h3>
+          <p class="log-note">{{ log.note }}</p>
+        </div>
+
+        <div v-else class="text-center text-grey">
+          삭제된 식물의 일기입니다.
           <p class="log-note">{{ log.note }}</p>
         </div>
 
@@ -44,89 +59,84 @@
     <v-dialog v-model="showAddDialog" max-width="500px">
       <v-card class="pa-4 rounded-lg">
         <v-card-title class="text-center font-weight-bold mb-2">
-          내 식물 리스트
+          일기 쓰기
         </v-card-title>
 
         <v-card-text>
-          <v-select
+          <UserPlants
               v-model="newLog.userPlantId"
-              :items="userPlants"
-              item-title="plantNickname"
-              item-value="userPlantId"
-              label="식물 선택"
-              variant="filled"
-              background-color="grey lighten-4"
-              class="mb-2"
-          ></v-select>
+              class="mb-3"
+          />
 
           <v-text-field
               v-model="newLog.note"
-              label="Note"
+              label="오늘의 기록"
               variant="filled"
               background-color="grey lighten-4"
+              rows="3"
+              auto-grow
           ></v-text-field>
 
           <div class="d-flex align-center mt-2">
             <v-switch
                 v-model="newLog.watered"
-                color="grey darken-1"
+                color="blue"
                 hide-details
+                inset
             ></v-switch>
-            <span class="ml-2">물을 주었음</span>
+            <span class="ml-2 font-weight-bold grey--text text--darken-2">물 주셨나요?</span>
           </div>
         </v-card-text>
 
         <v-card-actions class="justify-end">
-          <v-btn color="blue darken-1" variant="text" @click="closeAddDialog">CANCEL</v-btn>
-          <v-btn color="blue darken-1" variant="text" @click="submitLog">ADD</v-btn>
+          <v-btn color="grey darken-1" variant="text" @click="closeAddDialog">취소</v-btn>
+          <v-btn color="#556B2F" variant="flat" class="text-white" @click="submitLog">등록</v-btn>
         </v-card-actions>
       </v-card>
     </v-dialog>
 
-    <PlantDetailModal
-        :deleteButton="false"
-        v-model:isOpen="showPlantDetailModal"
-        :plantId="selectedPlantId"
-        @removed-plant="fetchMyPlants"
+    <UserPlantDetailModal
+        v-model:isOpen="showDetailModal"
+        :userPlantId="selectedUserPlantId"
+        @removed-plant="onPlantRemoved"
     />
   </v-container>
 </template>
 
 <script setup>
-import {ref, reactive} from 'vue';
-import {usePlantData} from '@/composables/usePlantData';
-import PlantDetailModal from '@/components/modals/PlantDetailModal.vue';
-import api from '@/api/api'; // API 호출을 위해 import
-import {useAuthStore} from '@/store/auth'; // userId 가져오기 위해 필요
+import { ref, reactive } from 'vue';
+import { usePlantData } from '@/composables/usePlantData';
+import UserPlantDetailModal from '@/components/modals/UserPlantDetailModal.vue';
+import UserPlants from '@/components/UserPlants.vue';
+import api from '@/api/api';
+import { useAuthStore } from '@/store/auth';
 
-// Composable 사용
-const {logs, userPlants, isLoading, error, fetchMyPlants, fetchRecentLogs} = usePlantData();
+const { logs, isLoading, error, fetchRecentLogs, fetchMyPlants } = usePlantData();
 const authStore = useAuthStore();
 
-
-// --- 상태 관리 ---
-const showPlantDetailModal = ref(false);
-const selectedPlantId = ref(null);
+const showDetailModal = ref(false);
+const selectedUserPlantId = ref(null);
 const showAddDialog = ref(false);
 
-// 새 일기 데이터
 const newLog = reactive({
   userPlantId: null,
   note: '',
   watered: false
 });
 
-// --- 함수 정의 ---
-
-// 1. 식물 상세 모달 열기
-const openPlantDetailModal = (plantId) => {
-  selectedPlantId.value = plantId;
-  showPlantDetailModal.value = true;
+const openUserPlantDetailModal = (userPlantId) => {
+  selectedUserPlantId.value = userPlantId;
+  showDetailModal.value = true;
 };
 
-// 2. 일기 추가 모달 열기/닫기
+const onPlantRemoved = async () => {
+  await Promise.all([
+    fetchRecentLogs(),
+    fetchMyPlants()
+  ]);
+};
+
 const openAddDialog = () => {
-  // 모달 열 때 입력값 초기화
   newLog.userPlantId = null;
   newLog.note = '';
   newLog.watered = false;
@@ -137,11 +147,9 @@ const closeAddDialog = () => {
   showAddDialog.value = false;
 };
 
-
-// 일기 저장 함수
 const submitLog = async () => {
   if (!newLog.userPlantId) {
-    alert("식물을 선택해주세요!");
+    alert("어떤 식물의 일기인가요? 식물을 선택해주세요.");
     return;
   }
 
@@ -151,48 +159,32 @@ const submitLog = async () => {
       note: newLog.note,
       watered: newLog.watered,
     });
-
-    // ✅ [핵심] 저장이 완료되면 목록을 다시 불러옵니다.
     await fetchRecentLogs();
-
     closeAddDialog();
-    // 입력창 초기화
-    newLog.note = '';
-    newLog.watered = false;
-    newLog.userPlantId = null;
-
   } catch (err) {
     console.error("일기 저장 실패:", err);
     alert("일기 저장 중 오류가 발생했습니다.");
   }
 };
 
-// 일기 삭제 함수
 const deleteLog = async (logId) => {
   if (!confirm("정말 이 일기를 삭제하시겠습니까?")) return;
 
   try {
     await api.delete(`/api/plant-logs/${logId}`);
-
-    // ✅ [핵심] 삭제가 완료되면 목록을 다시 불러옵니다.
     await fetchRecentLogs();
-
   } catch (err) {
     console.error("일기 삭제 실패:", err);
   }
 };
 
-
-// 5. 날짜 포맷팅 함수 (예: [ 2023, 3, 24 ])
 const formatDate = (dateArray) => {
   if (!dateArray) return '';
-  // 배열 [2025, 11, 19, ...] 형태로 온다고 가정
   if (Array.isArray(dateArray)) {
-    return `${dateArray[0]}, ${dateArray[1]}, ${dateArray[2]}`;
+    return `${dateArray[0]}. ${dateArray[1]}. ${dateArray[2]}`;
   }
-  // 문자열이면 Date 객체로 변환
   const d = new Date(dateArray);
-  return `${d.getFullYear()}, ${d.getMonth() + 1}, ${d.getDate()}`;
+  return `${d.getFullYear()}. ${d.getMonth() + 1}. ${d.getDate()}`;
 };
 </script>
 
@@ -201,22 +193,23 @@ const formatDate = (dateArray) => {
   max-width: 800px;
   margin: 0 auto;
   padding-top: 20px;
+  padding-left: 20px;
+  padding-right: 20px;
 }
 
-/* 버튼 스타일 */
 .add-log-btn {
   color: white !important;
   font-weight: bold;
   font-size: 1rem;
-  border-radius: 5px;
+  border-radius: 8px;
 }
 
-/* 카드 스타일 */
 .log-card {
   border-radius: 12px;
   border: 1px solid #e0e0e0;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05) !important;
   transition: transform 0.2s;
+  background-color: white;
 }
 
 .log-card:hover {
@@ -224,7 +217,7 @@ const formatDate = (dateArray) => {
 }
 
 .plant-name-title {
-  color: #556B2F; /* 녹색 */
+  color: #556B2F;
   font-weight: 700;
   font-size: 1.1rem;
 }
@@ -239,6 +232,7 @@ const formatDate = (dateArray) => {
   font-weight: 600;
   color: #333;
   margin-top: 10px;
+  word-break: break-all;
 }
 
 .date-text {
@@ -246,7 +240,6 @@ const formatDate = (dateArray) => {
   font-size: 0.85rem;
 }
 
-/* 커서 스타일 */
 .card-body {
   cursor: pointer;
 }

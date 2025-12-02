@@ -25,11 +25,12 @@
     />
 
     <PlantDetailModal
-        :deleteButton="true"
+        :deleteButton="false"
         v-model:isOpen="showPlantDetailModal"
         :plantId="selectedPlantId"
         @removed-plant="fetchPlants"
     />
+
   </div>
 </template>
 

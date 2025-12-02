@@ -54,6 +54,6 @@ export function usePlantData() {
     return {
         ...toRefs(state),
         fetchMyPlants,   // 기존에 있던 것
-        fetchRecentLogs  // ✅ [수정] 이 줄을 꼭 추가해야 합니다!
+        fetchRecentLogs
     };
 }

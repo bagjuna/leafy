@@ -120,8 +120,10 @@ public class UserPlantService {
      */
     @Transactional
     public void deleteUserPlant(Long userPlantId) {
+        plantLogRepository.deleteAll(plantLogRepository.findAllByUserPlant_UserPlantId_OrderByLogDateDesc(userPlantId));
         UserPlant userPlant = userPlantRepository.findById(userPlantId)
                 .orElseThrow(() -> new ResourceNotFoundException("UserPlant", "id", userPlantId));
+
         userPlantRepository.delete(userPlant);
     }
 

@@ -86,6 +86,7 @@ public class UserPlantController {
     @DeleteMapping("/{userPlantId}")
     public ResponseEntity<Void> deleteUserPlant(@PathVariable Long userPlantId) {
         userPlantService.deleteUserPlant(userPlantId);
+
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 }
