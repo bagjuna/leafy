@@ -119,7 +119,7 @@ const fetchPlantDetail = async () => {
   if (!props.plantId) return; // Guard clause
 
   try {
-    const response = await api.get(`/api/plants/${props.plantId}`);
+    const response = await api.get(`/plants/${props.plantId}`);
     plantDetail.value = response.data;
   } catch (error) {
     console.error("Failed to fetch plant detail:", error);
@@ -130,7 +130,7 @@ const removePlant = async () => {
   if (!confirm("정말 이 식물을 삭제하시겠습니까?")) return;
 
   try {
-    await api.delete(`/api/plants/${props.plantId}`);
+    await api.delete(`/plants/${props.plantId}`);
     emit('removed-plant'); // Notify parent to refresh list
     close();
   } catch (error) {
@@ -149,7 +149,7 @@ const submitMyPlant = async () => {
   }
 
   try {
-    await api.post(`/api/user-plants`, {
+    await api.post(`/user-plants`, {
       user: {
         userId: authStore.user?.userId
       },

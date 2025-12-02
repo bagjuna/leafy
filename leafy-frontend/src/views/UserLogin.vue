@@ -35,7 +35,7 @@ const password = ref('');
 
 const handleLogin = async () => {
   try {
-    const response = await api.post('/api/users/login', {
+    const response = await api.post('/users/login', {
       email: email.value,
       password: password.value
     });

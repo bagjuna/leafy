@@ -36,7 +36,7 @@ const selectedUserPlantId = ref(props.modelValue);
 const fetchUserPlants = async () => {
   try {
     // userId는 토큰에 있으므로 URL 파라미터 불필요
-    const response = await api.get(`/api/user-plants/user`);
+    const response = await api.get(`/user-plants/user`);
 
     userPlantList.value = response.data
         .filter(plant => plant.plant !== null)

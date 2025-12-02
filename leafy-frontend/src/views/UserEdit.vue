@@ -37,7 +37,7 @@ export default {
     const updateUser = async () => {
       try {
         const userId = user.value.userId; 
-        await api.put(`/api/users/${userId}`, editUser);
+        await api.put(`/users/${userId}`, editUser);
         alert('사용자 정보가 성공적으로 수정되었습니다. 다시 로그인 해주세요.');
         store.dispatch('logoutUser');
         router.push({ name: 'HomePage' });

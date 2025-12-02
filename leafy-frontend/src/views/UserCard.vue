@@ -50,7 +50,7 @@ export default {
 
     const fetchUser = async () => {
       const userId = user.value.userId;
-      api.get(`/api/users/${userId}`)
+      api.get(`/users/${userId}`)
         .then(response => {
           state.currentUser = response.data;
         })
@@ -65,7 +65,7 @@ export default {
     
     const editUser = async () =>{
       try {
-        await api.post('/api/users/login', {
+        await api.post('/users/login', {
           email: user.value.email,
           password: state.password,
         });
