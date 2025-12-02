@@ -33,7 +33,7 @@ jobs:
               leafy-postgres:
                 image: ${{ secrets.DOCKERHUB_USERNAME }}/leafy-postgres:latest
                 ports:
-                  - "5432:5432"
+                  - "127.0.0.1:5432:5432"
                 environment:
                   - POSTGRES_USER=${{ secrets.DATASOURCE_USERNAME }}
                   - POSTGRES_PASSWORD=${{ secrets.DATASOURCE_PASSWORD }}
@@ -49,7 +49,7 @@ jobs:
               redis:
                 image: ${{ secrets.DOCKERHUB_USERNAME }}/leafy-redis:latest  # 혹은 본인 ID
                 container_name: redis-server
-                # command: redis-server /usr/local/etc/redis/redis.conf --requirepass ... (이전 답변 참고)
+                # command: redis-server /usr/local/etc/redis/redis.conf --requirepass 
                 restart: always
                 volumes:
                   - redis_data:/data
