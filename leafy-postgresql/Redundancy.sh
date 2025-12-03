@@ -1,7 +1,8 @@
 # 1. 테스트용 네트워크 생성
 docker network create postgres 2>/dev/null || true
 
-# 2. 프라이머리 노드 실행
+# 2. 프라이머리 노드 실행 (일반 모드)
+# 이미지를 bitnami/postgresql:15로 변경하고, 불필요한 REPMGR 변수 제거
 docker run -d \
   --name postgres-primary-0 \
   --network postgres \
@@ -10,16 +11,10 @@ docker run -d \
   -e POSTGRESQL_USERNAME=${DATASOURCE_USERNAME} \
   -e POSTGRESQL_PASSWORD=${DATASOURCE_PASSWORD} \
   -e POSTGRESQL_DATABASE=${DATASOURCE_DB_NAME} \
-  -e REPMGR_PASSWORD=${REPMGR_PASSWORD} \
-  -e REPMGR_PRIMARY_HOST=postgres-primary-0 \
-  -e REPMGR_PRIMARY_PORT=5432 \
-  -e REPMGR_PARTNER_NODES=postgres-primary-0,postgres-standby-1:5432 \
-  -e REPMGR_NODE_NAME=postgres-primary-0 \
-  -e REPMGR_NODE_NETWORK_NAME=postgres-primary-0 \
-  -e REPMGR_PORT_NUMBER=5432 \
-  bitnami/postgresql-repmgr:15
+  bitnami/postgresql:15
 
-# 3. 스탠바이 노드 실행
+# 3. 스탠바이 노드 (일반 이미지에서는 복제 설정 없이 단순 DB 2개로 뜹니다)
+# 단순히 DB를 하나 더 띄우는 것이라면 아래 명령어도 동일하게 수정
 docker run -d \
   --name postgres-standby-1 \
   --network postgres \
@@ -28,27 +23,7 @@ docker run -d \
   -e POSTGRESQL_USERNAME=${DATASOURCE_USERNAME} \
   -e POSTGRESQL_PASSWORD=${DATASOURCE_PASSWORD} \
   -e POSTGRESQL_DATABASE=${DATASOURCE_DB_NAME} \
-  -e REPMGR_PASSWORD=${REPMGR_PASSWORD} \
-  -e REPMGR_PRIMARY_HOST=postgres-primary-0 \
-  -e REPMGR_PRIMARY_PORT=5432 \
-  -e REPMGR_PARTNER_NODES=postgres-primary-0,postgres-standby-1:5432 \
-  -e REPMGR_NODE_NAME=postgres-standby-1 \
-  -e REPMGR_NODE_NETWORK_NAME=postgres-standby-1 \
-  -e REPMGR_PORT_NUMBER=5432 \
-  bitnami/postgresql-repmgr:15
+  bitnami/postgresql:15
 
-# 4. SHELL1, SHELL2 각 컨테이너의 로그 확인
+# 4. 로그 확인
 docker logs -f postgres-primary-0
-docker logs -f postgres-standby-1
-
-# 5. 프라이머리 노드에 테이블 생성 및 데이터 삽입 
-docker exec -it -e PGPASSWORD=${DATASOURCE_PASSWORD} postgres-primary-0 psql -U ${DATASOURCE_USERNAME} -d ${DATASOURCE_DB_NAME} -c "CREATE TABLE sample (id SERIAL PRIMARY KEY, name VARCHAR(255));"
-docker exec -it -e PGPASSWORD=${DATASOURCE_PASSWORD} postgres-primary-0 psql -U ${DATASOURCE_USERNAME} -d ${DATASOURCE_DB_NAME} -c "INSERT INTO sample (name) VALUES ('John'), ('Jane'), ('Alice');"
-
-#6. 스탠바이 노드에 데이터가 동기화되어 있는지 확인
-docker exec -it -e PGPASSWORD=${DATASOURCE_PASSWORD} postgres-standby-1 psql -U ${DATASOURCE_USERNAME} -d ${DATASOURCE_DB_NAME} -c "SELECT * FROM sample;"
-
-#7. 환경 정리
-docker rm -f postgres-primary-0 postgres-standby-1
-docker volume rm postgres_primary_data postgres_standby_data
-docker network rm postgres
