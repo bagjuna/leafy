@@ -7,7 +7,7 @@
         <p class="welcome-text">
           안녕하세요, <span class="user-name">{{ authStore.user?.name }}</span>님!
         </p>
-        <p class="description">오늘도 즐거운 식물 관리하세요!</p>
+        <p class="description">오늘도 즐거운 식물 관리하세요!!</p>
       </div>
 
       <button class="logout-btn" @click="handleLogout">로그아웃</button>
