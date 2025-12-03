@@ -1,3 +1,4 @@
+# 최초 EC2 셋업을 위한 워크플로우 파일
 # .github/workflows/initial-setup.yml
 name: Initial EC2 Setup
 
@@ -25,7 +26,7 @@ jobs:
                 sudo chmod +x /usr/local/bin/docker-compose
             fi
 
-            # --- 2. docker-compose.yml 파일 생성 (검증된 버전) ---
+            # --- 2. docker-compose.yml 파일 생성 ---
             echo "Creating docker-compose.yml with variables"
             cat << EOF > docker-compose.yml
 
@@ -35,46 +36,51 @@ jobs:
                 ports:
                   - "127.0.0.1:5432:5432"
                 environment:
-                  - POSTGRES_USER=${{ secrets.DATASOURCE_USERNAME }}
-                  - POSTGRES_PASSWORD=${{ secrets.DATASOURCE_PASSWORD }}
-                  - POSTGRES_DB=${{ secrets.DATASOURCE_URL }}
+                  - POSTGRESQL_USERNAME=${{ secrets.DATASOURCE_USERNAME }}
+                  - POSTGRESQL_PASSWORD=${{ secrets.DATASOURCE_PASSWORD }}
+                  - POSTGRESQL_DATABASE=${{ secrets.DATASOURCE_DB_NAME }}
+                  - POSTGRESQL_POSTGRES_PASSWORD=${{ secrets.DATASOURCE_ADMIN_PASSWORD }}
+                  # REPMGR 관련 변수는 삭제함 (일반 이미지 사용 시 불필요)
                 volumes:
-                  - leafy_data:/var/lib/postgresql/data
+                  - leafy_data:/bitnami/postgresql  # [수정] Bitnami 데이터 경로!
                 restart: always
                 healthcheck:
-                  test: ["CMD-SHELL", "pg_isready -U ${{ secrets.DATASOURCE_USERNAME }}"]
+                  test: ["CMD-SHELL", "pg_isready -U ${{ secrets.DATASOURCE_USERNAME }} -d ${{ secrets.DATASOURCE_DB_NAME }}"]
                   interval: 5s
                   timeout: 5s
                   retries: 5
+
               redis:
-                image: ${{ secrets.DOCKERHUB_USERNAME }}/leafy-redis:latest  # 혹은 본인 ID
+                image: ${{ secrets.DOCKERHUB_USERNAME }}/leafy-redis:latest
                 container_name: redis-server
-                # command: redis-server /usr/local/etc/redis/redis.conf --requirepass 
+                command: redis-server --requirepass ${{ secrets.REDIS_PASSWORD }}
                 restart: always
                 volumes:
                   - redis_data:/data
                 networks:
-                  - default # 백엔드와 통신하기 위해
+                  - default
                 healthcheck:
-                  test: [ "CMD", "redis-cli", "ping" ]
+                  test: [ "CMD", "redis-cli", "-a", "${{ secrets.REDIS_PASSWORD }}", "ping" ]
                   interval: 10s
                   timeout: 5s
                   retries: 5
             
               leafy-backend:
                 image: \${BACKEND_IMAGE_TAG}
-
                 restart: on-failure
                 environment:
-                  - SPRING_DATASOURCE_URL=jdbc:postgresql://leafy-postgres:5432/${{ secrets.DATASOURCE_URL }}
+                  - SPRING_DATASOURCE_URL=jdbc:postgresql://leafy-postgres:5432/${{ secrets.DATASOURCE_DB_NAME }}
                   - SPRING_DATASOURCE_USERNAME=${{ secrets.DATASOURCE_USERNAME }}
                   - SPRING_DATASOURCE_PASSWORD=${{ secrets.DATASOURCE_PASSWORD }}
+            
+                  # Redis 설정
                   - SPRING_DATA_REDIS_HOST=redis
                   - SPRING_DATA_REDIS_PORT=6379
-                  - REDIS_PASSWORD=${{ secrets.REDIS_PASSWORD }}
                   - SPRING_DATA_REDIS_PASSWORD=${{ secrets.REDIS_PASSWORD }}
-                  - DISCORD_500_WEBHOOK_URI=${{secrets.DISCORD_500_WEBHOOK_URI}}
-                  - DISCORD_400_WEBHOOK_URI=${{secrets.DISCORD_400_WEBHOOK_URI}}
+            
+                  # 기타 설정
+                  - DISCORD_500_WEBHOOK_URI=${{ secrets.DISCORD_500_WEBHOOK_URI }}
+                  - DISCORD_400_WEBHOOK_URI=${{ secrets.DISCORD_400_WEBHOOK_URI }}
                   - JWT_SECRET=${{ secrets.JWT_SECRET }}
                   - SPRING_JPA_PROPERTIES_HIBERNATE_DIALECT=org.hibernate.dialect.PostgreSQLDialect
                 depends_on:
@@ -93,22 +99,18 @@ jobs:
                     - BACKEND_PORT=8080
                 depends_on:
                   - leafy-backend
-              
+            
             volumes:
               leafy_data:
               redis_data:
             EOF
 
             echo "Creating initial .env file"
+            # .env 파일에는 이미지 태그 정보만 있으면 됩니다.
+            # DB 정보는 위 docker-compose.yml에 직접 주입되므로 여기서 뺍니다. (혼동 방지)
             cat << EOF > .env
-            # Image Tags
-            BACKEND_IMAGE_TAG=dojuna/leafy-backend:latest
-            FRONTEND_IMAGE_TAG=dojuna/leafy-frontend:latest
-
-            # Datasource Credentials
-            POSTGRES_USER=${{ secrets.DATASOURCE_USERNAME }}
-            POSTGRES_PASSWORD=${{ secrets.DATASOURCE_PASSWORD }}
-            POSTGRES_DB=${{ secrets.DATASOURCE_URL }}
+            BACKEND_IMAGE_TAG=${{ secrets.DOCKERHUB_USERNAME }}/leafy-backend:latest
+            FRONTEND_IMAGE_TAG=${{ secrets.DOCKERHUB_USERNAME }}/leafy-frontend:latest
             EOF
             
             # --- 3. 서비스 시작 ---

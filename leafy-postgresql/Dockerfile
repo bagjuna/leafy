@@ -1,13 +1,12 @@
-#PostgreSQL 13 버전을 베이스 이미지로 사용
-FROM postgres:13
+#PostgreSQL 15버전 비트나미 이미지 사용
+FROM bitnami/postgresql:latest
 
-#init.sql파일을 /docker-entrypoint-initdb.d/ 로 복사, /docker-entrypoint-initdb.d/에 있는 sql문은 컨테이너가 처음 실행 시 자동실행됨
-COPY ./init/init.sql /docker-entrypoint-initdb.d/
+# 2. init.sql 복사 (소유권 변경)
+COPY --chown=1001:1001 ./init/init.sql /docker-entrypoint-initdb.d/
 
-#postgresql.conf파일을 /etc/postgresql/postgresql.conf 로 복사, 기본 설정 파일을 덮어쓰기하여 새로운 설정 적용
-COPY ./config/postgresql.conf /etc/postgresql/custom.conf
+# 3. 설정 파일 복사
+#COPY --chown=1001:1001 ./config/postgresql.conf /opt/bitnami/postgresql/conf/postgresql.conf
 
-
+# 4. 포트 노출
 EXPOSE 5432
 
-CMD ["postgres", "-c", "config_file=/etc/postgresql/custom.conf"]
