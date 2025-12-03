@@ -1,6 +1,6 @@
 # .github/workflows/leafy-backend-build-and-push.yml
-
-name: Backend CI/CD
+# Leafy Backend Build and Push Workflow
+name: Backend Build and Push
 
 on:
   push:
