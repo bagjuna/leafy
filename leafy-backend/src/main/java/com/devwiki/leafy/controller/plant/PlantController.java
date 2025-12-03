@@ -18,7 +18,7 @@ public class PlantController {
     private final PlantService plantService;
 
     /**
-     * 모든 식물 조회
+     * 모든 식물 조회 !
      *
      * @return 모든 식물 리스트
      */
