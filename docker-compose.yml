@@ -1,15 +1,16 @@
 services:
   leafy-postgres:
     build: ./leafy-postgresql
-    image: leafy-postgres:5.0.0-compose
+    image: bitnami/postgresql:15
     ports:
-      - "5432:5432"
+      - "127.0.0.1:5432:5432"
     environment:
-      - POSTGRES_USER=${DATASOURCE_USERNAME}
-      - POSTGRES_PASSWORD=${DATASOURCE_PASSWORD}
-      - POSTGRES_DB=${DATASOURCE_URL}
+      - POSTGRESQL_USERNAME=${DATASOURCE_USERNAME}
+      - POSTGRESQL_PASSWORD=${DATASOURCE_PASSWORD}
+      - POSTGRESQL_DATABASE=${DATASOURCE_DB_NAME}
+      - POSTGRESQL_POSTGRES_PASSWORD=${DATASOURCE_ADMIN_PASSWORD}
     volumes:
-      - leafy_data:/var/lib/postgresql/data
+      - leafy_data:/bitnami/postgresql
     deploy:
       resources:
         limits:
@@ -17,27 +18,45 @@ services:
           memory: 256M
     restart: always
     healthcheck:
-      test: [ "CMD-SHELL", "pg_isready -U ${DATASOURCE_USERNAME} -d ${DATASOURCE_URL}" ]
+      test: [ "CMD-SHELL", "pg_isready -U ${DATASOURCE_USERNAME} -d ${DATASOURCE_DB_NAME}" ]
       interval: 5s
       timeout: 5s
       retries: 5
+    networks:
+      - redis-net
 
   leafy-backend:
     build: ./leafy-backend
     image: leafy-backend:5.0.0-compose
     environment:
-      - SPRING_DATASOURCE_URL=jdbc:postgresql://leafy-postgres:5432/${DATASOURCE_URL}
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://leafy-postgres:5432/${DATASOURCE_DB_NAME}
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://leafy-postgres:5432/${DATASOURCE_DB_NAME}
       - SPRING_DATASOURCE_USERNAME=${DATASOURCE_USERNAME}
       - SPRING_DATASOURCE_PASSWORD=${DATASOURCE_PASSWORD}
       - SPRING_JPA_PROPERTIES_HIBERNATE_DIALECT=org.hibernate.dialect.PostgreSQLDialect
+      - DISCORD_500_WEBHOOK_URI=${DISCORD_500_WEBHOOK_URI}
+      - DISCORD_400_WEBHOOK_URI=${DISCORD_400_WEBHOOK_URI}
+      - TOUR_API_BASE_URL=${TOUR_API_BASE_URL}
+      - SPRING_DATA_REDIS_HOST=${REDIS_HOST:-redis}      # 값이 없으면 기본값 redis
+      - SPRING_DATA_REDIS_PORT=${REDIS_PORT:-6379}       # 값이 없으면 기본값 6379
+      - SPRING_DATA_REDIS_PASSWORD=${REDIS_PASSWORD}     # .env 파일의 비밀번호 사용
+      - JWT_SECRET=${JWT_SECRET}
     depends_on:
       - leafy-postgres
+      - redis # redis가 켜진 뒤 실행되도록 명시
     deploy:
       resources:
         limits:
           cpus: '1.5'
           memory: 512M
     restart: on-failure
+    ports:
+      - "8080:8080"
+    # 👇 [수정 2] 네트워크 연결 (이게 없으면 레디스 못 찾음)
+    networks:
+      - default    # DB 접속용
+      - redis-net  # Redis 접속용
+
       
   leafy-front:
     build: ./leafy-frontend
@@ -55,6 +74,53 @@ services:
           cpus: '0.5'
           memory: 64M
     restart: on-failure
+    networks:
+      - redis-net
+  redis:
+    build: ./leafy-redis
+    container_name: redis-server
+    ports:
+      - "6379:6379"
+    environment:
+      - REDIS_PASSWORD=${REDIS_PASSWORD}
+    volumes:
+      - redis_data:/data
+    # Dockerfile에서 COPY 했으므로 볼륨 마운트는 제거해도 됨 (또는 덮어쓰기용으로 유지)
+    # - ./redis.conf:/usr/local/etc/redis/redis.conf
+    command: redis-server /usr/local/etc/redis/redis.conf --requirepass ${REDIS_PASSWORD} --appendonly yes --maxmemory 512mb --maxmemory-policy allkeys-lru
+    networks:
+      - redis-net
+    healthcheck:
+      test: [ "CMD", "redis-cli", "ping" ]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    restart: unless-stopped
+
+  redis-commander:
+    image: rediscommander/redis-commander:latest
+    container_name: redis-commander
+    platform: linux/amd64
+    ports:
+      - "8082:8081"  # 8081은 카프카 UI가 사용중이므로 8082로 변경
+    environment:
+      - REDIS_HOSTS=leafy-redis:redis:6379:0:${REDIS_PASSWORD}
+    depends_on:
+      redis:
+        condition: service_healthy
+    restart: on-failure
+    networks: 
+      - default
+      - redis-net
+
+
+
+networks:
+  redis-net:
+    driver: bridge
+
 
 volumes:
   leafy_data:
+  redis_data:
+    driver: local
