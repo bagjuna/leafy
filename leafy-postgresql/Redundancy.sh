@@ -11,7 +11,7 @@ docker run -d \
   -e POSTGRESQL_USERNAME=${DATASOURCE_USERNAME} \
   -e POSTGRESQL_PASSWORD=${DATASOURCE_PASSWORD} \
   -e POSTGRESQL_DATABASE=${DATASOURCE_DB_NAME} \
-  bitnami/postgresql:15
+  soldevelo/postgresql:15
 
 # 3. 스탠바이 노드 (일반 이미지에서는 복제 설정 없이 단순 DB 2개로 뜹니다)
 # 단순히 DB를 하나 더 띄우는 것이라면 아래 명령어도 동일하게 수정
@@ -23,7 +23,7 @@ docker run -d \
   -e POSTGRESQL_USERNAME=${DATASOURCE_USERNAME} \
   -e POSTGRESQL_PASSWORD=${DATASOURCE_PASSWORD} \
   -e POSTGRESQL_DATABASE=${DATASOURCE_DB_NAME} \
-  bitnami/postgresql:15
+  soldevelo/postgresql:15
 
 # 4. 로그 확인
 docker logs -f postgres-primary-0

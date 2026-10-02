@@ -1,5 +1,5 @@
 #PostgreSQL 15버전 비트나미 이미지 사용
-FROM bitnami/postgresql:latest
+FROM soldevelo/postgresql:latest
 
 # 2. init.sql 복사 (소유권 변경)
 COPY --chown=1001:1001 ./init/init.sql /docker-entrypoint-initdb.d/
